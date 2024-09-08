@@ -1,12 +1,8 @@
-<style>
-    :global(body) {
-        font-family: 'Ink Free';
-    }
-</style>
+<script>
+    import Header from "$lib/Header.svelte";
+</script>
 
-<header>
-    <h1>Chris I Powell</h1>
-</header>
+<Header />
 
 <slot></slot>
 

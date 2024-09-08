@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Handlee&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+html {
+    font-family: 'Montserrat', 'Helvetica', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Handlee', 'Montserrat', 'Helvetica', sans-serif;
+    font-weight: 600;
+}
+
+body {
+    max-width: 1280px;
+    margin: auto;
+}
+
