@@ -3,7 +3,6 @@ import type { NavLink } from "$lib/services/navigation/nav";
 import { act, render, screen } from "@testing-library/svelte";
 import Nav from "./Nav.svelte"
 
-
 test("Navigation Header", () => {
     const testLinks: NavLink[] = [
         {
@@ -24,8 +23,6 @@ test("Navigation Header", () => {
     const actualLinks = screen.getAllByRole('link');
 
     expect(actualLinks.length).toBe(testLinks.length);
-
-
 
     testLinks.forEach(link => {
         let actualLink = screen.getByText(link.title);
