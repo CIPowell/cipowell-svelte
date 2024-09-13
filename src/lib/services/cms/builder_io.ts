@@ -1,11 +1,11 @@
 import { fetchEntries } from '@builder.io/sdk-svelte';
-import type { NavLink } from '../navigation/nav';
+import type { NavClient, NavLink } from '../navigation/nav';
 
-export class BuildIOClient {
+export class BuildIOClient implements NavClient {
     api_key: string  = "";
 
-    constructor(api_key: string) {
-        this.api_key = api_key;
+    constructor(api_key?: string) {
+        this.api_key = api_key || process.env.BUILDER_API_KEY || "";
     }
 
     async getGlobalNavLinks() : Promise<NavLink[]> {
