@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
     import Header from "$lib/molecules/header/Header.svelte";
     import Nav from '$lib/molecules/nav/Nav.svelte';
+
+    export let data;
 </script>
 
 <Header />
-<Nav links={[{title: 'Home', target: '/'}]} />
+<Nav links={data.navLinks} />
 
 <slot></slot>
 
