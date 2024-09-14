@@ -1,12 +1,12 @@
 <script lang="ts">
-    import NavLink from '$lib/atoms/links/NavLink.svelte';
-    import type { NavLink as NavLinkType } from '$lib/services/navigation/nav';
+    import NavHeaderLink from '$lib/atoms/links/NavHeaderLink.svelte';
+    import type { NavLink } from '$lib/services/navigation/nav';
 
-    export let links: NavLinkType[] = [];
+    export let links: NavLink[] = [];
 </script>
 
 <nav>
 {#each links as link}
-    <NavLink link={link} /> 
+    <NavHeaderLink link={link} /> 
 {/each}
 </nav>
