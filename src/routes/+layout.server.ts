@@ -1,6 +1,5 @@
 import { NavigationService, type NavLink } from "$lib/services/navigation/nav";
 import { error } from "@sveltejs/kit";
-import Layout from "./+layout.svelte";
 
 interface LayoutData {
     navLinks: NavLink[]
