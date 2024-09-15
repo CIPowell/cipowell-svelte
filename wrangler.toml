@@ -80,7 +80,7 @@ BUILDER_API_KEY = "22644214b95c46deab8d7849131f4881"
 
 [env.production.vars]
 # Public API Key, doesn't need to be kept secret
-API_KEY = "22644214b95c46deab8d7849131f4881"
+BUILDER_API_KEY = "22644214b95c46deab8d7849131f4881"
 
 # [[env.production.kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
