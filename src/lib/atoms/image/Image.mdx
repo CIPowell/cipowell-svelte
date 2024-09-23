@@ -1,0 +1,19 @@
+{/* Image.mdx */}
+
+import { Canvas, Meta } from '@storybook/blocks';
+
+import * as ImageStories from './Image.stories.svelte';
+
+<Meta of={ImageStories} />
+
+# Image
+
+The image element tries to render the correct format for the browser
+
+<Canvas of={ImageStories.Placeholder} />
+
+# Left Float
+
+Setting the left property and width property allow us to use the Iamge in preview mode
+
+<Canvas of={ImageStories.ArticlePreview} />
