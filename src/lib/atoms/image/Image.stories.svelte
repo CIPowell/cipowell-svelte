@@ -45,7 +45,7 @@
 />
 
 <Story
-	name="Article Preview"
+	name="ArticlePreview"
 	args={{
 		image: 'https://placehold.co/600x400',
 		altText: 'Placeholder',
