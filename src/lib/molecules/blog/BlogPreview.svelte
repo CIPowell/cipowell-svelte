@@ -1,9 +1,6 @@
 <script lang="ts">
-    export let title: string;
-    export let slug: string;
-    export let previewText: string;
-    export let imageSrc: string; 
-    export let imageAltText: string;
+    import type { BlogPostSummary } from "$lib/services/blog/Blog";
+    export let post: BlogPostSummary
 
     import Image from "$lib/atoms/image/Image.svelte";
 </script>
@@ -23,15 +20,21 @@
         color: #000;
         display: block;
         text-decoration: none;
+
+        margin: -0.5em -1em;
+        padding: 0.5em 1em;
     }
 
     a:hover {
         background-color: #ddd;
 
         transition: 200ms ease-in-out;
+    }
 
-        margin: -1em;
-        padding: 1em;
+    a:active {
+        background-color: #ddf;
+
+        transition: 200ms ease-in-out;
     }
 
     p {
@@ -41,9 +44,9 @@
 </style>
 
 <article>
-    <a href="/blog{slug}">
-        <h1>{title}</h1>
-        <Image image={imageSrc} altText={imageAltText} width={250} left={true} />
-        <p>{previewText}</p>
+    <a href="/blog{post.slug}">
+        <h1>{post.title}</h1>
+        <Image image={post.featuredImage} altText={post.featuredImageAltText} width={250} left={true} />
+        <p>{post.blurb}</p>
     </a>
 </article>

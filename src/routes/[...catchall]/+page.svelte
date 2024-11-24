@@ -1,8 +1,9 @@
 <script lang="ts">
     import { isPreviewing, Content } from "@builder.io/sdk-svelte";
+    import { CUSTOM_COMPONENTS } from "$lib/services/cms/builderComponents.js";
+    import { BUILDER_API_KEY } from "$lib/services/cms/builder_io.js";
 
     export let data;
-    export let api_key;
     export let model = 'page'
 
     const canShowData = data.content || isPreviewing();
@@ -13,7 +14,8 @@
         <Content
             model={model}
             content={data.content}
-            apiKey={api_key} 
+            apiKey={BUILDER_API_KEY} 
+            customComponents={CUSTOM_COMPONENTS}
         />
     {:else}
         Content not found
