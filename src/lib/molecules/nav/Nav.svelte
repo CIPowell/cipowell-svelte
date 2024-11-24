@@ -10,3 +10,9 @@
     <NavHeaderLink link={link} /> 
 {/each}
 </nav>
+
+<style>
+    nav {
+        display: block;
+    }
+</style>
