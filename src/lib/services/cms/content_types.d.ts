@@ -1,6 +1,6 @@
 import { EntryFieldTypes } from "contentful"
 
-export type Page = {
+export type ContentfulPage = {
     contentTypeId: 'page',
     fields: {
         slug: EntryFieldTypes.Symbol,
@@ -10,7 +10,7 @@ export type Page = {
     }
 }
 
-export type BlogPost = {
+export type ContentfulBlogPost = {
     contentTypeId: 'blogPost'
     fields: {
         slug: EntryFieldTypes.Symbol,
