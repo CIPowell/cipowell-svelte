@@ -20,20 +20,18 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
     "@playwright/test": "^1.28.1",
-    "@storybook/addon-a11y": "^8.3.0",
-    "@storybook/addon-essentials": "^8.3.0",
-    "@storybook/addon-interactions": "^8.3.0",
-    "@storybook/addon-links": "^8.3.0",
-    "@storybook/addon-svelte-csf": "^4.1.7",
-    "@storybook/blocks": "^8.3.0",
-    "@storybook/svelte": "^8.3.0",
-    "@storybook/sveltekit": "^8.3.0",
-    "@storybook/test": "^8.3.0",
+    "@storybook/addon-a11y": "^8.6.8",
+    "@storybook/addon-essentials": "^8.6.8",
+    "@storybook/addon-interactions": "^8.6.8",
+    "@storybook/addon-links": "^8.6.8",
+    "@storybook/blocks": "^8.6.8",
+    "@storybook/sveltekit": "^8.6.8",
+    "@storybook/test": "^8.6.8",
     "@storybook/test-runner": "^0.19.1",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/adapter-cloudflare": "^4.7.1",
-    "@sveltejs/kit": "^2.21.0",
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@sveltejs/kit": "^2.5.27",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/svelte": "^5.2.1",
     "@types/eslint": "^9.6.0",
@@ -41,27 +39,28 @@
     "axe-playwright": "^2.0.2",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-storybook": "^0.8.0",
-    "eslint-plugin-svelte": "^2.43.0",
+    "eslint-plugin-storybook": "^0.11.6",
+    "eslint-plugin-svelte": "^2.45.1",
     "globals": "^15.0.0",
     "jsdom": "^25.0.0",
     "prettier": "^3.1.1",
     "prettier-plugin-svelte": "^3.2.6",
     "storybook": "^8.3.0",
-    "svelte": "^4.2.19",
-    "svelte-check": "^3.8.5",
+    "svelte": "^5.25.2",
+    "svelte-check": "^4.0.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.19",
     "vitest": "^2.0.5"
   },
   "type": "module",
-  "dependencies": {
-    "@builder.io/sdk-svelte": "^2.0.9"
-  },
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
     ]
+  },
+  "dependencies": {
+    "@contentful/rich-text-html-renderer": "^17.0.0",
+    "contentful": "^11.5.10"
   }
 }
