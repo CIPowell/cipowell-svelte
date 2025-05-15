@@ -1,8 +1,17 @@
 <script lang="ts">
-	export let image: string;
-	export let altText: string;
-	export let width: number;
-	export let left: boolean = false;
+	interface Props {
+		image: string;
+		altText: string;
+		width: number;
+		left?: boolean;
+	}
+
+	let {
+		image,
+		altText,
+		width,
+		left = false
+	}: Props = $props();
 </script>
 
 <picture class:left>

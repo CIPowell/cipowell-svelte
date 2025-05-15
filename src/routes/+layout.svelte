@@ -4,12 +4,12 @@
 
     import '$lib/main.css';
 
-    export let data;
+    let { data, children } = $props();
 </script>
 
 <Header />
 <Nav links={data.navLinks} />
 
-<slot></slot>
+{@render children?.()}
 
 <footer>CIPowell 2024</footer>

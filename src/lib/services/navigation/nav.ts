@@ -1,4 +1,4 @@
-import { BuildIOClient } from "../cms/builder_io";
+import Contentful from "../cms/contentful";
 
 export interface NavLink {
     title: string;
@@ -10,13 +10,13 @@ export interface NavClient {
 }
 
 export class NavigationService {
-    navClient?: NavClient;
+    navClient: NavClient;
 
     constructor () {
-        this.navClient = new BuildIOClient();
+        this.navClient = new Contentful();
     }
 
     async getGlobalNavLinks(): Promise<NavLink[]> {
-        return this.navClient?.getGlobalNavLinks() || [];
+        return this.navClient.getGlobalNavLinks();
     }
 }

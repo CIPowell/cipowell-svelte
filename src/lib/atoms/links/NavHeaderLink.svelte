@@ -1,7 +1,11 @@
 <script lang="ts">
     import type { NavLink } from '$lib/services/navigation/nav';
     
-    export let link: NavLink;
+    interface Props {
+        link: NavLink;
+    }
+
+    let { link }: Props = $props();
 </script>
 
 <style>

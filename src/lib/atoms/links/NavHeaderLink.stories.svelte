@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
     export const meta = {
         title: "Design System/Atoms/links/NavHeaderLink",
         component: NavHeaderLink
@@ -10,8 +10,10 @@
     import NavHeaderLink from "./NavHeaderLink.svelte";
 </script>
 
-<Template let:args>
-    <NavHeaderLink {...args} />
+<Template >
+    {#snippet children({ args })}
+        <NavHeaderLink {...args} />
+    {/snippet}
 </Template>
 
 <Story name="Normal" args={{link: {title: "Test Link", target: "#"}}} />

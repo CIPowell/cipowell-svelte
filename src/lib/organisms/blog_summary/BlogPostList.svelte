@@ -2,7 +2,11 @@
 	import BlogPreview from "$lib/molecules/blog/BlogPreview.svelte";
     import type { BlogPostSummary } from "$lib/services/blog/Blog";
 
-    export let posts: BlogPostSummary[]
+    interface Props {
+        posts: BlogPostSummary[];
+    }
+
+    let { posts }: Props = $props();
 
 </script>
 

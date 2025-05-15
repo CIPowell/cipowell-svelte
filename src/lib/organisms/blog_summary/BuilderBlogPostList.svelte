@@ -3,8 +3,13 @@
     import type { BlogPostSummary } from "$lib/services/blog/Blog";
     import BlogPostList from "./BlogPostList.svelte";
 
-    export let tags: string[] = [];
-    export let posts: BlogPostSummary[] = [];
+    interface Props {
+        tags?: string[];
+        posts?: BlogPostSummary[];
+        children?: import('svelte').Snippet;
+    }
+
+    let { tags = [], posts = $bindable([]), children }: Props = $props();
 
     const blogClient = new BuildIOClient();
 
@@ -18,4 +23,4 @@
 
 <BlogPostList {posts} />
 
-<slot></slot>
+{@render children?.()}

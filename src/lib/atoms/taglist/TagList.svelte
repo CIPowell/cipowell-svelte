@@ -1,11 +1,15 @@
 <script lang="ts">
-    export let tags: string[] = [];
-    export let clickHandler: Function;
+    interface Props {
+        tags?: string[];
+        clickHandler: Function;
+    }
+
+    let { tags = [], clickHandler }: Props = $props();
 </script>
 
 <div>
     {#each tags as tag}
-        <button on:click={clickHandler(tag)}>{tag}</button>
+        <button onclick={clickHandler(tag)}>{tag}</button>
     {/each}
 </div>
 
