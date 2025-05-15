@@ -1,8 +1,12 @@
 <script lang="ts">
     import type { BlogPostSummary } from "$lib/services/blog/Blog";
-    export let post: BlogPostSummary
 
     import Image from "$lib/atoms/image/Image.svelte";
+    interface Props {
+        post: BlogPostSummary;
+    }
+
+    let { post }: Props = $props();
 </script>
 
 <style>

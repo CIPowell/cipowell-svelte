@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export const meta = {
 		title: 'Design System/molecules/blog/Blog Preview',
 		component: BlogPreview
@@ -10,8 +10,10 @@
 	import BlogPreview from './BlogPreview.svelte';
 </script>
 
-<Template let:args>
-	<BlogPreview {...args} />
+<Template >
+	{#snippet children({ args })}
+		<BlogPreview {...args} />
+	{/snippet}
 </Template>
 
 <Story

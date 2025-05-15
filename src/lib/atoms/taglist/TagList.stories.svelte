@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
     export const meta = {
         title: "Design System/Atoms/taglist/TagList",
         component: TagList
@@ -11,8 +11,10 @@
     import TagList from "./TagList.svelte";
 </script>
 
-<Template let:args>
-    <TagList {...args} />
+<Template >
+    {#snippet children({ args })}
+        <TagList {...args} />
+    {/snippet}
 </Template>
 
 <Story name="Normal" args={{tags: ['one', 'two', 'three'], clickHandler: fn()}} play={async ({ args, canvasElement }) => {

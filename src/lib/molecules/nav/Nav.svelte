@@ -2,7 +2,11 @@
     import NavHeaderLink from '$lib/atoms/links/NavHeaderLink.svelte';
     import type { NavLink } from '$lib/services/navigation/nav';
 
-    export let links: NavLink[] = [];
+    interface Props {
+        links?: NavLink[];
+    }
+
+    let { links = [] }: Props = $props();
 </script>
 
 <nav>

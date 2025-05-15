@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
     export const meta = {
         title: "Design System/Molecules/ Navigation",
         component: Nav
@@ -15,8 +15,10 @@
     }
 </script>
 
-<Template let:args>
-    <Nav {...args} />
+<Template >
+    {#snippet children({ args })}
+        <Nav {...args} />
+    {/snippet}
 </Template>
 
 <Story name="Demo Bar" 
