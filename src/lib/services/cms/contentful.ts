@@ -32,21 +32,36 @@ export class Contentful implements NavClient, PageClient {
     async getPage(slug: string): Promise<Page> {
         let pages = await this.client.getEntries<ContentfulPage>({
             'content_type': 'page',
-            'fields.slug': slug
+            'fields.slug': slug || 'home'
         });
 
-        if (pages.items.length === 0) {
+        if (!pages.items || pages.items.length === 0) {
+            console.error(`Page not found: ${slug}`)
             throw new Error(`Page not found: ${slug}`);
         }
 
         let page = pages.items[0];
+        let breadcrumbs =  this.getBreadcrumb(page);
 
         return {
             title: page.fields.title,
             slug: page.fields.slug,
             content: documentToHtmlString(page.fields.content),
-            breadcrumbs: []
+            breadcrumbs
         };
+    }
+
+    getBreadcrumb(page: contentful.Entry): NavLink[] {
+        let breadcrumbs: NavLink[] = []
+        if (page.fields.parent) { 
+            breadcrumbs = this.getBreadcrumb(page.fields.parent)
+        }
+
+        breadcrumbs.push({
+            title: page.fields.title,
+            target: page.fields.slug
+        });
+        return breadcrumbs;
     }
 };
 

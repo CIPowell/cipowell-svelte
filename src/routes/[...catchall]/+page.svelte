@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Breadcrumbs from "$lib/molecules/breadcrumbs/Breadcrumbs.svelte";
+
     let { data } = $props();
 </script>
 
@@ -8,5 +10,8 @@
 
 <main>
    <h1>{data.title}</h1>
+
+   <Breadcrumbs links={data.breadcrumbs} />
+
    {@html data.content}
 </main>
