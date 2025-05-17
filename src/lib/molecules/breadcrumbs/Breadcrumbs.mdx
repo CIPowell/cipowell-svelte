@@ -1,0 +1,18 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as BreadcrumbStories from './Breadcrumbs.stories';
+
+<Meta title="Molecules/Breadcrumbs" of={BreadcrumbStories} />
+
+# Breadcrumbs
+
+A molecule component that displays a horizontal breadcrumb navigation from a list of NavLink objects.
+
+## Example
+
+<Canvas of={BreadcrumbStories.Basic} />
+
+## Props
+
+| Name  | Type      | Description                  |
+|-------|-----------|------------------------------|
+| links | NavLink[] | Array of breadcrumb links    | 
