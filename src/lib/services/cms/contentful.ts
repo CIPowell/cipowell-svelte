@@ -5,6 +5,7 @@ import type { ContentfulPage } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { page } from '$app/state';
+import { BLOCKS } from '@contentful/rich-text-types';
 
 export class Contentful implements NavClient, PageClient {
     client: contentful.ContentfulClientApi<undefined>;
@@ -43,10 +44,30 @@ export class Contentful implements NavClient, PageClient {
         let page = pages.items[0];
         let breadcrumbs =  this.getBreadcrumb(page);
 
+        // Custom asset renderer for Contentful rich text
+        const options = {
+            renderNode: {
+                [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
+                    const { file, description, title } = node.data.target.fields;
+                    // Use the same markup as the Image atom, but as a string
+                    // Default width to 600 if not specified
+                    const width = 600;
+                    const imageUrl = file?.url?.startsWith('http') ? file.url : `https:${file.url}`;
+                    return `
+<picture>
+  <source srcset=\"${imageUrl}?w=${width}&fm=avif\" />
+  <source srcset=\"${imageUrl}?w=${width}&fm=webp\" />
+  <img src=\"${imageUrl}?w=${width}&fm=png\" alt=\"${description || title || ''}\" />
+</picture>
+`;
+                }
+            }
+        };
+
         return {
             title: page.fields.title,
             slug: page.fields.slug,
-            content: documentToHtmlString(page.fields.content),
+            content: documentToHtmlString(page.fields.content, options),
             breadcrumbs
         };
     }
