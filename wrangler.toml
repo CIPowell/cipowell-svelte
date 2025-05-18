@@ -70,6 +70,8 @@ pages_build_output_dir = ".svelte-kit/cloudflare"
 # Docs: https://developers.cloudflare.com/pages/functions/wrangler-configuration#environment-specific-overrides
 
 ######## PREVIEW environment config ########
+[env.preview]
+name = "preview"
 
 [env.preview.vars]
 # Public API Key, doesn't need to be kept secret
