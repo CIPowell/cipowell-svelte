@@ -62,6 +62,6 @@
   },
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^17.0.0",
-    "contentful": "^11.7.6"
+    "contentful": "^11.7.10"
   }
 }
