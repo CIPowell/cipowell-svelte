@@ -3,7 +3,7 @@ name = "cipowell"
 compatibility_flags = [
     "nodejs_compat"
 ]
-compatibility_date = "2025-05-15"
+compatibility_date = "2025-09-01"
 pages_build_output_dir = ".svelte-kit/cloudflare"
 
 # Automatically place your workloads in an optimal location to minimize latency.
