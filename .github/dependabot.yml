@@ -9,3 +9,16 @@ updates:
       prefix: "chore(deps)"
     labels:
       - "dependencies"
+    groups:
+      storybook:
+        patterns:
+          - "storybook"
+          - "@storybook/*"
+      svelte:
+        patterns:
+          - "svelte"
+          - "@sveltejs/*"
+      contentful:
+        patterns:
+          - "@contentful/*"
+          - "contentful"
