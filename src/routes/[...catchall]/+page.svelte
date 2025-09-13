@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-    <title>Chris I Powell - {data.title}</title>
+    <title >Chris I Powell - {data.title}</title>
 </svelte:head>
 
 <main>
