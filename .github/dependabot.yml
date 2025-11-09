@@ -23,3 +23,7 @@ updates:
         patterns:
           - "@contentful/*"
           - "contentful"
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
