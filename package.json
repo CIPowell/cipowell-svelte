@@ -26,7 +26,6 @@
     "@storybook/sveltekit": "^10.0.8",
     "@storybook/addon-svelte-csf": "^5.0.10",
     "@storybook/addon-vitest": "^10.0.8",
-    "@storybook/test-runner": "^0.24.1",
     "@sveltejs/adapter-auto": "^7.0.0",
     "@sveltejs/adapter-cloudflare": "^7.2.4",
     "@sveltejs/kit": "^2.49.0",
