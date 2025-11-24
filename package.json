@@ -30,7 +30,7 @@
     "@sveltejs/kit": "^2.49.0",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/svelte": "^5.2.8",
+    "@testing-library/svelte": "^5.2.9",
     "@types/eslint": "^9.6.0",
     "@vitest/ui": "^4.0.8",
     "axe-playwright": "^2.0.2",
