@@ -2,12 +2,12 @@ import type { StorybookConfig } from '@storybook/sveltekit';
 import remarkGfm from 'remark-gfm';
 
 const config: StorybookConfig = {
-	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|ts)'],
+	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|ts|svelte)'],
 	addons: [
-		'@storybook/addon-links',
-		'@chromatic-com/storybook',
-		'@storybook/addon-a11y',
-		{
+        '@storybook/addon-links',
+        '@chromatic-com/storybook',
+        '@storybook/addon-a11y',
+        {
 			name: "@storybook/addon-docs",
 			options: {
 				mdxPluginOptions: {
@@ -16,8 +16,15 @@ const config: StorybookConfig = {
 					},
 				},
 			}
-		}
-	],
+		},
+        {
+			name: '@storybook/addon-svelte-csf',
+			options: {
+				legacyTemplate: true, // Enables the legacy template syntax
+			},
+		},
+        '@storybook/addon-vitest'
+    ],
 	framework: {
 		name: '@storybook/sveltekit',
 		options: {}
