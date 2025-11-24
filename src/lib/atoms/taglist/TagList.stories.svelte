@@ -18,7 +18,7 @@
 	play={async ({ args, canvasElement }) => {
 		const canvas = within(canvasElement);
 
-		args.tags.forEach(async (arg) => {
+		args.tags.forEach(async (/** @type {string | number | RegExp | ((content: string, element: Element | null) => boolean)} */ arg) => {
 			let tag = canvas.getByText(arg);
 			await userEvent.click(tag);
 

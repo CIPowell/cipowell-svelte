@@ -1,8 +1,11 @@
 <script context="module">
 	import { defineMeta } from '@storybook/addon-svelte-csf';
-	import { within, userEvent } from '@testing-library/svelte';
+	import { within, userEvent } from 'storybook/test';
 	import Nav from './Nav.svelte';
 
+	/**
+	 * @param {number | undefined} ms
+	 */
 	function sleep(ms) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
