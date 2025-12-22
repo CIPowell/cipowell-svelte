@@ -33,7 +33,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.2.9",
     "@types/eslint": "^9.6.0",
-    "@vitest/ui": "^4.0.15",
+    "@vitest/ui": "^4.0.16",
     "axe-playwright": "^2.0.2",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.5",
@@ -50,10 +50,10 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.49.0",
     "vite": "^7.3.0",
-    "vitest": "^4.0.15",
+    "vitest": "^4.0.16",
     "playwright": "^1.56.1",
-    "@vitest/browser-playwright": "4.0.15",
-    "@vitest/coverage-v8": "4.0.15"
+    "@vitest/browser-playwright": "4.0.16",
+    "@vitest/coverage-v8": "4.0.16"
   },
   "type": "module",
   "eslintConfig": {
