@@ -1,38 +1,139 @@
-# create-svelte
+# cipowell-svelte
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+SvelteKit-powered personal site that renders pages from Contentful and deploys to Cloudflare Workers.
 
-## Creating a project
+## How this repository works
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Runtime flow
+
+1. `src/routes/+layout.server.ts` loads the global navigation using `NavigationService`.
+2. `src/routes/[...catchall]/+page.server.ts` resolves the current slug (with `home` fallback in the Contentful query) and fetches page data.
+3. `src/lib/services/cms/contentful.ts` calls Contentful APIs, builds breadcrumbs recursively from parent pages, and converts Rich Text to HTML.
+4. `src/routes/[...catchall]/+page.svelte` renders page title, breadcrumbs, and body content (`{@html ...}` output from Contentful rich text rendering).
+
+### Main building blocks
+
+- **SvelteKit app shell**: `+layout.svelte` renders `Header`, `Nav`, page content, and footer.
+- **Service layer**: navigation/page clients are abstracted behind small interfaces in `src/lib/services/**`.
+- **Content source**: Contentful is the backing CMS for page content and nav links.
+- **Component library**: atoms/molecules/organisms live in `src/lib/**` with Storybook stories and docs.
+- **Cloudflare target**: adapter is `@sveltejs/adapter-cloudflare` and Worker config is in `wrangler.toml`.
+
+## Prerequisites
+
+- Node.js 20+ (recommended for current SvelteKit/Vite ecosystem)
+- npm 10+
+- A Contentful delivery token (for local/server rendering)
+- Playwright browser binaries (for browser-based tests)
+
+## Setup
+
+1. Install dependencies:
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+npm install
 ```
 
-## Developing
+2. Create a local env file (or export in shell/CI):
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```bash
+touch .env
+```
+
+3. Add required variables to `.env` (or your shell/CI environment):
+
+```bash
+CONTENTFUL_API_KEY=<your_contentful_delivery_or_preview_token>
+# Optional, defaults to cdn.contentful.com:
+CONTENTFUL_HOST=cdn.contentful.com
+```
+
+> Notes:
+>
+> - Preview environment uses `preview.contentful.com` via `wrangler.toml`.
+> - If `CONTENTFUL_API_KEY` is missing, server-side page and nav fetches will fail.
+
+4. (Only needed once per machine) install Playwright browsers:
+
+```bash
+npx playwright install
+```
+
+## Common tasks
+
+### Local development
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Start local dev server (Vite + SvelteKit).
 
-To create a production version of your app:
+### Production build and preview
 
 ```bash
 npm run build
+npm run preview
 ```
 
-You can preview the production build with `npm run preview`.
+Build and serve the production artifact locally.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+### Type checking
+
+```bash
+npm run check
+```
+
+Runs `svelte-kit sync` and `svelte-check`.
+
+### Linting and formatting
+
+```bash
+npm run lint
+npm run format
+```
+
+- `lint` runs Prettier check + ESLint.
+- `format` applies Prettier formatting.
+
+### Unit tests
+
+```bash
+npm run test:unit
+```
+
+Runs Vitest for `src/**/*.{test,spec}.{js,ts}`.
+
+### Integration tests
+
+```bash
+npm run test:integration
+```
+
+Runs Playwright tests in `tests/` against a built+previewed app.
+
+### Storybook + story tests
+
+```bash
+npm run storybook
+npm run build-storybook
+npm run test:storybook
+```
+
+- `storybook`: local component explorer on port `6006`.
+- `build-storybook`: static Storybook build.
+- `test:storybook`: Vitest Storybook project (browser mode).
+
+### Full test suite
+
+```bash
+npm test
+```
+
+Runs integration tests, then unit tests.
+
+## Cloudflare deployment notes
+
+- SvelteKit is configured with Cloudflare adapter in `svelte.config.js`.
+- Worker config, compatibility date/flags, and preview env vars are defined in `wrangler.toml`.
+- Build artifacts are served from `.svelte-kit/cloudflare` per wrangler assets config.
