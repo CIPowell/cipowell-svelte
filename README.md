@@ -34,10 +34,10 @@ SvelteKit-powered personal site that renders pages from Contentful and deploys t
 npm install
 ```
 
-2. Create a local env file (or export in shell/CI):
+2. Create a local env file from the template (or export in shell/CI):
 
 ```bash
-touch .env
+cp .env.example .env
 ```
 
 3. Add required variables to `.env` (or your shell/CI environment):
@@ -102,7 +102,7 @@ npm run format
 npm run test:unit
 ```
 
-Runs Vitest for `src/**/*.{test,spec}.{js,ts}`.
+Runs the dedicated `unit` Vitest project for `src/**/*.{test,spec}.{js,ts}` (no Storybook browser runner).
 
 ### Integration tests
 
@@ -130,7 +130,7 @@ npm run test:storybook
 npm test
 ```
 
-Runs integration tests, then unit tests.
+Runs integration tests, then the dedicated unit test project.
 
 ## Cloudflare deployment notes
 
