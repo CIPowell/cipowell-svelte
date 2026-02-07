@@ -1,23 +1,29 @@
-import { NavigationService, type NavLink } from "$lib/services/navigation/nav";
-import { error } from "@sveltejs/kit";
+import { NavigationService, type NavLink } from '$lib/services/navigation/nav';
+import { error } from '@sveltejs/kit';
 
 interface LayoutData {
-    navLinks: NavLink[]
+	navLinks: NavLink[];
 }
 
-export async function load() {
-    const navService = new NavigationService();
-    const layoutData: LayoutData = {
-        navLinks: []
-    };
+export async function load({ platform, setHeaders }) {
+	const navService = new NavigationService(platform);
+	const layoutData: LayoutData = {
+		navLinks: []
+	};
 
-    try {
-        layoutData.navLinks = await navService.getGlobalNavLinks();
-    } catch(err) {
-        error(500, {
-            message: 'Failed to load Layout data'
-        });
-    }
+	try {
+		layoutData.navLinks = await navService.getGlobalNavLinks();
+	} catch {
+		error(500, {
+			message: 'Failed to load Layout data'
+		});
+	}
 
-    return layoutData;
+	// Set cache headers for the page response
+	// Cache for 1 hour in browser, 24 hours in CDN
+	setHeaders({
+		'Cache-Control': 'public, max-age=3600, s-maxage=86400'
+	});
+
+	return layoutData;
 }

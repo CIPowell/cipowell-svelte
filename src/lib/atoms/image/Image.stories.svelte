@@ -8,7 +8,10 @@
 	});
 </script>
 
-<Story name="Placeholder" args={{ image: 'https://placehold.co/600x400', altText: 'Placeholder', width: 600 }} />
+<Story
+	name="Placeholder"
+	args={{ image: 'https://placehold.co/600x400', altText: 'Placeholder', width: 600 }}
+/>
 
 <Story
 	name="ArticlePreview"

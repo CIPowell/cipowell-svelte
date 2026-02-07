@@ -1,21 +1,25 @@
 import Contentful from '$lib/services/cms/contentful';
 import type { Page } from '$lib/services/page/Page';
-import type { NavLink } from '$lib/services/navigation/nav';
 import { error } from '@sveltejs/kit';
 
+export async function load({ params, platform, setHeaders }) {
+	const slug = params.catchall;
+	const contentful = new Contentful(platform);
+	let pageData: Page;
 
-export async function load({ params }) {
-    const slug = params.catchall;
-    const contentful = new Contentful();
-    let pageData: Page;
+	try {
+		pageData = await contentful.getPage(slug);
+	} catch {
+		throw error(404, {
+			message: 'Page not found'
+		});
+	}
 
-    try {
-        pageData = await contentful.getPage(slug);
-    } catch (err) {
-        throw error(404, {
-            message: 'Page not found'
-        });
-    }
+	// Set cache headers for the page response
+	// Cache for 1 hour in browser and CDN
+	setHeaders({
+		'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+	});
 
-    return pageData;
+	return pageData;
 }

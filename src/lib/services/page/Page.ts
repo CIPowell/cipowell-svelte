@@ -1,25 +1,25 @@
-import type { NavLink } from "../navigation/nav";
-import Contentful from "../cms/contentful";
+import type { NavLink } from '../navigation/nav';
+import Contentful from '../cms/contentful';
 
 export interface Page {
-    title: string
-    slug: string
-    content: string
-    breadcrumbs: NavLink[]
+	title: string;
+	slug: string;
+	content: string;
+	breadcrumbs: NavLink[];
 }
 
 export interface PageClient {
-    getPage(slug: string): Promise<Page>
+	getPage(slug: string): Promise<Page>;
 }
 
 export class PageService {
-    pageClient: PageClient
+	pageClient: PageClient;
 
-    constructor() {
-        this.pageClient = new Contentful()
-    }
+	constructor(platform?: App.Platform) {
+		this.pageClient = new Contentful(platform);
+	}
 
-    async getPage(slug: string): Promise<Page> {
-        return this.pageClient.getPage(slug)
-    }
+	async getPage(slug: string): Promise<Page> {
+		return this.pageClient.getPage(slug);
+	}
 }

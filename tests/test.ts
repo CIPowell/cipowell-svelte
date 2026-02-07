@@ -7,7 +7,7 @@ test('home page has expected h1', async ({ page }) => {
 });
 
 test('homepage should have the main nav', async ({ page }) => {
-	await page.goto('/')
+	await page.goto('/');
 	await expect(page.locator('nav')).toBeVisible();
 	await expect(page.locator('a')).toBeVisible();
 });
