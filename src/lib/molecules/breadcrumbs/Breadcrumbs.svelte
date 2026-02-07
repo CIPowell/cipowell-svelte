@@ -24,7 +24,7 @@
 		padding: 0 0.5em;
 		color: #888;
 	}
-  
+
 	.breadcrumbs a {
 		text-decoration: none;
 	}

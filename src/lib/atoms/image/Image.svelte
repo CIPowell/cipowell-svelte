@@ -6,12 +6,7 @@
 		left?: boolean;
 	}
 
-	let {
-		image,
-		altText,
-		width,
-		left = false
-	}: Props = $props();
+	let { image, altText, width, left = false }: Props = $props();
 </script>
 
 <picture class:left>
