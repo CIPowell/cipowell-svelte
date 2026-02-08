@@ -7,13 +7,16 @@ import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { BLOCKS } from '@contentful/rich-text-types';
 import { ContentfulCache } from './cache';
 
+const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
+const CONTENTFUL_PREVIEW_HOST = 'preview.contentful.com';
+
 export class Contentful implements NavClient, PageClient {
 	client: contentful.ContentfulClientApi<undefined>;
 	cache: ContentfulCache;
 
 	constructor(platform?: App.Platform) {
-		const host = env.CONTENTFUL_HOST || 'cdn.contentful.com';
-		const isPreviewMode = host === 'preview.contentful.com';
+		const host = env.CONTENTFUL_HOST || CONTENTFUL_DELIVERY_HOST;
+		const isPreviewMode = host === CONTENTFUL_PREVIEW_HOST;
 
 		// Use preview API key if available and we're in preview mode, otherwise use regular key
 		const accessToken =
