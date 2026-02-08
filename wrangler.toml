@@ -7,11 +7,17 @@ compatibility_flags = [
 compatibility_date = "2025-09-01"
 preview_urls = true
 
+[observability]
+enabled = true
+
 [assets]
 binding = "ASSETS"
 directory = ".svelte-kit/cloudflare"
 
 ######## PREVIEW environment config ########
+# Preview mode uses the Contentful Preview API to show draft content
+# Set CONTENTFUL_PREVIEW_API_KEY secret to use a preview-specific token
+# If not set, falls back to CONTENTFUL_API_KEY
 
 [env.preview.vars]
 CONTENTFUL_HOST = "preview.contentful.com"

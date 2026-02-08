@@ -4,27 +4,27 @@ import remarkGfm from 'remark-gfm';
 const config: StorybookConfig = {
 	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|ts|svelte)'],
 	addons: [
-        '@storybook/addon-links',
-        '@chromatic-com/storybook',
-        '@storybook/addon-a11y',
-        {
-			name: "@storybook/addon-docs",
+		'@storybook/addon-links',
+		'@chromatic-com/storybook',
+		'@storybook/addon-a11y',
+		{
+			name: '@storybook/addon-docs',
 			options: {
 				mdxPluginOptions: {
 					mdxCompileOptions: {
-					  remarkPlugins: [remarkGfm],
-					},
-				},
+						remarkPlugins: [remarkGfm]
+					}
+				}
 			}
 		},
-        {
+		{
 			name: '@storybook/addon-svelte-csf',
 			options: {
-				legacyTemplate: true, // Enables the legacy template syntax
-			},
+				legacyTemplate: true // Enables the legacy template syntax
+			}
 		},
-        '@storybook/addon-vitest'
-    ],
+		'@storybook/addon-vitest'
+	],
 	framework: {
 		name: '@storybook/sveltekit',
 		options: {}

@@ -4,86 +4,123 @@ import * as contentful from 'contentful';
 import type { ContentfulPage } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
-import { page } from '$app/state';
 import { BLOCKS } from '@contentful/rich-text-types';
+import { ContentfulCache } from './cache';
+
+const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
+const CONTENTFUL_PREVIEW_HOST = 'preview.contentful.com';
 
 export class Contentful implements NavClient, PageClient {
-    client: contentful.ContentfulClientApi<undefined>;
+	client: contentful.ContentfulClientApi<undefined>;
+	cache: ContentfulCache;
 
-    constructor() {
-        this.client = contentful.createClient({
-            space: 'c85g7urd11yl',
-            accessToken: env.CONTENTFUL_API_KEY,
-            host: env.CONTENTFUL_HOST || "cdn.contentful.com"
-        });
-    }
+	constructor(platform?: App.Platform) {
+		const host = env.CONTENTFUL_HOST || CONTENTFUL_DELIVERY_HOST;
+		const isPreviewMode = host === CONTENTFUL_PREVIEW_HOST;
 
-    async getGlobalNavLinks(): Promise<NavLink[]> {
-        let pages = await this.client.getEntries<ContentfulPage>({
-            'content_type': 'page',
-        });
+		// Use preview API key if available and we're in preview mode, otherwise use regular key
+		const accessToken =
+			isPreviewMode && env.CONTENTFUL_PREVIEW_API_KEY
+				? env.CONTENTFUL_PREVIEW_API_KEY
+				: env.CONTENTFUL_API_KEY;
 
-        return pages.items.filter(p => !p.fields.parent)
-            .map(p => ({
-                title: p.fields.title,
-                target: p.fields.slug
-            }));
-    }
+		if (!accessToken) {
+			const requiredKey = isPreviewMode
+				? 'CONTENTFUL_PREVIEW_API_KEY or CONTENTFUL_API_KEY'
+				: 'CONTENTFUL_API_KEY';
+			throw new Error(`Missing required environment variable: ${requiredKey}`);
+		}
 
-    async getPage(slug: string): Promise<Page> {
-        let pages = await this.client.getEntries<ContentfulPage>({
-            'content_type': 'page',
-            'fields.slug': slug || 'home'
-        });
+		this.client = contentful.createClient({
+			space: 'c85g7urd11yl',
+			accessToken,
+			host
+		});
+		this.cache = new ContentfulCache(platform, host);
+	}
 
-        if (!pages.items || pages.items.length === 0) {
-            console.error(`Page not found: ${slug}`)
-            throw new Error(`Page not found: ${slug}`);
-        }
+	async getGlobalNavLinks(): Promise<NavLink[]> {
+		return this.cache.get(
+			'nav-links',
+			async () => {
+				const pages = await this.client.getEntries<ContentfulPage>({
+					content_type: 'page'
+				});
 
-        let page = pages.items[0];
-        let breadcrumbs =  this.getBreadcrumb(page);
+				return pages.items
+					.filter((p) => !p.fields.parent)
+					.map((p) => ({
+						title: p.fields.title,
+						target: p.fields.slug
+					}));
+			},
+			60 * 60 * 24 // Cache nav links for 24 hours
+		);
+	}
 
-        // Custom asset renderer for Contentful rich text
-        const options = {
-            renderNode: {
-                [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
-                    const { file, description, title } = node.data.target.fields;
-                    // Use the same markup as the Image atom, but as a string
-                    // Default width to 600 if not specified
-                    const width = 600;
-                    const imageUrl = file?.url?.startsWith('http') ? file.url : `https:${file.url}`;
-                    return `
+	async getPage(slug: string): Promise<Page> {
+		return this.cache.get(
+			`page-${slug || 'home'}`,
+			async () => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
+				const pages = await this.client.getEntries<ContentfulPage>({
+					content_type: 'page',
+					'fields.slug': slug || 'home'
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				} as any);
+
+				if (!pages.items || pages.items.length === 0) {
+					console.error(`Page not found: ${slug}`);
+					throw new Error(`Page not found: ${slug}`);
+				}
+
+				const page = pages.items[0];
+				const breadcrumbs = this.getBreadcrumb(page);
+
+				// Custom asset renderer for Contentful rich text
+				const options = {
+					renderNode: {
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						[BLOCKS.EMBEDDED_ASSET]: (node: any) => {
+							const { file, description, title } = node.data.target.fields;
+							// Use the same markup as the Image atom, but as a string
+							// Default width to 600 if not specified
+							const width = 600;
+							const imageUrl = file?.url?.startsWith('http') ? file.url : `https:${file.url}`;
+							return `
 <picture>
-  <source srcset=\"${imageUrl}?w=${width}&fm=avif\" />
-  <source srcset=\"${imageUrl}?w=${width}&fm=webp\" />
-  <img src=\"${imageUrl}?w=${width}&fm=png\" alt=\"${description || title || ''}\" />
+  <source srcset="${imageUrl}?w=${width}&fm=avif" />
+  <source srcset="${imageUrl}?w=${width}&fm=webp" />
+  <img src="${imageUrl}?w=${width}&fm=png" alt="${description || title || ''}" />
 </picture>
 `;
-                }
-            }
-        };
+						}
+					}
+				};
 
-        return {
-            title: page.fields.title,
-            slug: page.fields.slug,
-            content: documentToHtmlString(page.fields.content, options),
-            breadcrumbs
-        };
-    }
+				return {
+					title: page.fields.title as string,
+					slug: page.fields.slug as string,
+					content: documentToHtmlString(page.fields.content, options),
+					breadcrumbs
+				};
+			},
+			60 * 60 // Cache pages for 1 hour
+		);
+	}
 
-    getBreadcrumb(page: contentful.Entry): NavLink[] {
-        let breadcrumbs: NavLink[] = []
-        if (page.fields.parent) { 
-            breadcrumbs = this.getBreadcrumb(page.fields.parent)
-        }
+	getBreadcrumb(page: contentful.Entry): NavLink[] {
+		let breadcrumbs: NavLink[] = [];
+		if (page.fields.parent) {
+			breadcrumbs = this.getBreadcrumb(page.fields.parent as contentful.Entry);
+		}
 
-        breadcrumbs.push({
-            title: page.fields.title,
-            target: page.fields.slug
-        });
-        return breadcrumbs;
-    }
-};
+		breadcrumbs.push({
+			title: page.fields.title as string,
+			target: page.fields.slug as string
+		});
+		return breadcrumbs;
+	}
+}
 
 export default Contentful;
