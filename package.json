@@ -35,7 +35,7 @@
 		"@types/eslint": "^9.6.0",
 		"@vitest/ui": "^4.0.18",
 		"axe-playwright": "^2.0.2",
-		"eslint": "^10.0.0",
+		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-storybook": "^10.2.7",
 		"eslint-plugin-svelte": "^3.14.0",
