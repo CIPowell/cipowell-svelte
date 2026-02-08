@@ -12,10 +12,20 @@ export class Contentful implements NavClient, PageClient {
 	cache: ContentfulCache;
 
 	constructor(platform?: App.Platform) {
+		const host = env.CONTENTFUL_HOST || 'cdn.contentful.com';
+		const isPreviewMode = host === 'preview.contentful.com';
+
+		// Use preview API key if available and we're in preview mode, otherwise use regular key
+		const accessToken = (
+			isPreviewMode && env.CONTENTFUL_PREVIEW_API_KEY
+				? env.CONTENTFUL_PREVIEW_API_KEY
+				: env.CONTENTFUL_API_KEY
+		) as string;
+
 		this.client = contentful.createClient({
 			space: 'c85g7urd11yl',
-			accessToken: env.CONTENTFUL_API_KEY as string,
-			host: env.CONTENTFUL_HOST || 'cdn.contentful.com'
+			accessToken,
+			host
 		});
 		this.cache = new ContentfulCache(platform);
 	}
