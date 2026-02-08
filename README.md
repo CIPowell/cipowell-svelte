@@ -36,3 +36,27 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Contentful Configuration
+
+This project uses Contentful as a headless CMS. The following environment variables are required:
+
+### Required Secrets
+
+- `CONTENTFUL_API_KEY` - Delivery API token (for production)
+- `CONTENTFUL_PREVIEW_API_KEY` - Preview API token (optional, for preview environments)
+
+### Environment Variables
+
+- `CONTENTFUL_HOST` - Contentful API host (defaults to `cdn.contentful.com`)
+  - For preview mode, set to `preview.contentful.com`
+
+### Preview Mode
+
+To use Contentful's Preview API (for viewing draft content):
+
+1. Set `CONTENTFUL_HOST=preview.contentful.com` in your environment
+2. Set `CONTENTFUL_PREVIEW_API_KEY` with your preview API token
+3. If `CONTENTFUL_PREVIEW_API_KEY` is not set, the app will fall back to using `CONTENTFUL_API_KEY`
+
+In wrangler.toml, the preview environment is already configured with `CONTENTFUL_HOST = "preview.contentful.com"`.
