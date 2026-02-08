@@ -16,11 +16,17 @@ export class Contentful implements NavClient, PageClient {
 		const isPreviewMode = host === 'preview.contentful.com';
 
 		// Use preview API key if available and we're in preview mode, otherwise use regular key
-		const accessToken = (
+		const accessToken =
 			isPreviewMode && env.CONTENTFUL_PREVIEW_API_KEY
 				? env.CONTENTFUL_PREVIEW_API_KEY
-				: env.CONTENTFUL_API_KEY
-		) as string;
+				: env.CONTENTFUL_API_KEY;
+
+		if (!accessToken) {
+			const requiredKey = isPreviewMode
+				? 'CONTENTFUL_PREVIEW_API_KEY or CONTENTFUL_API_KEY'
+				: 'CONTENTFUL_API_KEY';
+			throw new Error(`Missing required environment variable: ${requiredKey}`);
+		}
 
 		this.client = contentful.createClient({
 			space: 'c85g7urd11yl',
