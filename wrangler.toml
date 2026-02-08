@@ -7,6 +7,9 @@ compatibility_flags = [
 compatibility_date = "2025-09-01"
 preview_urls = true
 
+[observability]
+enabled = true
+
 [assets]
 binding = "ASSETS"
 directory = ".svelte-kit/cloudflare"

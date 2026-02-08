@@ -1,6 +1,7 @@
 import Contentful from '$lib/services/cms/contentful';
 import type { Page } from '$lib/services/page/Page';
 import { error } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 
 export async function load({ params, platform, setHeaders }) {
 	const slug = params.catchall;
@@ -15,10 +16,12 @@ export async function load({ params, platform, setHeaders }) {
 		});
 	}
 
-	// Set cache headers for the page response
-	// Cache for 1 hour in browser and CDN
+	// Disable caching for preview mode to avoid persisting draft content
+	const contentfulHost = env.CONTENTFUL_HOST;
+	const isPreviewMode = contentfulHost?.includes('preview');
+
 	setHeaders({
-		'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+		'Cache-Control': isPreviewMode ? 'private, no-store' : 'public, max-age=3600, s-maxage=3600'
 	});
 
 	return pageData;

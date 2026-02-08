@@ -1,5 +1,6 @@
 import { NavigationService, type NavLink } from '$lib/services/navigation/nav';
 import { error } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 
 interface LayoutData {
 	navLinks: NavLink[];
@@ -14,15 +15,17 @@ export async function load({ platform, setHeaders }) {
 	try {
 		layoutData.navLinks = await navService.getGlobalNavLinks();
 	} catch {
-		error(500, {
+		throw error(500, {
 			message: 'Failed to load Layout data'
 		});
 	}
 
-	// Set cache headers for the page response
-	// Cache for 1 hour in browser, 24 hours in CDN
+	// Disable caching for preview mode to avoid persisting draft content
+	const contentfulHost = env.CONTENTFUL_HOST;
+	const isPreviewMode = contentfulHost?.includes('preview');
+
 	setHeaders({
-		'Cache-Control': 'public, max-age=3600, s-maxage=86400'
+		'Cache-Control': isPreviewMode ? 'private, no-store' : 'public, max-age=3600, s-maxage=86400'
 	});
 
 	return layoutData;

@@ -36,7 +36,7 @@ export class Contentful implements NavClient, PageClient {
 			accessToken,
 			host
 		});
-		this.cache = new ContentfulCache(platform);
+		this.cache = new ContentfulCache(platform, host);
 	}
 
 	async getGlobalNavLinks(): Promise<NavLink[]> {

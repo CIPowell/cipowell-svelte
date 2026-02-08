@@ -18,16 +18,12 @@
 	play={async ({ args, canvasElement }) => {
 		const canvas = within(canvasElement);
 
-		args.tags.forEach(
-			async (
-				/** @type {string | number | RegExp | ((content: string, element: Element | null) => boolean)} */ arg
-			) => {
-				let tag = canvas.getByText(arg);
-				await userEvent.click(tag);
+		for (const arg of args.tags) {
+			let tag = canvas.getByText(arg);
+			await userEvent.click(tag);
 
-				await waitFor(() => expect(args.clickHandler).toHaveBeenCalledWith(arg));
-			}
-		);
+			await waitFor(() => expect(args.clickHandler).toHaveBeenCalledWith(arg));
+		}
 	}}
 />
 
