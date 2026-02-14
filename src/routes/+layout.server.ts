@@ -1,5 +1,4 @@
-import { NavigationService, type NavLink } from '$lib/services/navigation/nav';
-import { error } from '@sveltejs/kit';
+import { NavigationService, getOrderedNavLinks, type NavLink } from '$lib/services/navigation/nav';
 import { env } from '$env/dynamic/private';
 
 interface LayoutData {
@@ -7,17 +6,15 @@ interface LayoutData {
 }
 
 export async function load({ platform, setHeaders }) {
-	const navService = new NavigationService(platform);
 	const layoutData: LayoutData = {
 		navLinks: []
 	};
 
 	try {
-		layoutData.navLinks = await navService.getGlobalNavLinks();
+		const navService = new NavigationService(platform);
+		layoutData.navLinks = getOrderedNavLinks(await navService.getGlobalNavLinks());
 	} catch {
-		throw error(500, {
-			message: 'Failed to load Layout data'
-		});
+		layoutData.navLinks = getOrderedNavLinks([]);
 	}
 
 	// Disable caching for preview mode to avoid persisting draft content
