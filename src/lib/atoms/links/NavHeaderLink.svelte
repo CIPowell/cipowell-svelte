@@ -19,6 +19,8 @@
 		margin-right: 1.5rem;
 		font-family: var(--font-link);
 		font-weight: 600;
+		margin-right: 0.75rem;
+		text-decoration: none;
 		font-size: 1.1rem;
 		line-height: 1.1;
 	}
