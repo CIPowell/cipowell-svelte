@@ -3,8 +3,6 @@ import type { NavClient, NavLink } from '$lib/services/navigation/nav';
 import * as contentful from 'contentful';
 import type { ContentfulPage } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
-import { BLOCKS } from '@contentful/rich-text-types';
 import { ContentfulCache } from './cache';
 
 const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
@@ -65,7 +63,8 @@ export class Contentful implements NavClient, PageClient {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
 				const pages = await this.client.getEntries<ContentfulPage>({
 					content_type: 'page',
-					'fields.slug': slug || 'home'
+					'fields.slug': slug || 'home',
+					include: 10
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				} as any);
 
@@ -77,31 +76,10 @@ export class Contentful implements NavClient, PageClient {
 				const page = pages.items[0];
 				const breadcrumbs = this.getBreadcrumb(page);
 
-				// Custom asset renderer for Contentful rich text
-				const options = {
-					renderNode: {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						[BLOCKS.EMBEDDED_ASSET]: (node: any) => {
-							const { file, description, title } = node.data.target.fields;
-							// Use the same markup as the Image atom, but as a string
-							// Default width to 600 if not specified
-							const width = 600;
-							const imageUrl = file?.url?.startsWith('http') ? file.url : `https:${file.url}`;
-							return `
-<picture>
-  <source srcset="${imageUrl}?w=${width}&fm=avif" />
-  <source srcset="${imageUrl}?w=${width}&fm=webp" />
-  <img src="${imageUrl}?w=${width}&fm=png" alt="${description || title || ''}" />
-</picture>
-`;
-						}
-					}
-				};
-
 				return {
 					title: page.fields.title as string,
 					slug: page.fields.slug as string,
-					content: documentToHtmlString(page.fields.content, options),
+					content: page.fields.content ?? null,
 					breadcrumbs
 				};
 			},
