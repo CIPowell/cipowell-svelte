@@ -9,10 +9,33 @@
 	--color-tag-bg: #ccc;
 	--color-tag-bg-hover: #ccf;
 	--color-shadow-text: rgba(200, 200, 200, 0.6);
+	--color-white: #ffffff;
+	--color-plum-600: #4b1d6b;
+	--color-bg-primary: var(--color-background);
+	--color-bg-soft: #ebe7ef;
+	--color-focus-ring: #6a3d8f;
 
 	--font-body: 'Montserrat', 'Helvetica', sans-serif;
 	--font-heading: 'Playfair Display', 'Helvetica', sans-serif;
 	--font-link: var(--font-heading);
+
+	--font-size-h1: clamp(2.25rem, 4vw, 4rem);
+	--font-size-body-lg: clamp(1.125rem, 2vw, 1.25rem);
+	--font-weight-medium: 500;
+	--font-weight-semibold: 600;
+	--line-height-tight: 1.15;
+	--line-height-body: 1.6;
+
+	--space-1: 0.5rem;
+	--space-2: 1rem;
+	--space-3: 1.5rem;
+	--space-4: 2rem;
+	--space-5: 2.5rem;
+	--space-6: 3rem;
+	--space-7: 4.5rem;
+
+	--container-default: 75rem;
+	--container-narrow: 56.25rem;
 
 	--color-link-default: var(--color-accent-1);
 	--color-link-hover: var(--color-accent-1);

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Breadcrumbs from '$lib/molecules/breadcrumbs/Breadcrumbs.svelte';
+	import ContentfulRichText from '$lib/organisms/rich_text/ContentfulRichText.svelte';
 
 	let { data } = $props();
 </script>
@@ -9,5 +9,5 @@
 </svelte:head>
 
 <main>
-	{@html data.content}
+	<ContentfulRichText document={data.content} />
 </main>

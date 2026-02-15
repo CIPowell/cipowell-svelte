@@ -4,7 +4,7 @@ import Contentful from '../cms/contentful';
 export interface Page {
 	title: string;
 	slug: string;
-	content: string;
+	content: { nodeType: string; content: unknown[] } | null;
 	breadcrumbs: NavLink[];
 }
 
