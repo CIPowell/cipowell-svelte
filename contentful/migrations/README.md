@@ -25,7 +25,7 @@ npm run contentful:migration:new -- add-blog-post-tags
 ## Apply a migration
 
 ```bash
-npm run contentful:migration:run -- contentful/migrations/<timestamp>-add-blog-post-tags.js
+npm run contentful:migration:run -- contentful/migrations/<timestamp>-add-blog-post-tags.cjs
 ```
 
 ## Team workflow
@@ -78,5 +78,5 @@ Contentful migrations are append-only in git history. If a migration introduces 
 Example rollback command:
 
 ```bash
-npm run contentful:migration:run -- contentful/migrations/<timestamp>-rollback-<change>.js
+npm run contentful:migration:run -- contentful/migrations/<timestamp>-rollback-<change>.cjs
 ```
