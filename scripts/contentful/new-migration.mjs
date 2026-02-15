@@ -23,7 +23,7 @@ const timestamp = new Date()
 	.toISOString()
 	.replace(/[-:.TZ]/g, '')
 	.slice(0, 14);
-const fileName = `${timestamp}-${safeName}.js`;
+const fileName = `${timestamp}-${safeName}.cjs`;
 const migrationsDir = path.resolve('contentful/migrations');
 const fullPath = path.join(migrationsDir, fileName);
 

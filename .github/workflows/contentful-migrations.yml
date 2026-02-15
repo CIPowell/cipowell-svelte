@@ -48,7 +48,7 @@ jobs:
             HEAD_SHA="${{ github.sha }}"
           fi
 
-          CHANGED=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'contentful/migrations/*.js' | sort)
+          CHANGED=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'contentful/migrations/*.cjs' | sort)
 
           {
             echo "files<<EOF"
@@ -92,7 +92,7 @@ jobs:
       - name: Collect changed migration files
         id: changed
         run: |
-          CHANGED=$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- 'contentful/migrations/*.js' | sort)
+          CHANGED=$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- 'contentful/migrations/*.cjs' | sort)
           {
             echo "files<<EOF"
             echo "$CHANGED"
