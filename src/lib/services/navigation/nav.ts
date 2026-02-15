@@ -15,13 +15,57 @@ const ORDERED_NAV_ITEMS: Array<{ title: string; defaultTarget: string; aliases?:
 	{ title: 'About Me', defaultTarget: '/about', aliases: ['about'] }
 ];
 
+function normalizeValue(value: string): string {
+	return value.trim().toLowerCase();
+}
+
+function normalizeTarget(target: string): string {
+	const trimmed = target.trim();
+
+	if (!trimmed) {
+		return '';
+	}
+
+	if (trimmed === '/') {
+		return '/';
+	}
+
+	return trimmed.replace(/^\/+/, '').replace(/\/+$/, '').toLowerCase();
+}
+
+function getLinkIdentity(link: NavLink): string {
+	const normalizedTarget = normalizeTarget(link.target);
+	if (normalizedTarget) {
+		return `target:${normalizedTarget}`;
+	}
+
+	return `title:${normalizeValue(link.title)}`;
+}
+
+function dedupeLinks(links: NavLink[]): NavLink[] {
+	const seen = new Set<string>();
+	const deduped: NavLink[] = [];
+
+	for (const link of links) {
+		const identity = getLinkIdentity(link);
+		if (seen.has(identity)) {
+			continue;
+		}
+
+		seen.add(identity);
+		deduped.push(link);
+	}
+
+	return deduped;
+}
+
 export function getOrderedNavLinks(links: NavLink[]): NavLink[] {
-	const remaining = [...links];
+	const remaining = dedupeLinks(links);
 	const orderedLinks: NavLink[] = [];
 
 	for (const item of ORDERED_NAV_ITEMS) {
 		const matchIndex = remaining.findIndex((link) => {
-			const lowerTitle = link.title.trim().toLowerCase();
+			const lowerTitle = normalizeValue(link.title);
 			return item.aliases?.includes(lowerTitle);
 		});
 
@@ -40,7 +84,7 @@ export function getOrderedNavLinks(links: NavLink[]): NavLink[] {
 		});
 	}
 
-	return [...orderedLinks, ...remaining];
+	return dedupeLinks([...orderedLinks, ...remaining]);
 }
 
 export class NavigationService {
