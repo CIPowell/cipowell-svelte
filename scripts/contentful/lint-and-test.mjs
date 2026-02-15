@@ -17,12 +17,22 @@ async function listFiles(dir, extension) {
 		.sort();
 }
 
-const migrationFiles = await listFiles(path.resolve('contentful/migrations'), '.cjs');
+const cjsMigrationFiles = await listFiles(path.resolve('contentful/migrations'), '.cjs');
+const jsMigrationFiles = await listFiles(path.resolve('contentful/migrations'), '.js');
+const migrationFiles = [...cjsMigrationFiles, ...jsMigrationFiles].sort();
 const contentfulScripts = await listFiles(path.resolve('scripts/contentful'), '.mjs');
 
 if (migrationFiles.length === 0) {
 	console.error('No migration files were found in contentful/migrations.');
 	process.exit(1);
+}
+
+if (jsMigrationFiles.length > 0) {
+	console.warn(
+		`Found legacy .js migrations. Prefer .cjs for reliability: ${jsMigrationFiles
+			.map((file) => path.basename(file))
+			.join(', ')}`
+	);
 }
 
 run('npx', ['eslint', ...contentfulScripts, ...migrationFiles]);
