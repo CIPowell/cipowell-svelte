@@ -7,9 +7,28 @@
 	let { data, children } = $props();
 </script>
 
-<Header />
-<Nav links={data.navLinks} />
+<div class="site-header">
+	<Header />
+	<Nav links={data.navLinks} />
+</div>
 
 {@render children?.()}
 
 <footer>CIPowell 2024</footer>
+
+<style>
+	.site-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 0.5rem 0;
+	}
+
+	@media (min-width: 768px) {
+		.site-header {
+			justify-content: flex-start;
+			gap: 1rem;
+		}
+	}
+</style>
