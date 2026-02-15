@@ -14,7 +14,8 @@
 		link: {
 			title: 'Test Link',
 			target: '#'
-		}
+		},
+		variant: 'default'
 	}}
 />
 
@@ -24,9 +25,21 @@
 		link: {
 			title: 'Test Link',
 			target: '#'
-		}
+		},
+		variant: 'default'
 	}}
 	parameters={{
 		pseudo: { hover: true }
+	}}
+/>
+
+<Story
+	name="Primary"
+	args={{
+		link: {
+			title: 'Contact',
+			target: '#'
+		},
+		variant: 'primary'
 	}}
 />

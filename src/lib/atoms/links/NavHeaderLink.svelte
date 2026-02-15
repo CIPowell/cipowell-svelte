@@ -1,27 +1,41 @@
 <script lang="ts">
 	import type { NavLink } from '$lib/services/navigation/nav';
 
+	type NavHeaderLinkVariant = 'default' | 'primary';
+
 	interface Props {
 		link: NavLink;
+		variant?: NavHeaderLinkVariant;
 	}
 
-	let { link }: Props = $props();
+	let { link, variant = 'default' }: Props = $props();
 </script>
 
-<a class="navlink" href={link.target}>{link.title}</a>
+<a class={`navlink navlink--${variant}`} href={link.target}>{link.title}</a>
 
 <style>
-	a {
+	.navlink {
 		display: inline-block;
 		margin-right: 1.5rem;
-		text-decoration: none;
-
-		font-weight: bold;
+		font-family: var(--font-link);
+		font-weight: 600;
 		font-size: 1.1rem;
-		color: var(--color-text-primary);
+		line-height: 1.1;
 	}
 
-	a:hover {
-		text-shadow: 0.2rem 0.2rem var(--color-shadow-text);
+	.navlink--default {
+		color: var(--color-link-default);
+	}
+
+	.navlink--primary {
+		background-color: var(--color-link-primary-bg);
+		color: var(--color-link-primary-text);
+		padding: 0.55rem 0.95rem;
+		border-radius: 0.3rem;
+	}
+
+	.navlink--primary:hover,
+	.navlink--primary:focus-visible {
+		text-decoration-color: var(--color-link-primary-text);
 	}
 </style>
