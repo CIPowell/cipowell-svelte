@@ -29,7 +29,7 @@
 	}
 
 	a {
-		color: #000;
+		color: var(--color-text-primary);
 		display: block;
 		text-decoration: none;
 
@@ -38,13 +38,13 @@
 	}
 
 	a:hover {
-		background-color: #ddd;
+		background-color: var(--color-surface-hover);
 
 		transition: 200ms ease-in-out;
 	}
 
 	a:active {
-		background-color: #ddf;
+		background-color: var(--color-surface-active);
 
 		transition: 200ms ease-in-out;
 	}

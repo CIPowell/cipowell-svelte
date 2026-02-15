@@ -22,7 +22,7 @@
 
 	.breadcrumbs .sep {
 		padding: 0 0.5em;
-		color: #888;
+		color: var(--color-text-muted);
 	}
 
 	.breadcrumbs a {

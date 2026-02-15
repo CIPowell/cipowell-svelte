@@ -23,7 +23,7 @@
 
 		font-size: 1rem;
 
-		background-color: #ccc;
+		background-color: var(--color-tag-bg);
 
 		padding: 0.25rem 1rem;
 		margin: 0 0.5rem;
@@ -33,6 +33,6 @@
 	}
 
 	button:hover {
-		background-color: #ccf;
+		background-color: var(--color-tag-bg-hover);
 	}
 </style>
