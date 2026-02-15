@@ -4,8 +4,6 @@
 
 <style>
 	h1 {
-		font-weight: 900;
 		font-variant-caps: small-caps;
-		font-size: 3rem;
 	}
 </style>
