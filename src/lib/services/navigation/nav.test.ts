@@ -12,7 +12,7 @@ describe('getOrderedNavLinks', () => {
 		expect(getOrderedNavLinks(links)).toEqual([
 			{ title: 'Home', target: '/' },
 			{ title: 'Thoughts', target: '/blog' },
-			{ title: 'About', target: '/about-me' }
+			{ title: 'About Me', target: '/about-me' }
 		]);
 	});
 
@@ -25,7 +25,26 @@ describe('getOrderedNavLinks', () => {
 		expect(getOrderedNavLinks(links)).toEqual([
 			{ title: 'Home', target: '/' },
 			{ title: 'Thoughts', target: '/thoughts' },
-			{ title: 'About', target: '/about' }
+			{ title: 'About Me', target: '/about' }
+		]);
+	});
+
+	test('ignores duplicate links from CMS', () => {
+		const links: NavLink[] = [
+			{ title: 'Home', target: '/' },
+			{ title: 'Home Duplicate', target: '/' },
+			{ title: 'Blog', target: '/thoughts' },
+			{ title: 'Thoughts Duplicate', target: '/thoughts' },
+			{ title: 'About', target: '/about' },
+			{ title: 'Contact', target: '/contact' },
+			{ title: 'Contact Again', target: '/contact/' }
+		];
+
+		expect(getOrderedNavLinks(links)).toEqual([
+			{ title: 'Home', target: '/' },
+			{ title: 'Thoughts', target: '/thoughts' },
+			{ title: 'About Me', target: '/about' },
+			{ title: 'Contact', target: '/contact' }
 		]);
 	});
 });

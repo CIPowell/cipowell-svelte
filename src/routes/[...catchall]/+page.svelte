@@ -9,9 +9,5 @@
 </svelte:head>
 
 <main>
-	<h1>{data.title}</h1>
-
-	<Breadcrumbs links={data.breadcrumbs} />
-
 	{@html data.content}
 </main>
