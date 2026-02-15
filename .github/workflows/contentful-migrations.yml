@@ -1,0 +1,114 @@
+name: Contentful migrations
+
+on:
+  pull_request:
+    paths:
+      - 'contentful/migrations/**'
+      - 'scripts/contentful/**'
+      - '.github/workflows/contentful-migrations.yml'
+      - 'package.json'
+      - 'package-lock.json'
+  push:
+    paths:
+      - 'contentful/migrations/**'
+      - 'scripts/contentful/**'
+      - '.github/workflows/contentful-migrations.yml'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  verify-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint and test migration scripts
+        run: npm run contentful:migration:verify
+
+      - name: Collect changed migration files
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE_SHA="${{ github.event.before }}"
+            HEAD_SHA="${{ github.sha }}"
+          fi
+
+          CHANGED=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'contentful/migrations/*.js' | sort)
+
+          {
+            echo "files<<EOF"
+            echo "$CHANGED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Apply changed migrations to PR test environment
+        if: github.event_name == 'pull_request' && steps.changed.outputs.files != ''
+        env:
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          CONTENTFUL_MANAGEMENT_TOKEN: ${{ secrets.CONTENTFUL_MANAGEMENT_TOKEN }}
+          CONTENTFUL_ENVIRONMENT_ID: ${{ secrets.CONTENTFUL_PREVIEW_ENVIRONMENT_ID }}
+        run: |
+          echo "Applying migrations to preview environment: ${CONTENTFUL_ENVIRONMENT_ID}"
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            echo "Applying $file"
+            npm run contentful:migration:run -- "$file"
+          done <<< "${{ steps.changed.outputs.files }}"
+
+  apply-on-default-branch:
+    if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
+    needs: verify-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Collect changed migration files
+        id: changed
+        run: |
+          CHANGED=$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- 'contentful/migrations/*.js' | sort)
+          {
+            echo "files<<EOF"
+            echo "$CHANGED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Apply changed migrations to default branch environment
+        if: steps.changed.outputs.files != ''
+        env:
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          CONTENTFUL_MANAGEMENT_TOKEN: ${{ secrets.CONTENTFUL_MANAGEMENT_TOKEN }}
+          CONTENTFUL_ENVIRONMENT_ID: ${{ secrets.CONTENTFUL_PRODUCTION_ENVIRONMENT_ID }}
+        run: |
+          echo "Applying migrations to production environment: ${CONTENTFUL_ENVIRONMENT_ID}"
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            echo "Applying $file"
+            npm run contentful:migration:run -- "$file"
+          done <<< "${{ steps.changed.outputs.files }}"

@@ -64,6 +64,7 @@ npx playwright install
 ### Local development
 
 ```bash
+npm install
 npm run dev
 ```
 
