@@ -18,10 +18,10 @@
 
 		font-weight: bold;
 		font-size: 1.1rem;
-		color: black;
+		color: var(--color-text-primary);
 	}
 
 	a:hover {
-		text-shadow: 0.2rem 0.2rem rgba(200, 200, 200, 0.6);
+		text-shadow: 0.2rem 0.2rem var(--color-shadow-text);
 	}
 </style>
