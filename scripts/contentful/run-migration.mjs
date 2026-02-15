@@ -29,7 +29,7 @@ const result = spawnSync(
 		CONTENTFUL_SPACE_ID,
 		'--environment-id',
 		environmentId,
-		'--access-token',
+		'--management-token',
 		CONTENTFUL_MANAGEMENT_TOKEN,
 		'--yes',
 		absoluteFilePath
