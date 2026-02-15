@@ -1,6 +1,11 @@
 <script lang="ts">
 	import type { NavLink } from '$lib/services/navigation/nav';
-	export let links: NavLink[] = [];
+
+	interface Props {
+		links?: NavLink[];
+	}
+
+	let { links = [] }: Props = $props();
 </script>
 
 <nav class="breadcrumbs">
@@ -23,9 +28,5 @@
 	.breadcrumbs .sep {
 		padding: 0 0.5em;
 		color: var(--color-text-muted);
-	}
-
-	.breadcrumbs a {
-		text-decoration: none;
 	}
 </style>

@@ -12,7 +12,7 @@ export interface NavClient {
 const ORDERED_NAV_ITEMS: Array<{ title: string; defaultTarget: string; aliases?: string[] }> = [
 	{ title: 'Home', defaultTarget: '/', aliases: ['home'] },
 	{ title: 'Thoughts', defaultTarget: '/thoughts', aliases: ['blog', 'thoughts'] },
-	{ title: 'About', defaultTarget: '/about', aliases: ['about'] }
+	{ title: 'About Me', defaultTarget: '/about', aliases: ['about'] }
 ];
 
 export function getOrderedNavLinks(links: NavLink[]): NavLink[] {
