@@ -19,7 +19,7 @@
 
 	interface Props {
 		items: ThreeColumnItemModel[];
-		variant?: 'default' | 'credibility' | 'feature' | 'focus';
+		variant?: 'default' | 'credibility' | 'feature' | 'focus' | 'cta';
 		background?: 'default' | 'soft' | 'plum';
 		divider?: boolean;
 		align?: 'left' | 'center';
@@ -91,6 +91,10 @@
 		display: grid;
 		grid-template-columns: repeat(1, minmax(0, 1fr));
 		gap: var(--space-4);
+	}
+
+	.three-column-section__grid > [role='listitem'] {
+		height: 100%;
 	}
 
 	@media (min-width: 40rem) {

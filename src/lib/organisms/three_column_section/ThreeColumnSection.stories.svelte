@@ -22,6 +22,24 @@
 		}
 	];
 
+	const ctaItems = [
+		{
+			title: 'Explore My Work',
+			description: 'Case studies and selected product wins.',
+			link: { label: 'View projects →', href: '#' }
+		},
+		{
+			title: 'Read My Writing',
+			description: 'Practical notes on product, UX, and engineering.',
+			link: { label: 'Open articles →', href: '#' }
+		},
+		{
+			title: 'Start a Conversation',
+			description: "Let's discuss your roadmap and delivery goals.",
+			link: { label: 'Contact me →', href: '#' }
+		}
+	];
+
 	const { Story } = defineMeta({
 		title: 'Design System/Organisms/ThreeColumnSection',
 		component: ThreeColumnSection,
@@ -34,7 +52,10 @@
 		},
 		argTypes: {
 			items: { control: 'object' },
-			variant: { control: 'inline-radio', options: ['default', 'credibility', 'feature', 'focus'] },
+			variant: {
+				control: 'inline-radio',
+				options: ['default', 'credibility', 'feature', 'focus', 'cta']
+			},
 			background: { control: 'inline-radio', options: ['default', 'soft', 'plum'] },
 			divider: { control: 'boolean' },
 			align: { control: 'inline-radio', options: ['left', 'center'] }
@@ -69,3 +90,5 @@
 		}
 	}}
 />
+
+<Story name="CTA variant" args={{ variant: 'cta', background: 'soft', items: ctaItems }} />
