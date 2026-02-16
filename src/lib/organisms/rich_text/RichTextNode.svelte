@@ -1,5 +1,10 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import HeroSection from '$lib/organisms/hero_section/HeroSection.svelte';
+	import ThreeColumnSection from '$lib/organisms/three_column_section/ThreeColumnSection.svelte';
+	import BadgeIcon from '$lib/icons/BadgeIcon.svelte';
+	import SparkIcon from '$lib/icons/SparkIcon.svelte';
+	import ShieldIcon from '$lib/icons/ShieldIcon.svelte';
 	import Self from './RichTextNode.svelte';
 
 	type Mark = { type: string };
@@ -10,6 +15,11 @@
 		marks?: Mark[];
 		content?: RichTextNodeValue[];
 		data?: Record<string, unknown>;
+	};
+
+	type RichTextEmbeddedEntry = {
+		fields?: Record<string, unknown>;
+		sys?: { contentType?: { sys?: { id?: string } } };
 	};
 
 	type HeroFields = {
@@ -24,6 +34,32 @@
 		maxWidth?: 'default' | 'narrow';
 	};
 
+	type ThreeColumnItemFields = {
+		title?: string;
+		description?: string;
+		iconType?: string;
+		linkLabel?: string;
+		linkHref?: string;
+		align?: 'left' | 'center';
+	};
+
+	type ThreeColumnSectionFields = {
+		items?: Array<{ fields?: ThreeColumnItemFields }>;
+		variant?: 'default' | 'credibility' | 'feature' | 'focus' | 'cta';
+		background?: 'default' | 'soft' | 'plum';
+		divider?: boolean;
+		align?: 'left' | 'center';
+		hover?: boolean;
+	};
+
+	type ThreeColumnItemViewModel = {
+		title: string;
+		description?: string;
+		icon?: Component;
+		link?: { label: string; href: string };
+		align?: 'left' | 'center';
+	};
+
 	interface Props {
 		node: RichTextNodeValue;
 	}
@@ -33,21 +69,74 @@
 	const hasMark = (marks: Mark[] | undefined, type: string) =>
 		Boolean(marks?.some((mark) => mark.type === type));
 
+	const asText = (value: unknown) => (typeof value === 'string' ? value : '');
+	const asVariant = (value: unknown, options: string[], fallback: string) =>
+		typeof value === 'string' && options.includes(value) ? value : fallback;
+
+	const getEmbeddedEntry = (target: unknown): RichTextEmbeddedEntry | null => {
+		const entry = target as RichTextEmbeddedEntry;
+		if (!entry?.sys?.contentType?.sys?.id) {
+			return null;
+		}
+
+		return entry;
+	};
+
 	const getHeroFields = (target: unknown): HeroFields | null => {
-		const entry = target as {
-			fields?: HeroFields;
-			sys?: { contentType?: { sys?: { id?: string } } };
-		};
+		const entry = getEmbeddedEntry(target);
 		if (entry?.sys?.contentType?.sys?.id !== 'heroSection') {
 			return null;
 		}
 
-		return entry.fields ?? null;
+		return (entry.fields as HeroFields) ?? null;
 	};
 
-	const asText = (value: unknown) => (typeof value === 'string' ? value : '');
-	const asVariant = (value: unknown, options: string[], fallback: string) =>
-		typeof value === 'string' && options.includes(value) ? value : fallback;
+	const getThreeColumnSectionFields = (target: unknown): ThreeColumnSectionFields | null => {
+		const entry = getEmbeddedEntry(target);
+		if (entry?.sys?.contentType?.sys?.id !== 'threeColumnSection') {
+			return null;
+		}
+
+		return (entry.fields as ThreeColumnSectionFields) ?? null;
+	};
+
+	const iconByType: Record<string, Component> = {
+		badge: BadgeIcon,
+		spark: SparkIcon,
+		shield: ShieldIcon
+	};
+
+	const mapThreeColumnItems = (
+		items: ThreeColumnSectionFields['items']
+	): ThreeColumnItemViewModel[] => {
+		if (!items?.length) {
+			return [];
+		}
+
+		return items.flatMap((item) => {
+			const title = asText(item.fields?.title).trim();
+			if (!title) {
+				return [];
+			}
+
+			const description = asText(item.fields?.description).trim();
+			const iconType = asText(item.fields?.iconType);
+			const linkLabel = asText(item.fields?.linkLabel).trim();
+			const linkHref = asText(item.fields?.linkHref).trim();
+			const link = linkLabel && linkHref ? { label: linkLabel, href: linkHref } : undefined;
+			const align = asVariant(item.fields?.align, ['left', 'center'], 'left') as 'left' | 'center';
+
+			return [
+				{
+					title,
+					description: description || undefined,
+					icon: iconByType[iconType],
+					link,
+					align
+				}
+			];
+		});
+	};
 
 	const heroFields = $derived(getHeroFields(node?.data?.target));
 	const heroPrimaryCta = $derived(
@@ -60,6 +149,9 @@
 			? { label: heroFields.secondaryCtaLabel, href: heroFields.secondaryCtaHref }
 			: undefined
 	);
+
+	const threeColumnFields = $derived(getThreeColumnSectionFields(node?.data?.target));
+	const threeColumnItems = $derived(mapThreeColumnItems(threeColumnFields?.items));
 </script>
 
 {#if node.nodeType === 'paragraph'}
@@ -140,6 +232,22 @@
 		maxWidth={asVariant(heroFields.maxWidth, ['default', 'narrow'], 'default') as
 			| 'default'
 			| 'narrow'}
+	/>
+{:else if node.nodeType === 'embedded-entry-block' && threeColumnItems.length > 0}
+	<ThreeColumnSection
+		items={threeColumnItems}
+		variant={asVariant(
+			threeColumnFields?.variant,
+			['default', 'credibility', 'feature', 'focus', 'cta'],
+			'default'
+		) as 'default' | 'credibility' | 'feature' | 'focus' | 'cta'}
+		background={asVariant(threeColumnFields?.background, ['default', 'soft', 'plum'], 'default') as
+			| 'default'
+			| 'soft'
+			| 'plum'}
+		divider={Boolean(threeColumnFields?.divider)}
+		align={asVariant(threeColumnFields?.align, ['left', 'center'], 'left') as 'left' | 'center'}
+		hover={Boolean(threeColumnFields?.hover)}
 	/>
 {:else if node.nodeType === 'text'}
 	{#if hasMark(node.marks, 'bold')}

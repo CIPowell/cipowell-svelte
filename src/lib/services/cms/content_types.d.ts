@@ -43,3 +43,28 @@ export type ContentfulSiteFooter = {
 		metaText: EntryFieldTypes.Symbol;
 	};
 };
+
+export type ContentfulThreeColumnItem = {
+	contentTypeId: 'threeColumnItem';
+	fields: {
+		title: EntryFieldTypes.Symbol;
+		description: EntryFieldTypes.Text;
+		iconType: EntryFieldTypes.Symbol;
+		linkLabel: EntryFieldTypes.Symbol;
+		linkHref: EntryFieldTypes.Symbol;
+		align: EntryFieldTypes.Symbol;
+	};
+};
+
+export type ContentfulThreeColumnSection = {
+	contentTypeId: 'threeColumnSection';
+	fields: {
+		internalName: EntryFieldTypes.Symbol;
+		items: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<ContentfulThreeColumnItem>>;
+		variant: EntryFieldTypes.Symbol;
+		background: EntryFieldTypes.Symbol;
+		divider: EntryFieldTypes.Boolean;
+		align: EntryFieldTypes.Symbol;
+		hover: EntryFieldTypes.Boolean;
+	};
+};
