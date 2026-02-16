@@ -15,7 +15,7 @@ module.exports = function (migration) {
 	footerLink
 		.createField('href')
 		.name('Href')
-		.type('Symbol')
+		.type('Text')
 		.required(true)
 		.validations([
 			{ size: { min: 1, max: 255 } },
@@ -23,9 +23,8 @@ module.exports = function (migration) {
 				regexp: {
 					pattern:
 						'^(https?:\\/\\/[^\\s]+|mailto:[^\\s@]+@[^\\s@]+\\.[^\\s@]+|\\/(?!\\/)[^\\s]*|#.+)$',
-					flags: null
-				},
-				message: 'Use an absolute URL, mailto link, a root-relative path, or an anchor link'
+					flags: ''
+				}
 			}
 		]);
 
@@ -109,16 +108,15 @@ module.exports = function (migration) {
 	siteFooter
 		.createField('email')
 		.name('Contact Email')
-		.type('Symbol')
+		.type('Text')
 		.required(true)
 		.validations([
 			{ size: { min: 3, max: 100 } },
 			{
 				regexp: {
 					pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
-					flags: null
-				},
-				message: 'Use a valid email address'
+					flags: ''
+				}
 			}
 		]);
 
