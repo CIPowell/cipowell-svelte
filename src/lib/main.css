@@ -24,6 +24,18 @@
 	--color-link-inverse: #f3e9ff;
 	--color-icon-surface: #e6dff0;
 	--color-icon-surface-inverse: #6a3d8f;
+	--color-cta-surface: var(--color-white);
+	--color-cta-surface-hover: #f0ebf6;
+	--color-cta-surface-active: #e8e0f1;
+	--color-cta-border: #cfc0dd;
+	--color-cta-border-hover: #9b80b5;
+	--color-cta-label: var(--color-accent-1);
+	--color-cta-surface-inverse: #5a2e7d;
+	--color-cta-surface-inverse-hover: #69408b;
+	--color-cta-surface-inverse-active: #744d95;
+	--color-cta-border-inverse: #bca6d0;
+	--color-cta-border-inverse-hover: #e0d2ef;
+	--color-cta-label-inverse: #f3e9ff;
 
 	--footer-bg: var(--color-background);
 	--footer-bg-plum: var(--color-plum-600);
