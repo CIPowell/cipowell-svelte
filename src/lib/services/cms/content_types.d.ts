@@ -24,7 +24,7 @@ export type ContentfulFooterLink = {
 	contentTypeId: 'footerLink';
 	fields: {
 		label: EntryFieldTypes.Symbol;
-		href: EntryFieldTypes.Symbol;
+		href: EntryFieldTypes.Text;
 	};
 };
 
@@ -39,7 +39,7 @@ export type ContentfulSiteFooter = {
 		writingLinks: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<ContentfulFooterLink>>;
 		connectTitle: EntryFieldTypes.Symbol;
 		socialLinks: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<ContentfulFooterLink>>;
-		email: EntryFieldTypes.Symbol;
+		email: EntryFieldTypes.Text;
 		metaText: EntryFieldTypes.Symbol;
 	};
 };
