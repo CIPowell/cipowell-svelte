@@ -19,3 +19,27 @@ export type ContentfulBlogPost = {
 		tags: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
 	};
 };
+
+export type ContentfulFooterLink = {
+	contentTypeId: 'footerLink';
+	fields: {
+		label: EntryFieldTypes.Symbol;
+		href: EntryFieldTypes.Symbol;
+	};
+};
+
+export type ContentfulSiteFooter = {
+	contentTypeId: 'siteFooter';
+	fields: {
+		internalName: EntryFieldTypes.Symbol;
+		brandTagline: EntryFieldTypes.Text;
+		navigationTitle: EntryFieldTypes.Symbol;
+		navigationLinks: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<ContentfulFooterLink>>;
+		writingTitle: EntryFieldTypes.Symbol;
+		writingLinks: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<ContentfulFooterLink>>;
+		connectTitle: EntryFieldTypes.Symbol;
+		socialLinks: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<ContentfulFooterLink>>;
+		email: EntryFieldTypes.Symbol;
+		metaText: EntryFieldTypes.Symbol;
+	};
+};

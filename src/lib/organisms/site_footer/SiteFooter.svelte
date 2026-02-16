@@ -3,6 +3,7 @@
 	import FooterMetaText from '$lib/atoms/footer/FooterMetaText.svelte';
 	import FooterBrandBlock from '$lib/molecules/footer/FooterBrandBlock.svelte';
 	import FooterColumn from '$lib/molecules/footer/FooterColumn.svelte';
+	import { DEFAULT_SITE_FOOTER } from '$lib/services/footer/footer';
 
 	type SiteFooterTheme = 'default' | 'plum';
 	type FooterLinkItem = { label: string; href: string };
@@ -22,37 +23,14 @@
 		metaText?: string;
 	}
 
-	const currentYear = new Date().getFullYear();
-
 	let {
 		theme = 'default',
 		logoSrc = '/logo-cip.png',
-		brandTagline = 'Building teams and systems that deliver real impact.',
-		navigation = {
-			title: 'Navigation',
-			links: [
-				{ label: 'About', href: '/about' },
-				{ label: 'Writing', href: '/thoughts' },
-				{ label: 'Work', href: '/work' },
-				{ label: 'Contact', href: '/contact' }
-			]
-		},
-		writing = {
-			title: 'Writing',
-			links: [
-				{ label: 'Latest article', href: '/thoughts' },
-				{ label: 'Archive', href: '/thoughts' }
-			]
-		},
-		connect = {
-			title: 'Connect',
-			links: [
-				{ label: 'LinkedIn', href: 'https://linkedin.com' },
-				{ label: 'GitHub', href: 'https://github.com' },
-				{ label: 'Email', href: 'mailto:hello@cipowell.com' }
-			]
-		},
-		metaText = `© ${currentYear} Chris I. Powell. All rights reserved.`
+		brandTagline = DEFAULT_SITE_FOOTER.brandTagline,
+		navigation = DEFAULT_SITE_FOOTER.navigation,
+		writing = DEFAULT_SITE_FOOTER.writing,
+		connect = DEFAULT_SITE_FOOTER.connect,
+		metaText = DEFAULT_SITE_FOOTER.metaText
 	}: Props = $props();
 
 	const variant = $derived(theme === 'plum' ? 'inverse' : 'default');

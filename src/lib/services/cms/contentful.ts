@@ -1,12 +1,30 @@
 import { env } from '$env/dynamic/private';
 import type { NavClient, NavLink } from '$lib/services/navigation/nav';
+import type { SiteFooterContent } from '$lib/services/footer/footer';
 import * as contentful from 'contentful';
-import type { ContentfulPage } from './content_types';
+import type { ContentfulPage, ContentfulSiteFooter } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { ContentfulCache } from './cache';
 
 const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
 const CONTENTFUL_PREVIEW_HOST = 'preview.contentful.com';
+
+function mapResolvedFooterLinks(
+	links: Array<contentful.Entry | contentful.UnresolvedLink<'Entry'>>
+): Array<{ label: string; href: string }> {
+	return links.flatMap((link) => {
+		if (!('fields' in link)) {
+			return [];
+		}
+
+		return [
+			{
+				label: link.fields.label as string,
+				href: link.fields.href as string
+			}
+		];
+	});
+}
 
 export class Contentful implements NavClient, PageClient {
 	client: contentful.ContentfulClientApi<undefined>;
@@ -84,6 +102,46 @@ export class Contentful implements NavClient, PageClient {
 				};
 			},
 			60 * 60 // Cache pages for 1 hour
+		);
+	}
+
+	async getSiteFooter(): Promise<SiteFooterContent> {
+		return this.cache.get(
+			'site-footer',
+			async () => {
+				const entries = await this.client.getEntries<ContentfulSiteFooter>({
+					content_type: 'siteFooter',
+					limit: 1,
+					include: 2
+				});
+
+				if (!entries.items.length) {
+					throw new Error('Site footer entry not found');
+				}
+
+				const footer = entries.items[0].fields;
+				const navigationLinks = mapResolvedFooterLinks(footer.navigationLinks);
+				const writingLinks = mapResolvedFooterLinks(footer.writingLinks);
+				const socialLinks = mapResolvedFooterLinks(footer.socialLinks);
+
+				return {
+					brandTagline: footer.brandTagline,
+					navigation: {
+						title: footer.navigationTitle,
+						links: navigationLinks
+					},
+					writing: {
+						title: footer.writingTitle,
+						links: writingLinks
+					},
+					connect: {
+						title: footer.connectTitle,
+						links: [...socialLinks, { label: 'Email', href: `mailto:${footer.email}` }]
+					},
+					metaText: footer.metaText
+				};
+			},
+			60 * 60 * 24
 		);
 	}
 
