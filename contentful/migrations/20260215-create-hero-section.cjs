@@ -79,14 +79,13 @@ module.exports = function (migration) {
 				'blockquote',
 				'embedded-asset-block',
 				'embedded-entry-block',
-				'paragraph'
+				'hyperlink',
+				'entry-hyperlink',
+				'asset-hyperlink'
 			]
 		},
 		{
 			enabledMarks: ['bold', 'italic', 'underline', 'code']
-		},
-		{
-			enabledHyperlinkTypes: ['entry', 'asset', 'url']
 		},
 		{
 			nodes: {
