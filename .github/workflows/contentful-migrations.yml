@@ -9,6 +9,8 @@ on:
       - 'package.json'
       - 'package-lock.json'
   push:
+    branches:
+      - main
     paths:
       - 'contentful/migrations/**'
       - 'scripts/contentful/**'
