@@ -15,6 +15,7 @@
 		link?: Link;
 		align?: 'left' | 'center';
 		inverse?: boolean;
+		hover?: boolean;
 		variant?: 'default' | 'credibility' | 'feature' | 'focus' | 'cta';
 	}
 
@@ -25,6 +26,7 @@
 		link,
 		align = 'left',
 		inverse = false,
+		hover = false,
 		variant = 'default'
 	}: Props = $props();
 
@@ -32,7 +34,9 @@
 	const isCta = $derived(variant === 'cta' && Boolean(link));
 </script>
 
-<article class={`three-column-item three-column-item--${align} three-column-item--${variant}`}>
+<article
+	class={`three-column-item three-column-item--${align} three-column-item--${variant} ${hover && variant === 'feature' ? 'three-column-item--hover' : ''}`}
+>
 	{#if isCta && link}
 		<a
 			class={`three-column-item__cta ${inverse ? 'three-column-item__cta--inverse' : ''}`}
@@ -103,6 +107,14 @@
 		font-size: clamp(1.25rem, 2vw, 1.5rem);
 	}
 
+	.three-column-item--feature {
+		gap: var(--space-3);
+	}
+
+	.three-column-item--feature.three-column-item--center {
+		text-align: center;
+	}
+
 	.three-column-item--credibility :global(h3.heading) {
 		font-size: clamp(1rem, 1.4vw, 1.125rem);
 		text-transform: uppercase;
@@ -127,6 +139,17 @@
 	.three-column-item__icon :global(svg) {
 		width: var(--space-3);
 		height: var(--space-3);
+	}
+
+	.three-column-item--hover {
+		padding: var(--space-3);
+		border-radius: var(--space-2);
+		transition: box-shadow 150ms ease;
+	}
+
+	.three-column-item--hover:hover,
+	.three-column-item--hover:focus-within {
+		box-shadow: var(--elevation-soft);
 	}
 
 	.three-column-item__cta {

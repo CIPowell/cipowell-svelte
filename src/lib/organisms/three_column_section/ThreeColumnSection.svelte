@@ -23,6 +23,7 @@
 		background?: 'default' | 'soft' | 'plum';
 		divider?: boolean;
 		align?: 'left' | 'center';
+		hover?: boolean;
 	}
 
 	let {
@@ -30,7 +31,8 @@
 		variant = 'default',
 		background = 'default',
 		divider = false,
-		align = 'left'
+		align = 'left',
+		hover = false
 	}: Props = $props();
 
 	const isInverse = $derived(background === 'plum');
@@ -52,6 +54,7 @@
 							icon={item.icon}
 							link={item.link}
 							align={item.align ?? align}
+							{hover}
 							{variant}
 							inverse={isInverse}
 						/>

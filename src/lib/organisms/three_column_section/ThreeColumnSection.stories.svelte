@@ -22,6 +22,17 @@
 		}
 	];
 
+	const featureItems = [
+		{ title: 'Build', description: 'Designing resilient systems', icon: StoryIconBadge },
+		{ title: 'Grow', description: 'Developing engineers', icon: StoryIconBadge },
+		{ title: 'Improve', description: 'Replacing fragile processes', icon: StoryIconBadge }
+	];
+
+	const featureItemsNoIcons = featureItems.map(({ title, description }) => ({
+		title,
+		description
+	}));
+
 	const ctaItems = [
 		{
 			title: 'Explore My Work',
@@ -48,7 +59,8 @@
 			variant: 'default',
 			background: 'default',
 			divider: true,
-			align: 'left'
+			align: 'left',
+			hover: false
 		},
 		argTypes: {
 			items: { control: 'object' },
@@ -58,7 +70,8 @@
 			},
 			background: { control: 'inline-radio', options: ['default', 'soft', 'plum'] },
 			divider: { control: 'boolean' },
-			align: { control: 'inline-radio', options: ['left', 'center'] }
+			align: { control: 'inline-radio', options: ['left', 'center'] },
+			hover: { control: 'boolean' }
 		},
 		parameters: {
 			docs: {
@@ -81,6 +94,26 @@
 />
 
 <Story name="Plum background" args={{ background: 'plum' }} />
+
+<Story
+	name="Feature highlights (with icons)"
+	args={{ variant: 'feature', items: featureItems, hover: true }}
+/>
+
+<Story
+	name="Feature highlights (without icons)"
+	args={{ variant: 'feature', items: featureItemsNoIcons }}
+/>
+
+<Story
+	name="Feature highlights (center aligned)"
+	args={{ variant: 'feature', items: featureItems, align: 'center', hover: true }}
+/>
+
+<Story
+	name="Feature highlights (soft background)"
+	args={{ variant: 'feature', items: featureItems, background: 'soft', hover: true }}
+/>
 
 <Story
 	name="Mobile viewport"
