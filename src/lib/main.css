@@ -3,7 +3,7 @@
 	--color-text-primary: #2a2a2a;
 	--color-accent-1: #4b1d6b;
 	--color-text-on-accent: #f5f3f7;
-	--color-text-muted: #888;
+	--color-text-muted: #6b7280;
 	--color-surface-hover: #ddd;
 	--color-surface-active: #ddf;
 	--color-tag-bg: #ccc;
@@ -15,7 +15,20 @@
 	--color-bg-soft: #ebe7ef;
 	--color-focus-ring: #6a3d8f;
 
-	--font-body: 'Montserrat', 'Helvetica', sans-serif;
+	--footer-bg: var(--color-background);
+	--footer-bg-plum: var(--color-plum-600);
+	--footer-divider-color: #d8d3dc;
+	--footer-divider-color-inverse: #7d6390;
+	--footer-heading-color: var(--color-text-primary);
+	--footer-heading-color-inverse: var(--color-white);
+	--footer-meta-color: var(--color-text-muted);
+	--footer-meta-color-inverse: #e6dff0;
+	--footer-link-color: var(--color-text-primary);
+	--footer-link-hover-color: #5e3a9e;
+	--footer-link-color-inverse: var(--color-white);
+	--footer-link-hover-color-inverse: #f3e9ff;
+
+	--font-body: 'Inter', 'Helvetica', sans-serif;
 	--font-heading: 'Playfair Display', 'Helvetica', sans-serif;
 	--font-link: var(--font-heading);
 
