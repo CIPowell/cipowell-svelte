@@ -1,6 +1,6 @@
 import { env } from '$env/dynamic/private';
 import type { NavClient, NavLink } from '$lib/services/navigation/nav';
-import type { SiteFooterContent } from '$lib/services/footer/footer';
+import type { SiteFooterContent } from '$lib/services/footer/footer-content';
 import * as contentful from 'contentful';
 import type { ContentfulPage, ContentfulSiteFooter } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
