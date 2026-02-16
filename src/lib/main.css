@@ -15,6 +15,16 @@
 	--color-bg-soft: #ebe7ef;
 	--color-focus-ring: #6a3d8f;
 
+	--color-divider-default: #d8d3dc;
+	--color-divider-inverse: #7d6390;
+	--color-surface-default: var(--color-bg-primary);
+	--color-surface-soft: var(--color-bg-soft);
+	--color-surface-plum: var(--color-plum-600);
+	--color-text-inverse: var(--color-white);
+	--color-link-inverse: #f3e9ff;
+	--color-icon-surface: #e6dff0;
+	--color-icon-surface-inverse: #6a3d8f;
+
 	--footer-bg: var(--color-background);
 	--footer-bg-plum: var(--color-plum-600);
 	--footer-divider-color: #d8d3dc;
