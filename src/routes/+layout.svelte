@@ -6,6 +6,7 @@
 	import '$lib/main.css';
 
 	let { data, children } = $props();
+	const footer = $derived(data.footer);
 </script>
 
 <div class="site-header">
@@ -15,7 +16,13 @@
 
 {@render children?.()}
 
-<SiteFooter />
+<SiteFooter
+	brandTagline={footer.brandTagline}
+	navigation={footer.navigation}
+	writing={footer.writing}
+	connect={footer.connect}
+	metaText={footer.metaText}
+/>
 
 <style>
 	.site-header {
