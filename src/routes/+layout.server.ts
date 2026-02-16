@@ -1,9 +1,6 @@
 import { NavigationService, getOrderedNavLinks, type NavLink } from '$lib/services/navigation/nav';
-import {
-	DEFAULT_SITE_FOOTER,
-	FooterService,
-	type SiteFooterContent
-} from '$lib/services/footer/footer';
+import { DEFAULT_SITE_FOOTER, type SiteFooterContent } from '$lib/services/footer/footer-content';
+import { FooterService } from '$lib/services/footer/footer.server';
 import { env } from '$env/dynamic/private';
 
 interface LayoutData {

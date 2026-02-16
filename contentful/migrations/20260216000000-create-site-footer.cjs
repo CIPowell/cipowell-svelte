@@ -15,18 +15,9 @@ module.exports = function (migration) {
 	footerLink
 		.createField('href')
 		.name('Href')
-		.type('Text')
+		.type('Symbol')
 		.required(true)
-		.validations([
-			{ size: { min: 1, max: 255 } },
-			{
-				regexp: {
-					pattern:
-						'^(https?:\\/\\/[^\\s]+|mailto:[^\\s@]+@[^\\s@]+\\.[^\\s@]+|\\/(?!\\/)[^\\s]*|#.+)$',
-					flags: ''
-				}
-			}
-		]);
+		.validations([{ size: { min: 1, max: 255 } }]);
 
 	const siteFooter = migration
 		.createContentType('siteFooter')
@@ -108,17 +99,9 @@ module.exports = function (migration) {
 	siteFooter
 		.createField('email')
 		.name('Contact Email')
-		.type('Text')
+		.type('Symbol')
 		.required(true)
-		.validations([
-			{ size: { min: 3, max: 100 } },
-			{
-				regexp: {
-					pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
-					flags: ''
-				}
-			}
-		]);
+		.validations([{ size: { min: 3, max: 100 } }]);
 
 	siteFooter
 		.createField('metaText')

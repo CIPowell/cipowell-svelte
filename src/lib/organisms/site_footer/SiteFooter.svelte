@@ -3,7 +3,7 @@
 	import FooterMetaText from '$lib/atoms/footer/FooterMetaText.svelte';
 	import FooterBrandBlock from '$lib/molecules/footer/FooterBrandBlock.svelte';
 	import FooterColumn from '$lib/molecules/footer/FooterColumn.svelte';
-	import { DEFAULT_SITE_FOOTER } from '$lib/services/footer/footer';
+	import { DEFAULT_SITE_FOOTER } from '$lib/services/footer/footer-content';
 
 	type SiteFooterTheme = 'default' | 'plum';
 	type FooterLinkItem = { label: string; href: string };

@@ -1,5 +1,3 @@
-import Contentful from '../cms/contentful';
-
 export interface FooterLink {
 	label: string;
 	href: string;
@@ -48,19 +46,3 @@ export const DEFAULT_SITE_FOOTER: SiteFooterContent = {
 	},
 	metaText: `© ${currentYear} Chris I. Powell. All rights reserved.`
 };
-
-export interface FooterClient {
-	getSiteFooter(): Promise<SiteFooterContent>;
-}
-
-export class FooterService {
-	footerClient: FooterClient;
-
-	constructor(platform?: App.Platform) {
-		this.footerClient = new Contentful(platform);
-	}
-
-	async getSiteFooter(): Promise<SiteFooterContent> {
-		return this.footerClient.getSiteFooter();
-	}
-}
