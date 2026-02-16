@@ -69,6 +69,9 @@
 	--space-6: 3rem;
 	--space-7: 4.5rem;
 
+	--elevation-none: none;
+	--elevation-soft: 0 12px 24px -18px rgba(42, 42, 42, 0.45);
+
 	--container-default: 75rem;
 	--container-narrow: 56.25rem;
 
