@@ -23,8 +23,13 @@
 		onclick={toggleMenu}
 		aria-expanded={isMenuOpen}
 		aria-controls={navMenuId}
+		aria-label="Menu"
 	>
-		<span class="menu-toggle__label">Menu</span>
+		<span class="menu-toggle__icon" aria-hidden="true">
+			<span class="menu-toggle__bar"></span>
+			<span class="menu-toggle__bar"></span>
+			<span class="menu-toggle__bar"></span>
+		</span>
 	</button>
 
 	<div id={navMenuId} class:menu-open={isMenuOpen} class="menu-panel">
@@ -45,17 +50,30 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.5rem 0.75rem;
-		border: 1px solid currentColor;
+		padding: 0.5rem;
+		border: 1px solid var(--color-nav-menu-border);
 		border-radius: 0.25rem;
 		background: transparent;
-		font-size: 1rem;
-		font-weight: 600;
+		color: var(--color-accent-1);
 		cursor: pointer;
 	}
 
+	.menu-toggle__icon {
+		display: inline-flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.menu-toggle__bar {
+		display: block;
+		width: 1.5rem;
+		height: 0.125rem;
+		background: currentColor;
+		border-radius: 999px;
+	}
+
 	.menu-toggle:focus-visible {
-		outline: 3px solid currentColor;
+		outline: 3px solid var(--color-focus-ring);
 		outline-offset: 3px;
 	}
 
@@ -64,11 +82,11 @@
 		position: absolute;
 		right: 0;
 		top: calc(100% + 0.5rem);
-		background: white;
+		background: var(--color-nav-menu-bg);
 		padding: 0.75rem;
-		border: 1px solid #ccc;
+		border: 1px solid var(--color-nav-menu-border);
 		border-radius: 0.5rem;
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+		box-shadow: var(--elevation-nav-menu);
 		z-index: 2;
 	}
 
