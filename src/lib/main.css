@@ -79,6 +79,9 @@
 	--color-link-hover: var(--color-accent-1);
 	--color-link-primary-bg: var(--color-accent-1);
 	--color-link-primary-text: var(--color-text-on-accent);
+	--color-nav-menu-bg: var(--color-white);
+	--color-nav-menu-border: var(--color-divider-default);
+	--elevation-nav-menu: 0 6px 20px rgba(42, 42, 42, 0.1);
 }
 
 html {
