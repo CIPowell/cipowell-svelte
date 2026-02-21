@@ -78,6 +78,23 @@
 	const asText = (value: unknown) => (typeof value === 'string' ? value : '');
 	const asVariant = (value: unknown, options: string[], fallback: string) =>
 		typeof value === 'string' && options.includes(value) ? value : fallback;
+	const sanitizeHref = (raw: unknown): string | null => {
+		const href = String(raw ?? '').trim();
+		if (!href) {
+			return null;
+		}
+
+		if (href.startsWith('/') || href.startsWith('#')) {
+			return href;
+		}
+
+		try {
+			const parsed = new URL(href);
+			return ['http:', 'https:', 'mailto:', 'tel:'].includes(parsed.protocol) ? href : null;
+		} catch {
+			return null;
+		}
+	};
 
 	const getEmbeddedEntry = (target: unknown): RichTextEmbeddedEntry | null => {
 		const entry = target as RichTextEmbeddedEntry;
@@ -214,11 +231,18 @@
 		{/each}
 	</li>
 {:else if node.nodeType === 'hyperlink'}
-	<a href={asText(node.data?.uri)}>
-		{#each node.content ?? [] as child, index (`link-${index}`)}
+	{@const safeHref = sanitizeHref(node.data?.uri)}
+	{#if safeHref}
+		<a href={safeHref}>
+			{#each node.content ?? [] as child, index (`link-${index}`)}
+				<Self node={child} />
+			{/each}
+		</a>
+	{:else}
+		{#each node.content ?? [] as child, index (`link-fallback-${index}`)}
 			<Self node={child} />
 		{/each}
-	</a>
+	{/if}
 {:else if node.nodeType === 'embedded-asset-block'}
 	{@const target = node.data?.target as {
 		fields?: { file?: { url?: string }; description?: string; title?: string };
