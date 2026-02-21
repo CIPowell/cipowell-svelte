@@ -77,3 +77,30 @@ test('renders embedded blog preview section entries from contentful rich text', 
 		'/thoughts/post-one'
 	);
 });
+
+test('renders hyperlink nodes when href protocol is safe', () => {
+	render(RichTextNode, {
+		node: {
+			nodeType: 'hyperlink',
+			data: { uri: 'https://example.com/path' },
+			content: [{ nodeType: 'text', value: 'Safe link' }]
+		}
+	});
+
+	expect(screen.getByRole('link', { name: 'Safe link' }).getAttribute('href')).toBe(
+		'https://example.com/path'
+	);
+});
+
+test('does not render hyperlink anchors for unsafe href protocols', () => {
+	render(RichTextNode, {
+		node: {
+			nodeType: 'hyperlink',
+			data: { uri: 'javascript:alert(1)' },
+			content: [{ nodeType: 'text', value: 'Unsafe link' }]
+		}
+	});
+
+	expect(screen.getByText('Unsafe link')).toBeTruthy();
+	expect(screen.queryByRole('link', { name: 'Unsafe link' })).toBeNull();
+});
