@@ -2,7 +2,7 @@ import { NavigationService, getOrderedNavLinks, type NavLink } from '$lib/servic
 import { DEFAULT_SITE_FOOTER, type SiteFooterContent } from '$lib/services/footer/footer-content';
 import { FooterService } from '$lib/services/footer/footer.server';
 import { env } from '$env/dynamic/private';
-import { isPreviewRequest } from '$lib/services/cms/preview';
+import { getResponseCacheHeaders, isPreviewRequest } from '$lib/services/cms/preview';
 
 interface LayoutData {
 	navLinks: NavLink[];
@@ -32,11 +32,9 @@ export async function load({ platform, setHeaders, url }) {
 
 	// Disable caching for preview mode to avoid persisting draft content
 	const contentfulHost = env.CONTENTFUL_HOST;
-	const isPreviewMode = preview || contentfulHost?.includes('preview');
+	const isPreviewMode = preview || Boolean(contentfulHost?.includes('preview'));
 
-	setHeaders({
-		'Cache-Control': isPreviewMode ? 'private, no-store' : 'public, max-age=3600, s-maxage=86400'
-	});
+	setHeaders(getResponseCacheHeaders(isPreviewMode));
 
 	return layoutData;
 }
