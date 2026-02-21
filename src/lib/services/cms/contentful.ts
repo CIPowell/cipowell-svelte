@@ -80,12 +80,15 @@ export class Contentful implements NavClient, PageClient {
 		return this.cache.get(
 			'nav-links',
 			async () => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK query types are strict and do not include all supported search params
 				const pages = await this.client.getEntries<ContentfulPage>({
-					content_type: 'page'
-				});
+					content_type: 'page',
+					'fields.parent[exists]': false,
+					select: 'fields.title,fields.slug'
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				} as any);
 
 				return pages.items
-					.filter((p) => !p.fields.parent)
 					.map((p) => ({
 						title: p.fields.title,
 						target: p.fields.slug
