@@ -72,7 +72,8 @@ export class Contentful implements NavClient, PageClient {
 		this.client = contentful.createClient({
 			space: 'c85g7urd11yl',
 			accessToken,
-			host
+			host,
+			environment: env.CONTENTFUL_ENVIRONMENT || 'master'
 		});
 		this.cache = new ContentfulCache(platform, host);
 	}
