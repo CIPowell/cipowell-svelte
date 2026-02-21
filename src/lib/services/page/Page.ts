@@ -15,8 +15,8 @@ export interface PageClient {
 export class PageService {
 	pageClient: PageClient;
 
-	constructor(platform?: App.Platform) {
-		this.pageClient = new Contentful(platform);
+	constructor(platform?: App.Platform, preview = false) {
+		this.pageClient = new Contentful(platform, preview);
 	}
 
 	async getPage(slug: string): Promise<Page> {
