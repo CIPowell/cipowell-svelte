@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { isPreviewRequest, resolveContentfulHost } from './preview';
+import { getResponseCacheHeaders, isPreviewRequest, resolveContentfulHost } from './preview';
 
 describe('isPreviewRequest', () => {
 	test('returns true when preview=true query param is set', () => {
@@ -29,5 +29,21 @@ describe('resolveContentfulHost', () => {
 
 	test('falls back to delivery host when no host is configured', () => {
 		expect(resolveContentfulHost(false)).toBe('cdn.contentful.com');
+	});
+});
+
+describe('getResponseCacheHeaders', () => {
+	test('returns strict no-cache headers for preview requests', () => {
+		expect(getResponseCacheHeaders(true)).toEqual({
+			'Cache-Control': 'private, no-store, no-cache, must-revalidate, max-age=0',
+			Pragma: 'no-cache',
+			Expires: '0'
+		});
+	});
+
+	test('returns public cache headers for delivery requests', () => {
+		expect(getResponseCacheHeaders(false)).toEqual({
+			'Cache-Control': 'public, max-age=3600, s-maxage=86400'
+		});
 	});
 });
