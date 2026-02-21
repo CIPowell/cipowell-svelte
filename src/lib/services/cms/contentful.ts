@@ -5,6 +5,7 @@ import * as contentful from 'contentful';
 import type { ContentfulBlogPost, ContentfulPage, ContentfulSiteFooter } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { ContentfulCache } from './cache';
+import { resolveContentfulHost } from './preview';
 
 const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
 const CONTENTFUL_PREVIEW_HOST = 'preview.contentful.com';
@@ -51,8 +52,8 @@ export class Contentful implements NavClient, PageClient {
 	client: contentful.ContentfulClientApi<undefined>;
 	cache: ContentfulCache;
 
-	constructor(platform?: App.Platform) {
-		const host = env.CONTENTFUL_HOST || CONTENTFUL_DELIVERY_HOST;
+	constructor(platform?: App.Platform, preview = false) {
+		const host = resolveContentfulHost(preview, env.CONTENTFUL_HOST);
 		const isPreviewMode = host === CONTENTFUL_PREVIEW_HOST;
 
 		// Use preview API key if available and we're in preview mode, otherwise use regular key
