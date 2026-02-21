@@ -20,6 +20,15 @@ export type ContentfulBlogPost = {
 	};
 };
 
+export type ContentfulBlogPreviewSection = {
+	contentTypeId: 'blogPreviewSection';
+	fields: {
+		internalName: EntryFieldTypes.Symbol;
+		title: EntryFieldTypes.Symbol;
+		subjectTag: EntryFieldTypes.Symbol;
+	};
+};
+
 export type ContentfulFooterLink = {
 	contentTypeId: 'footerLink';
 	fields: {

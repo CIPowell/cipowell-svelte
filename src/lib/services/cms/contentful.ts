@@ -2,12 +2,33 @@ import { env } from '$env/dynamic/private';
 import type { NavClient, NavLink } from '$lib/services/navigation/nav';
 import type { SiteFooterContent } from '$lib/services/footer/footer-content';
 import * as contentful from 'contentful';
-import type { ContentfulPage, ContentfulSiteFooter } from './content_types';
+import type { ContentfulBlogPost, ContentfulPage, ContentfulSiteFooter } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { ContentfulCache } from './cache';
 
 const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
 const CONTENTFUL_PREVIEW_HOST = 'preview.contentful.com';
+
+type RichTextNode = {
+	nodeType?: string;
+	data?: {
+		target?: {
+			sys?: {
+				contentType?: {
+					sys?: {
+						id?: string;
+					};
+				};
+			};
+			fields?: {
+				title?: string;
+				subjectTag?: string;
+				items?: Array<{ fields?: Record<string, string> }>;
+			};
+		};
+	};
+	content?: RichTextNode[];
+};
 
 function mapResolvedFooterLinks(
 	links: Array<contentful.Entry | contentful.UnresolvedLink<'Entry'>>
@@ -92,6 +113,9 @@ export class Contentful implements NavClient, PageClient {
 				}
 
 				const page = pages.items[0];
+				await this.hydrateBlogPreviewSections(
+					page.fields.content as RichTextNode | null | undefined
+				);
 				const breadcrumbs = this.getBreadcrumb(page);
 
 				return {
@@ -103,6 +127,95 @@ export class Contentful implements NavClient, PageClient {
 			},
 			60 * 60 // Cache pages for 1 hour
 		);
+	}
+
+	private async hydrateBlogPreviewSections(
+		content: RichTextNode | null | undefined
+	): Promise<void> {
+		if (!content) {
+			return;
+		}
+
+		const sections = this.getBlogPreviewSectionTargets(content);
+		if (!sections.length) {
+			return;
+		}
+
+		for (const section of sections) {
+			const posts = await this.getLatestBlogPosts(section.fields?.subjectTag ?? '');
+
+			section.fields = {
+				...section.fields,
+				items: posts.map((post) => ({
+					fields: {
+						title: this.getSymbolFieldValue(post.fields.title),
+						linkLabel: 'Read post',
+						linkHref: `/thoughts/${this.getSymbolFieldValue(post.fields.slug)}`
+					}
+				}))
+			};
+		}
+	}
+
+	private getBlogPreviewSectionTargets(content: RichTextNode): Array<{
+		fields?: {
+			title?: string;
+			subjectTag?: string;
+			items?: Array<{ fields?: Record<string, string> }>;
+		};
+	}> {
+		const targets: Array<{
+			fields?: {
+				title?: string;
+				subjectTag?: string;
+				items?: Array<{ fields?: Record<string, string> }>;
+			};
+		}> = [];
+
+		const walk = (node: RichTextNode) => {
+			const target = node.data?.target;
+			const contentTypeId = target?.sys?.contentType?.sys?.id;
+			if (
+				node.nodeType === 'embedded-entry-block' &&
+				contentTypeId === 'blogPreviewSection' &&
+				target
+			) {
+				targets.push(target);
+			}
+
+			for (const child of node.content ?? []) {
+				walk(child);
+			}
+		};
+
+		walk(content);
+		return targets;
+	}
+
+	private getSymbolFieldValue(value: string | Record<string, string | undefined>): string {
+		if (typeof value === 'string') {
+			return value;
+		}
+
+		return value['en-US'] ?? '';
+	}
+
+	private async getLatestBlogPosts(
+		subjectTag: string
+	): Promise<Array<contentful.Entry<ContentfulBlogPost>>> {
+		const query: Record<string, string | number> = {
+			content_type: 'blogPost',
+			order: '-sys.createdAt',
+			limit: 3
+		};
+
+		if (subjectTag.trim()) {
+			query['fields.tags[in]'] = subjectTag.trim();
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
+		const entries = await this.client.getEntries<ContentfulBlogPost>(query as any);
+		return entries.items;
 	}
 
 	async getSiteFooter(): Promise<SiteFooterContent> {
