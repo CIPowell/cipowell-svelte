@@ -53,7 +53,11 @@ export class ContentfulCache {
 	}
 
 	private getCacheKey(key: string): string {
-		// Include host namespace to prevent preview/delivery cache pollution
-		return `https://cache.contentful/${this.cachePrefix}/${this.hostNamespace}/${encodeURIComponent(key)}`;
+		const cacheUrl = new URL(`https://cache.contentful/${this.cachePrefix}/${this.hostNamespace}`);
+
+		// Keep the caller key in a query param so URL encoding is handled safely.
+		cacheUrl.searchParams.set('key', key);
+
+		return cacheUrl.toString();
 	}
 }
