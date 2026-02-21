@@ -90,8 +90,8 @@ export function getOrderedNavLinks(links: NavLink[]): NavLink[] {
 export class NavigationService {
 	navClient: NavClient;
 
-	constructor(platform?: App.Platform) {
-		this.navClient = new Contentful(platform);
+	constructor(platform?: App.Platform, preview = false) {
+		this.navClient = new Contentful(platform, preview);
 	}
 
 	async getGlobalNavLinks(): Promise<NavLink[]> {
