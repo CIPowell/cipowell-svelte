@@ -259,16 +259,40 @@ export class Contentful implements NavClient, PageClient {
 	}
 
 	getBreadcrumb(page: contentful.Entry): NavLink[] {
-		let breadcrumbs: NavLink[] = [];
-		if (page.fields.parent) {
-			breadcrumbs = this.getBreadcrumb(page.fields.parent as contentful.Entry);
+		const breadcrumbs: NavLink[] = [];
+		const visited = new Set<string>();
+		let current: contentful.Entry | undefined = page;
+
+		while (current) {
+			const currentId = current.sys?.id;
+			if (currentId) {
+				if (visited.has(currentId)) {
+					console.warn(`Cycle detected in breadcrumb parent chain for entry ${currentId}`);
+					break;
+				}
+
+				visited.add(currentId);
+			}
+
+			breadcrumbs.push({
+				title: current.fields.title as string,
+				target: current.fields.slug as string
+			});
+
+			const parent = current.fields.parent as contentful.Entry | undefined;
+			if (!parent) {
+				break;
+			}
+
+			const parentId = parent.sys?.id;
+			if (!parentId) {
+				break;
+			}
+
+			current = parent;
 		}
 
-		breadcrumbs.push({
-			title: page.fields.title as string,
-			target: page.fields.slug as string
-		});
-		return breadcrumbs;
+		return breadcrumbs.reverse();
 	}
 }
 
