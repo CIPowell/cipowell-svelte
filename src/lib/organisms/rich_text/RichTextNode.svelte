@@ -52,6 +52,12 @@
 		hover?: boolean;
 	};
 
+	type BlogPreviewSectionFields = {
+		title?: string;
+		subjectTag?: string;
+		items?: Array<{ fields?: ThreeColumnItemFields }>;
+	};
+
 	type ThreeColumnItemViewModel = {
 		title: string;
 		description?: string;
@@ -98,6 +104,15 @@
 		}
 
 		return (entry.fields as ThreeColumnSectionFields) ?? null;
+	};
+
+	const getBlogPreviewSectionFields = (target: unknown): BlogPreviewSectionFields | null => {
+		const entry = getEmbeddedEntry(target);
+		if (entry?.sys?.contentType?.sys?.id !== 'blogPreviewSection') {
+			return null;
+		}
+
+		return (entry.fields as BlogPreviewSectionFields) ?? null;
 	};
 
 	const iconByType: Record<string, Component> = {
@@ -152,6 +167,8 @@
 
 	const threeColumnFields = $derived(getThreeColumnSectionFields(node?.data?.target));
 	const threeColumnItems = $derived(mapThreeColumnItems(threeColumnFields?.items));
+	const blogPreviewFields = $derived(getBlogPreviewSectionFields(node?.data?.target));
+	const blogPreviewItems = $derived(mapThreeColumnItems(blogPreviewFields?.items));
 </script>
 
 {#if node.nodeType === 'paragraph'}
@@ -249,6 +266,13 @@
 		align={asVariant(threeColumnFields?.align, ['left', 'center'], 'left') as 'left' | 'center'}
 		hover={Boolean(threeColumnFields?.hover)}
 	/>
+{:else if node.nodeType === 'embedded-entry-block' && blogPreviewItems.length > 0}
+	<section>
+		{#if blogPreviewFields?.title}
+			<h2>{blogPreviewFields.title}</h2>
+		{/if}
+		<ThreeColumnSection items={blogPreviewItems} variant="cta" background="soft" />
+	</section>
 {:else if node.nodeType === 'text'}
 	{#if hasMark(node.marks, 'bold')}
 		<strong>{node.value}</strong>
