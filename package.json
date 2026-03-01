@@ -39,7 +39,7 @@
 		"@types/eslint": "^9.6.0",
 		"@vitest/ui": "^4.0.18",
 		"axe-playwright": "^2.0.2",
-		"eslint": "^10.0.1",
+		"eslint": "^10.0.2",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-storybook": "^10.2.13",
 		"eslint-plugin-svelte": "^3.15.0",
