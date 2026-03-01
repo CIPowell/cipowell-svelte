@@ -46,11 +46,15 @@ cp .env.example .env
 CONTENTFUL_API_KEY=<your_contentful_delivery_or_preview_token>
 # Optional, defaults to cdn.contentful.com:
 CONTENTFUL_HOST=cdn.contentful.com
+# Optional, defaults to master:
+CONTENTFUL_ENVIRONMENT=master
 ```
 
 > Notes:
 >
 > - Preview environment uses `preview.contentful.com` via `wrangler.toml`.
+> - Add `?preview=true` to any page URL to force Contentful Preview API requests (useful when validating draft content in a preview deployment).
+> - If `CONTENTFUL_ENVIRONMENT` is not set, the app defaults Contentful environment to `master`.
 > - If `CONTENTFUL_API_KEY` is missing, server-side page and nav fetches will fail.
 
 4. (Only needed once per machine) install Playwright browsers:
