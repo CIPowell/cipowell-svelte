@@ -7,6 +7,12 @@
 		locale,
 		enableInspectorMode: true,
 		enableLiveUpdates: true
+	});
+
+	ContentfulLivePreview.subscribe('save', {
+		callback: async () => {
+			window.location.reload();
+		}
 	})
 </script>
  
