@@ -4,7 +4,9 @@
 	let {  locale } = $props();
 
 	ContentfulLivePreview.init({
-		locale
+		locale,
+		enableInspectorMode: true,
+		enableLiveUpdates: true
 	})
 </script>
  
