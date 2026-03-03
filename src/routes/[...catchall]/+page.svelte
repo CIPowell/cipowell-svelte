@@ -11,9 +11,7 @@
 
 {#if data.livePreview.enabled}
 	<LivePreviewBootstrap
-		enabled={data.livePreview.enabled}
 		locale={data.contentfulMetadata.locale}
-		environment={data.contentfulMetadata.environment}
 	/>
 {/if}
 
