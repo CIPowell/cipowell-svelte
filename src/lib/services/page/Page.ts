@@ -6,6 +6,14 @@ export interface Page {
 	slug: string;
 	content: { nodeType: string; content: unknown[] } | null;
 	breadcrumbs: NavLink[];
+	contentfulMetadata: {
+		entryId: string;
+		locale: string;
+		environment: string;
+	};
+	livePreview: {
+		enabled: boolean;
+	};
 }
 
 export interface PageClient {
@@ -15,8 +23,8 @@ export interface PageClient {
 export class PageService {
 	pageClient: PageClient;
 
-	constructor(platform?: App.Platform) {
-		this.pageClient = new Contentful(platform);
+	constructor(platform?: App.Platform, preview = false) {
+		this.pageClient = new Contentful(platform, preview);
 	}
 
 	async getPage(slug: string): Promise<Page> {

@@ -8,8 +8,8 @@ export interface FooterClient {
 export class FooterService {
 	footerClient: FooterClient;
 
-	constructor(platform?: App.Platform) {
-		this.footerClient = new Contentful(platform);
+	constructor(platform?: App.Platform, preview = false) {
+		this.footerClient = new Contentful(platform, preview);
 	}
 
 	async getSiteFooter(): Promise<SiteFooterContent> {
