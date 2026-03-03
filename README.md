@@ -46,11 +46,16 @@ cp .env.example .env
 CONTENTFUL_API_KEY=<your_contentful_delivery_or_preview_token>
 # Optional, defaults to cdn.contentful.com:
 CONTENTFUL_HOST=cdn.contentful.com
+# Optional, defaults to master:
+CONTENTFUL_ENVIRONMENT=master
 ```
 
 > Notes:
 >
 > - Preview environment uses `preview.contentful.com` via `wrangler.toml`.
+> - Preview API mode now activates only when requests originate from Contentful Live Preview (Contentful app iframe context), not via URL query flags.
+> - If `CONTENTFUL_ENVIRONMENT` is not set, the app defaults Contentful environment to `master`.
+> - The Contentful Live Preview SDK is loaded only when the page is embedded in Contentful Live Preview.
 > - If `CONTENTFUL_API_KEY` is missing, server-side page and nav fetches will fail.
 
 4. (Only needed once per machine) install Playwright browsers:

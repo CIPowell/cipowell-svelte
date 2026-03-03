@@ -8,12 +8,13 @@ export class ContentfulCache {
 	private hostNamespace: string;
 
 	constructor(platform?: App.Platform, contentfulHost?: string) {
-		// Use Cloudflare's cache if available (production)
-		// In development/preview, cache will be null and we'll skip caching
-		this.cache = platform?.caches?.default || null;
+		const isPreviewHost = contentfulHost?.includes('preview') ?? false;
+
+		// Never cache preview responses to avoid stale draft content in Contentful preview mode.
+		this.cache = isPreviewHost ? null : (platform?.caches?.default ?? null);
 
 		// Derive namespace from host to prevent preview/delivery cache pollution
-		this.hostNamespace = contentfulHost?.includes('preview') ? 'preview' : 'delivery';
+		this.hostNamespace = isPreviewHost ? 'preview' : 'delivery';
 	}
 
 	/**
@@ -52,7 +53,11 @@ export class ContentfulCache {
 	}
 
 	private getCacheKey(key: string): string {
-		// Include host namespace to prevent preview/delivery cache pollution
-		return `https://cache.contentful/${this.cachePrefix}/${this.hostNamespace}/${encodeURIComponent(key)}`;
+		const cacheUrl = new URL(`https://cache.contentful/${this.cachePrefix}/${this.hostNamespace}`);
+
+		// Keep the caller key in a query param so URL encoding is handled safely.
+		cacheUrl.searchParams.set('key', key);
+
+		return cacheUrl.toString();
 	}
 }

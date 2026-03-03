@@ -5,6 +5,7 @@ import * as contentful from 'contentful';
 import type { ContentfulBlogPost, ContentfulPage, ContentfulSiteFooter } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { ContentfulCache } from './cache';
+import { resolveContentfulHost } from './preview';
 
 const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
 const CONTENTFUL_PREVIEW_HOST = 'preview.contentful.com';
@@ -50,9 +51,12 @@ function mapResolvedFooterLinks(
 export class Contentful implements NavClient, PageClient {
 	client: contentful.ContentfulClientApi<undefined>;
 	cache: ContentfulCache;
+	contentfulEnvironment: string;
+	previewEnabled: boolean;
 
-	constructor(platform?: App.Platform) {
-		const host = env.CONTENTFUL_HOST || CONTENTFUL_DELIVERY_HOST;
+	constructor(platform?: App.Platform, preview = false) {
+		const host = resolveContentfulHost(preview, env.CONTENTFUL_HOST);
+		const contentfulEnvironment = env.CONTENTFUL_ENVIRONMENT || 'master';
 		const isPreviewMode = host === CONTENTFUL_PREVIEW_HOST;
 
 		// Use preview API key if available and we're in preview mode, otherwise use regular key
@@ -71,9 +75,12 @@ export class Contentful implements NavClient, PageClient {
 		this.client = contentful.createClient({
 			space: 'c85g7urd11yl',
 			accessToken,
-			host
+			host,
+			environment: contentfulEnvironment
 		});
 		this.cache = new ContentfulCache(platform, host);
+		this.contentfulEnvironment = contentfulEnvironment;
+		this.previewEnabled = isPreviewMode;
 	}
 
 	async getGlobalNavLinks(): Promise<NavLink[]> {
@@ -125,7 +132,15 @@ export class Contentful implements NavClient, PageClient {
 					title: page.fields.title as string,
 					slug: page.fields.slug as string,
 					content: page.fields.content ?? null,
-					breadcrumbs
+					breadcrumbs,
+					contentfulMetadata: {
+						entryId: page.sys.id,
+						locale: page.sys.locale || 'en-US',
+						environment: this.contentfulEnvironment
+					},
+					livePreview: {
+						enabled: this.previewEnabled
+					}
 				};
 			},
 			60 * 60 // Cache pages for 1 hour
