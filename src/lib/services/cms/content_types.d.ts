@@ -59,6 +59,7 @@ export type ContentfulThreeColumnItem = {
 		title: EntryFieldTypes.Symbol;
 		description: EntryFieldTypes.Text;
 		iconType: EntryFieldTypes.Symbol;
+		iconName: EntryFieldTypes.Symbol;
 		linkLabel: EntryFieldTypes.Symbol;
 		linkHref: EntryFieldTypes.Symbol;
 		align: EntryFieldTypes.Symbol;

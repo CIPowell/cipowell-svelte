@@ -41,6 +41,35 @@ test('renders embedded three column section entries from contentful rich text', 
 	expect(screen.getByRole('link', { name: 'See more' }).getAttribute('href')).toBe('/services');
 });
 
+test('prefers iconName and supports expanded icon options', () => {
+	render(RichTextNode, {
+		node: {
+			nodeType: 'embedded-entry-block',
+			data: {
+				target: {
+					sys: { contentType: { sys: { id: 'threeColumnSection' } } },
+					fields: {
+						items: [
+							{
+								fields: {
+									title: 'Scale',
+									description: 'Tracking growth trends',
+									iconType: 'badge',
+									iconName: 'chart'
+								}
+							}
+						]
+					}
+				}
+			}
+		}
+	});
+
+	expect(screen.getByText('Scale')).toBeTruthy();
+	expect(screen.getByText('Tracking growth trends')).toBeTruthy();
+	expect(document.querySelectorAll('svg')).toHaveLength(1);
+});
+
 test('renders embedded blog preview section entries from contentful rich text', () => {
 	render(RichTextNode, {
 		node: {
