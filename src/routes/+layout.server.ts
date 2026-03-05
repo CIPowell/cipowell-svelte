@@ -2,18 +2,20 @@ import { NavigationService, getOrderedNavLinks, type NavLink } from '$lib/servic
 import { DEFAULT_SITE_FOOTER, type SiteFooterContent } from '$lib/services/footer/footer-content';
 import { FooterService } from '$lib/services/footer/footer.server';
 import { env } from '$env/dynamic/private';
-import { getResponseCacheHeaders, isContentfulLivePreviewRequest } from '$lib/services/cms/preview';
+
 
 interface LayoutData {
 	navLinks: NavLink[];
 	footer: SiteFooterContent;
+	preview: boolean
 }
 
 export async function load({ platform, request, setHeaders, url }) {
-	const preview = isContentfulLivePreviewRequest(url, request.headers.get('referer'));
+	const preview = url.searchParams.get('preview') == 'true'
 	const layoutData: LayoutData = {
 		navLinks: [],
-		footer: DEFAULT_SITE_FOOTER
+		footer: DEFAULT_SITE_FOOTER,
+		preview
 	};
 
 	try {
@@ -30,11 +32,8 @@ export async function load({ platform, request, setHeaders, url }) {
 		layoutData.footer = DEFAULT_SITE_FOOTER;
 	}
 
-	// Disable caching for preview mode to avoid persisting draft content
-	const contentfulHost = env.CONTENTFUL_HOST;
-	const isPreviewMode = preview || Boolean(contentfulHost?.includes('preview'));
 
-	setHeaders(getResponseCacheHeaders(isPreviewMode));
+	console.log(`Loaded ${url} preview mode is ${preview}`)
 
 	return layoutData;
 }
