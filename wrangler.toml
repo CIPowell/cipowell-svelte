@@ -32,8 +32,7 @@ directory = ".svelte-kit/cloudflare"
 # If not set, falls back to CONTENTFUL_API_KEY
 
 [env.preview.vars]
-CONTENTFUL_HOST = "preview.contentful.com"
-
+CONTENTFUL_ENVIRONMENT = "preview"
 
 ######## PRODUCTION environment config ########
 

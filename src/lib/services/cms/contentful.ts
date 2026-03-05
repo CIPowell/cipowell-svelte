@@ -5,7 +5,6 @@ import * as contentful from 'contentful';
 import type { ContentfulBlogPost, ContentfulPage, ContentfulSiteFooter } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { ContentfulCache } from './cache';
-import { resolveContentfulHost } from './preview';
 
 const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
 const CONTENTFUL_PREVIEW_HOST = 'preview.contentful.com';
@@ -55,18 +54,16 @@ export class Contentful implements NavClient, PageClient {
 	previewEnabled: boolean;
 
 	constructor(platform?: App.Platform, preview = false) {
-		const host = resolveContentfulHost(preview, env.CONTENTFUL_HOST);
 		const contentfulEnvironment = env.CONTENTFUL_ENVIRONMENT || 'master';
-		const isPreviewMode = host === CONTENTFUL_PREVIEW_HOST;
 
 		// Use preview API key if available and we're in preview mode, otherwise use regular key
 		const accessToken =
-			isPreviewMode && env.CONTENTFUL_PREVIEW_API_KEY
+			preview && env.CONTENTFUL_PREVIEW_API_KEY
 				? env.CONTENTFUL_PREVIEW_API_KEY
 				: env.CONTENTFUL_API_KEY;
 
 		if (!accessToken) {
-			const requiredKey = isPreviewMode
+			const requiredKey = preview
 				? 'CONTENTFUL_PREVIEW_API_KEY or CONTENTFUL_API_KEY'
 				: 'CONTENTFUL_API_KEY';
 			throw new Error(`Missing required environment variable: ${requiredKey}`);
@@ -74,13 +71,13 @@ export class Contentful implements NavClient, PageClient {
 
 		this.client = contentful.createClient({
 			space: 'c85g7urd11yl',
+			host: preview ? 'preview.contentful.com' : 'cdn.contentful.com',
 			accessToken,
-			host,
 			environment: contentfulEnvironment
 		});
-		this.cache = new ContentfulCache(platform, host);
+		this.cache = new ContentfulCache(platform);
 		this.contentfulEnvironment = contentfulEnvironment;
-		this.previewEnabled = isPreviewMode;
+		this.previewEnabled = preview;
 	}
 
 	async getGlobalNavLinks(): Promise<NavLink[]> {

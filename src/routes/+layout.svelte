@@ -2,12 +2,20 @@
 	import Header from '$lib/molecules/header/Header.svelte';
 	import Nav from '$lib/molecules/nav/Nav.svelte';
 	import SiteFooter from '$lib/organisms/site_footer/SiteFooter.svelte';
+	import LivePreviewBootstrap from '$lib/services/cms/LivePreviewBootstrap.svelte';
 
 	import '$lib/main.css';
 
 	let { data, children } = $props();
 	const footer = $derived(data.footer);
 </script>
+
+
+{#if data.preview}
+	<LivePreviewBootstrap
+		locale='en-US'
+	/>
+{/if}
 
 <div class="site-header">
 	<Header />
