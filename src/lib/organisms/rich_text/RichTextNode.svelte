@@ -2,9 +2,7 @@
 	import type { Component } from 'svelte';
 	import HeroSection from '$lib/organisms/hero_section/HeroSection.svelte';
 	import ThreeColumnSection from '$lib/organisms/three_column_section/ThreeColumnSection.svelte';
-	import BadgeIcon from '$lib/icons/BadgeIcon.svelte';
-	import SparkIcon from '$lib/icons/SparkIcon.svelte';
-	import ShieldIcon from '$lib/icons/ShieldIcon.svelte';
+	import { threeColumnIconByName } from '$lib/icons/icon_registry';
 	import Self from './RichTextNode.svelte';
 
 	type Mark = { type: string };
@@ -38,6 +36,7 @@
 		title?: string;
 		description?: string;
 		iconType?: string;
+		iconName?: string;
 		linkLabel?: string;
 		linkHref?: string;
 		align?: 'left' | 'center';
@@ -132,12 +131,6 @@
 		return (entry.fields as BlogPreviewSectionFields) ?? null;
 	};
 
-	const iconByType: Record<string, Component> = {
-		badge: BadgeIcon,
-		spark: SparkIcon,
-		shield: ShieldIcon
-	};
-
 	const mapThreeColumnItems = (
 		items: ThreeColumnSectionFields['items']
 	): ThreeColumnItemViewModel[] => {
@@ -153,16 +146,18 @@
 
 			const description = asText(item.fields?.description).trim();
 			const iconType = asText(item.fields?.iconType);
+			const iconName = asText(item.fields?.iconName);
 			const linkLabel = asText(item.fields?.linkLabel).trim();
 			const linkHref = asText(item.fields?.linkHref).trim();
 			const link = linkLabel && linkHref ? { label: linkLabel, href: linkHref } : undefined;
 			const align = asVariant(item.fields?.align, ['left', 'center'], 'left') as 'left' | 'center';
+			const icon = threeColumnIconByName[iconName] ?? threeColumnIconByName[iconType];
 
 			return [
 				{
 					title,
 					description: description || undefined,
-					icon: iconByType[iconType],
+					icon,
 					link,
 					align
 				}
