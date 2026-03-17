@@ -92,11 +92,10 @@ export class Contentful implements NavClient, PageClient {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				} as any);
 
-				return pages.items
-					.map((p) => ({
-						title: p.fields.title,
-						target: p.fields.slug
-					}));
+				return pages.items.map((p) => ({
+					title: p.fields.title,
+					target: p.fields.slug
+				}));
 			},
 			60 * 60 * 24 // Cache nav links for 24 hours
 		);
@@ -231,6 +230,22 @@ export class Contentful implements NavClient, PageClient {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
 		const entries = await this.client.getEntries<ContentfulBlogPost>(query as any);
 		return entries.items;
+	}
+
+	async getMostRecentlyCreatedBlogPosts(
+		limit = 3
+	): Promise<Array<{ title: string; slug: string }>> {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
+		const entries = await this.client.getEntries<ContentfulBlogPost>({
+			content_type: 'blogPost',
+			order: '-sys.createdAt',
+			limit
+		} as any);
+
+		return entries.items.map((entry) => ({
+			title: this.getSymbolFieldValue(entry.fields.title),
+			slug: this.getSymbolFieldValue(entry.fields.slug)
+		}));
 	}
 
 	async getSiteFooter(): Promise<SiteFooterContent> {
