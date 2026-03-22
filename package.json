@@ -42,7 +42,7 @@
 		"@vitest/coverage-v8": "4.1.0",
 		"@vitest/ui": "^4.0.18",
 		"axe-playwright": "^2.0.2",
-		"eslint": "^10.0.3",
+		"eslint": "^10.1.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-storybook": "^10.3.1",
 		"eslint-plugin-svelte": "^3.16.0",
