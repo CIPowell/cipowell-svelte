@@ -231,8 +231,9 @@ class Contentful implements NavClient, PageClient {
 			query['fields.tags[in]'] = subjectTag.trim();
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
-		const entries = await this.client.getEntries<ContentfulBlogPost>(query as any);
+		const entries = await this.client.getEntries<ContentfulBlogPost>(
+			query as unknown as contentful.EntriesQueries<ContentfulBlogPost, undefined>
+		);
 		return entries.items;
 	}
 
@@ -255,7 +256,6 @@ class Contentful implements NavClient, PageClient {
 	}
 
 	async getMostRecentlyCreatedBlogPosts(limit = 3, tag = ''): Promise<BlogPostPreview[]> {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
 		const query: Record<string, string | number> = {
 			content_type: 'blogPost',
 			order: '-sys.createdAt',
@@ -266,20 +266,20 @@ class Contentful implements NavClient, PageClient {
 			query['fields.tags[in]'] = tag.trim();
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
-		const entries = await this.client.getEntries<ContentfulBlogPost>(query as any);
+		const entries = await this.client.getEntries<ContentfulBlogPost>(
+			query as unknown as contentful.EntriesQueries<ContentfulBlogPost, undefined>
+		);
 
 		return entries.items.map((entry) => this.mapBlogPostPreview(entry));
 	}
 
 	async getBlogPost(slug: string): Promise<BlogPost> {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
 		const entries = await this.client.getEntries<ContentfulBlogPost>({
 			content_type: 'blogPost',
 			'fields.slug': slug,
 			include: 10,
 			limit: 1
-		} as any);
+		} as unknown as contentful.EntriesQueries<ContentfulBlogPost, undefined>);
 
 		if (!entries.items.length) {
 			throw new Error(`Blog post not found: ${slug}`);

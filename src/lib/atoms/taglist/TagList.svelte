@@ -10,7 +10,7 @@
 </script>
 
 <div>
-	{#each tags as tag (`tag-${tag}`)}
+	{#each tags as tag, index (`tag-${tag}-${index}`)}
 		<button onclick={() => clickHandler(tag)}>{tag}</button>
 	{/each}
 </div>
