@@ -23,3 +23,5 @@ vite.config.ts.timestamp-*
 test-results
 
 *storybook.log.tmp
+
+.tmp
