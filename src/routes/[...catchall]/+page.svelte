@@ -3,19 +3,16 @@
 	import ContentfulRichText from '$lib/organisms/rich_text/ContentfulRichText.svelte';
 	import { ContentfulLivePreview } from '@contentful/live-preview';
 	import { onMount } from 'svelte';
-	let { data } = $props();
-	let pageContent = $state<typeof data.content>(null);
 
-	$effect(() => {
-		pageContent = data.content;
-	});
+	let { data } = $props();
+	let pageContent = $derived(data.content);
 
 	onMount(() => {
 		if (!data.livePreview.enabled) {
 			return;
 		}
 
-		let unsubscribe: VoidFunction | undefined;
+		let unsubscribe: (() => void) | undefined;
 		let cancelled = false;
 		let refreshInFlight = false;
 

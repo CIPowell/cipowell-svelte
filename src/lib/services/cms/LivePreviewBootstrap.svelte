@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { ContentfulLivePreview } from "@contentful/live-preview";
+	import { ContentfulLivePreview } from '@contentful/live-preview';
+	import { onMount } from 'svelte';
 
 	let { locale } = $props();
 
-	ContentfulLivePreview.init({
-		locale: locale,
-		enableInspectorMode: true,
-		enableLiveUpdates: true
+	onMount(() => {
+		ContentfulLivePreview.init({
+			locale,
+			enableInspectorMode: true,
+			enableLiveUpdates: true
+		});
 	});
 </script>
- 

@@ -9,7 +9,7 @@
 </script>
 
 <nav class="breadcrumbs">
-	{#each links as link, i}
+	{#each links as link, i (`breadcrumb-${link.target}-${i}`)}
 		<a href={link.target}>{link.title}</a>
 		{#if i < links.length - 1}
 			<span class="sep">&gt;</span>

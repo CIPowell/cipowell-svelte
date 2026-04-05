@@ -2,27 +2,39 @@
 	"name": "cipowell-svelte",
 	"version": "0.0.1",
 	"private": true,
+	"engines": {
+		"node": "24.14.1"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"test": "npm run test:integration && npm run test:unit",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check": "npm run check:types && npm run check:deps",
+		"check:types": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:deps": "knip",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check . && eslint .",
+		"lint": "npm run lint:format && npm run lint:code && npm run lint:docs",
+		"lint:format": "prettier --check .",
+		"lint:code": "eslint .",
+		"lint:docs": "markdownlint-cli2 \"**/*.md\"",
 		"format": "prettier --write .",
+		"test": "npm run test:unit && npm run test:storybook && npm run test:integration",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
 		"test:storybook": "vitest --project=storybook",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
+		"security": "npm run security:deps && npm run security:secrets && npm run security:sast",
+		"security:deps": "node ./scripts/quality/security-deps.mjs",
+		"security:secrets": "node ./scripts/quality/security-secrets.mjs",
+		"security:sast": "node ./scripts/quality/security-sast.mjs",
+		"ci": "npm run lint && npm run check && npm run build && npm run build-storybook && npm run test && npm run security",
 		"contentful:migration:new": "node scripts/contentful/new-migration.mjs",
 		"contentful:migration:run": "node scripts/contentful/run-migration.mjs",
 		"contentful:migration:verify": "node scripts/contentful/lint-and-test.mjs",
 		"contentful:migration:rollback": "node scripts/contentful/run-migration.mjs"
 	},
 	"devDependencies": {
-		"@chromatic-com/storybook": "^5.1.1",
 		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.59.1",
 		"@storybook/addon-a11y": "^10.3.4",
@@ -31,44 +43,57 @@
 		"@storybook/addon-svelte-csf": "^5.1.2",
 		"@storybook/addon-vitest": "^10.3.4",
 		"@storybook/sveltekit": "^10.3.4",
-		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/adapter-cloudflare": "^7.2.8",
-		"@sveltejs/kit": "^2.53.4",
-		"@sveltejs/vite-plugin-svelte": "^6.2.4",
-		"@testing-library/jest-dom": "^6.9.1",
+		"@sveltejs/kit": "^2.56.1",
+		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@testing-library/svelte": "^5.3.1",
-		"@types/eslint": "^9.6.0",
-		"@vitest/browser-playwright": "4.1.2",
-		"@vitest/coverage-v8": "4.1.2",
-		"@vitest/ui": "^4.0.18",
-		"axe-playwright": "^2.0.2",
+		"@types/node": "^25.5.2",
+		"@vitest/browser-playwright": "^4.1.2",
+		"@vitest/coverage-v8": "^4.1.2",
+		"@vitest/ui": "^4.1.2",
 		"eslint": "^10.2.0",
-		"eslint-config-prettier": "^10.1.5",
+		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-storybook": "^10.3.4",
 		"eslint-plugin-svelte": "^3.17.0",
 		"globals": "^17.4.0",
 		"jsdom": "^29.0.1",
+		"knip": "^6.3.0",
+		"markdownlint-cli2": "^0.22.0",
 		"playwright": "^1.59.1",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.5.1",
 		"remark-gfm": "^4.0.1",
-		"storybook": "^10.2.8",
-		"svelte": "^5.53.7",
+		"storybook": "^10.3.4",
+		"svelte": "^5.55.1",
 		"svelte-check": "^4.4.6",
-		"typescript": "^5.9.3",
+		"typescript": "^6.0.2",
 		"typescript-eslint": "^8.58.0",
-		"vite": "^7.3.1",
-		"vitest": "^4.0.18"
+		"vite": "^8.0.3",
+		"vitest": "^4.1.2"
+	},
+	"overrides": {
+		"@sveltejs/kit": {
+			"cookie": "0.7.0"
+		},
+		"contentful-sdk-core": {
+			"lodash": "4.18.0"
+		},
+		"markdownlint-cli2": {
+			"smol-toml": "1.6.1"
+		},
+		"miniflare": {
+			"undici": "7.24.5"
+		},
+		"minimatch@10.2.4": {
+			"brace-expansion": "5.0.5"
+		},
+		"postcss-load-config": {
+			"yaml": "1.10.3"
+		}
 	},
 	"type": "module",
-	"eslintConfig": {
-		"extends": [
-			"plugin:storybook/recommended"
-		]
-	},
 	"dependencies": {
 		"@contentful/live-preview": "^4.9.12",
-		"@contentful/rich-text-html-renderer": "^17.1.6",
 		"contentful": "^11.12.0"
 	}
 }

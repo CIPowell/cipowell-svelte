@@ -1,17 +1,15 @@
 import { NavigationService, getOrderedNavLinks, type NavLink } from '$lib/services/navigation/nav';
 import { DEFAULT_SITE_FOOTER, type SiteFooterContent } from '$lib/services/footer/footer-content';
 import { FooterService } from '$lib/services/footer/footer.server';
-import { env } from '$env/dynamic/private';
-
 
 interface LayoutData {
 	navLinks: NavLink[];
 	footer: SiteFooterContent;
-	preview: boolean
+	preview: boolean;
 }
 
-export async function load({ platform, request, setHeaders, url }) {
-	const preview = url.searchParams.get('preview') == 'true'
+export async function load({ platform, url }) {
+	const preview = url.searchParams.get('preview') == 'true';
 	const layoutData: LayoutData = {
 		navLinks: [],
 		footer: DEFAULT_SITE_FOOTER,
@@ -32,8 +30,7 @@ export async function load({ platform, request, setHeaders, url }) {
 		layoutData.footer = DEFAULT_SITE_FOOTER;
 	}
 
-
-	console.log(`Loaded ${url} preview mode is ${preview}`)
+	console.log(`Loaded ${url} preview mode is ${preview}`);
 
 	return layoutData;
 }

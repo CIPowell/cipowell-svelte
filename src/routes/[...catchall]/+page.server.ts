@@ -4,7 +4,7 @@ import { error } from '@sveltejs/kit';
 
 export async function load({ params, platform, url }) {
 	const slug = params.catchall;
-	const preview = url.searchParams.get('preview') == "true";
+	const preview = url.searchParams.get('preview') == 'true';
 	const contentful = new Contentful(platform, preview);
 	let pageData: Page;
 

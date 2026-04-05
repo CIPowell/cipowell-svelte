@@ -1,0 +1,17 @@
+{
+	"$schema": "https://unpkg.com/knip@6/schema.json",
+	"entry": [
+		"tests/**/*.{js,ts}",
+		".storybook/**/*.{js,ts}",
+		"scripts/**/*.{js,mjs,cjs,ts}",
+		"contentful/migrations/**/*.{js,cjs}"
+	],
+	"project": [
+		"src/**/*.{js,ts,svelte}",
+		"tests/**/*.{js,ts}",
+		".storybook/**/*.{js,ts}",
+		"scripts/**/*.{js,mjs,cjs,ts}",
+		"contentful/migrations/**/*.{js,cjs}",
+		"*.config.{js,ts}"
+	]
+}

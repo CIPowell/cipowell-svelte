@@ -5,7 +5,6 @@ const config: StorybookConfig = {
 	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|ts|svelte)'],
 	addons: [
 		'@storybook/addon-links',
-		'@chromatic-com/storybook',
 		'@storybook/addon-a11y',
 		{
 			name: '@storybook/addon-docs',
@@ -30,4 +29,5 @@ const config: StorybookConfig = {
 		options: {}
 	}
 };
+
 export default config;

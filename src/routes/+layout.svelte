@@ -10,11 +10,8 @@
 	const footer = $derived(data.footer);
 </script>
 
-
 {#if data.preview}
-	<LivePreviewBootstrap
-		locale='en-US'
-	/>
+	<LivePreviewBootstrap locale="en-US" />
 {/if}
 
 <div class="site-header">

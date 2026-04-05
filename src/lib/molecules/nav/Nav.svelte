@@ -33,7 +33,7 @@
 	</button>
 
 	<div id={navMenuId} class:menu-open={isMenuOpen} class="menu-panel">
-		{#each links as link}
+		{#each links as link (`nav-${link.target}`)}
 			<NavHeaderLink {link} />
 		{/each}
 	</div>

@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint, build, and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Lint formatting
+        run: npm run lint:format
+
+      - name: Lint code
+        run: npm run lint:code
+
+      - name: Lint docs
+        run: npm run lint:docs
+
+      - name: Check types
+        run: npm run check:types
+
+      - name: Check dependency hygiene
+        run: npm run check:deps
+
+      - name: Build app
+        run: npm run build
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Run Storybook tests
+        run: npm run test:storybook
+
+      - name: Run integration tests
+        run: npm run test:integration
+
+  security:
+    name: Security checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install OSV-Scanner and Gitleaks
+        run: |
+          go install github.com/google/osv-scanner/v2/cmd/osv-scanner@latest
+          go install github.com/gitleaks/gitleaks/v8@latest
+          echo "$HOME/go/bin" >> "$GITHUB_PATH"
+
+      - name: Install Semgrep CE
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --user semgrep
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Dependency vulnerability scan
+        run: npm run security:deps
+
+      - name: Secret scan
+        run: npm run security:secrets
+
+      - name: Static analysis security scan
+        run: npm run security:sast

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-
 	type FooterLinkVariant = 'default' | 'inverse';
 
 	interface Props {
@@ -13,9 +11,8 @@
 </script>
 
 {#if href.startsWith('/')}
-	<a class={`footer-link footer-link--${variant}`} href={resolve(href)}>{label}</a>
+	<a class={`footer-link footer-link--${variant}`} {href}>{label}</a>
 {:else}
-	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 	<a class={`footer-link footer-link--${variant}`} {href}>{label}</a>
 {/if}
 

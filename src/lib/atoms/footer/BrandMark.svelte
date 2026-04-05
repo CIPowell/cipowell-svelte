@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-
 	type BrandMarkVariant = 'default' | 'inverse';
 
 	interface Props {
@@ -18,7 +16,7 @@
 	}: Props = $props();
 </script>
 
-<a class={`brand-mark brand-mark--${variant}`} href={resolve(href)} aria-label="Go to home page">
+<a class={`brand-mark brand-mark--${variant}`} {href} aria-label="Go to home page">
 	<img {src} {alt} loading="lazy" decoding="async" />
 </a>
 
