@@ -1,4 +1,3 @@
-/// <reference types="vitest/config" />
 import { sveltekit } from '@sveltejs/kit/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
 import { defineConfig } from 'vitest/config';
@@ -44,8 +43,7 @@ export default defineConfig({
 								browser: 'chromium'
 							}
 						]
-					},
-					setupFiles: ['.storybook/vitest.setup.ts']
+					}
 				}
 			}
 		]

@@ -1,15 +1,17 @@
 <script lang="ts">
+	type TagClickHandler = (tag: string) => void;
+
 	interface Props {
 		tags?: string[];
-		clickHandler: Function;
+		clickHandler: TagClickHandler;
 	}
 
 	let { tags = [], clickHandler }: Props = $props();
 </script>
 
 <div>
-	{#each tags as tag}
-		<button onclick={clickHandler(tag)}>{tag}</button>
+	{#each tags as tag (`tag-${tag}`)}
+		<button onclick={() => clickHandler(tag)}>{tag}</button>
 	{/each}
 </div>
 

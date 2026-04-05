@@ -1,14 +1,10 @@
-import { env } from '$env/dynamic/private';
-import type { BlogPost, BlogPostPreview } from '$lib/services/blog/Blog';
-import type { NavClient, NavLink } from '$lib/services/navigation/nav';
 import type { SiteFooterContent } from '$lib/services/footer/footer-content';
+import type { NavClient, NavLink } from '$lib/services/navigation/nav';
+import { env } from '$env/dynamic/private';
 import * as contentful from 'contentful';
-import type { ContentfulBlogPost, ContentfulPage, ContentfulSiteFooter } from './content_types';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { ContentfulCache } from './cache';
-
-const CONTENTFUL_DELIVERY_HOST = 'cdn.contentful.com';
-const CONTENTFUL_PREVIEW_HOST = 'preview.contentful.com';
+import type { ContentfulBlogPost, ContentfulPage, ContentfulSiteFooter } from './content_types';
 
 type RichTextNode = {
 	nodeType?: string;
@@ -48,7 +44,7 @@ function mapResolvedFooterLinks(
 	});
 }
 
-export class Contentful implements NavClient, PageClient {
+class Contentful implements NavClient, PageClient {
 	client: contentful.ContentfulClientApi<undefined>;
 	cache: ContentfulCache;
 	contentfulEnvironment: string;
@@ -85,14 +81,19 @@ export class Contentful implements NavClient, PageClient {
 		return this.cache.get(
 			'nav-links',
 			async () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK query types are strict and do not include all supported search params
-				const pages = await this.client.getEntries<ContentfulPage>({
+				const query = {
 					content_type: 'page',
 					'fields.parent[exists]': false,
 					select: 'fields.title,fields.slug'
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				} as any);
+				} as const;
+				const pages = await this.client.getEntries<ContentfulPage>(
+					query as unknown as contentful.EntriesQueries<ContentfulPage, undefined>
+				);
 
+				return pages.items.map((p) => ({
+					title: p.fields.title,
+					target: p.fields.slug
+				}));
 				return pages.items.map((p) => ({
 					title: p.fields.title,
 					target: p.fields.slug
@@ -106,13 +107,14 @@ export class Contentful implements NavClient, PageClient {
 		return this.cache.get(
 			`page-${slug || 'home'}`,
 			async () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
-				const pages = await this.client.getEntries<ContentfulPage>({
+				const query = {
 					content_type: 'page',
 					'fields.slug': slug || 'home',
 					include: 10
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				} as any);
+				} as const;
+				const pages = await this.client.getEntries<ContentfulPage>(
+					query as unknown as contentful.EntriesQueries<ContentfulPage, undefined>
+				);
 
 				if (!pages.items || pages.items.length === 0) {
 					console.error(`Page not found: ${slug}`);

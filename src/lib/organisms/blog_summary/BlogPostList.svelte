@@ -11,6 +11,6 @@
 
 <h1>Summary</h1>
 
-{#each posts as post}
+{#each posts as post, index (`post-${post.slug}-${index}`)}
 	<BlogPreview {post} />
 {/each}

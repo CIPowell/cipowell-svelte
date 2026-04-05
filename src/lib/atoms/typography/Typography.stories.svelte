@@ -24,7 +24,6 @@
 		heading3: 'Heading 3',
 		heading4: 'Heading 4',
 		heading5: 'Heading 5',
-		body:
-			'Body text preview. Change this in Controls to validate typography, spacing, and readability.'
+		body: 'Body text preview. Change this in Controls to validate typography, spacing, and readability.'
 	}}
 />

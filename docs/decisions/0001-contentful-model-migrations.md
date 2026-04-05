@@ -1,9 +1,11 @@
 # ADR 0001: Manage Contentful content model migrations in code
 
 ## Status
+
 Accepted
 
 ## Context
+
 The project currently manages the Contentful content model manually in the web UI. That approach makes changes hard to review, hard to reproduce, and risky to promote across environments.
 
 The goal is to choose a migration approach that:
@@ -19,14 +21,14 @@ The goal is to choose a migration approach that:
 
 Contentful-maintained Node.js library that defines model changes in JavaScript migration files.
 
-**Pros**
+#### Option 1 pros
 
 - Officially supported by Contentful and widely used in their examples.
 - Purpose-built for content model evolution (create/edit/delete content types, fields, validations, editor interfaces).
 - Supports incremental migration history (one file per change).
 - Easy to run in CI with environment variables.
 
-**Cons**
+#### Option 1 cons
 
 - JavaScript/TypeScript imperative DSL, not pure declarative state.
 - Rollback is manual unless reverse migrations are authored.
@@ -35,12 +37,12 @@ Contentful-maintained Node.js library that defines model changes in JavaScript m
 
 CLI command that executes migration files (internally aligned with the Migration DSL).
 
-**Pros**
+#### Option 2 pros
 
 - Good DX for local usage.
 - Handles prompting and account-space targeting.
 
-**Cons**
+#### Option 2 cons
 
 - Still depends on migration scripts (not fundamentally different from Option 1).
 - Adds an additional CLI dependency and user authentication complexity in CI.
@@ -49,12 +51,12 @@ CLI command that executes migration files (internally aligned with the Migration
 
 Build our own migration runner on top of the Management API SDK.
 
-**Pros**
+#### Option 3 pros
 
 - Maximum flexibility.
 - No dependency on migration DSL constraints.
 
-**Cons**
+#### Option 3 cons
 
 - Highest maintenance cost.
 - Re-implements migration concerns already solved by official tools.

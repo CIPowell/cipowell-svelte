@@ -2,6 +2,16 @@
 
 SvelteKit-powered personal site that renders pages from Contentful and deploys to Cloudflare Workers.
 
+## Toolchain baseline
+
+- Node.js `24.14.1` via `.nvmrc`, `.node-version`, and `package.json`
+- npm `10+`
+- TypeScript `6`
+- Vite `8`
+- SvelteKit `2` on Svelte `5`
+
+The repository uses an open-source-only quality pipeline for formatting, linting, type checking, dependency hygiene, tests, and security scanning. When a PR changes behavior, tooling, workflows, or contributor rules, update `README.md`, `AGENTS.md`, `.github/copilot-instructions.md`, and any relevant docs in the same change.
+
 ## How this repository works
 
 ### Runtime flow
@@ -21,10 +31,18 @@ SvelteKit-powered personal site that renders pages from Contentful and deploys t
 
 ## Prerequisites
 
-- Node.js 20+ (recommended for current SvelteKit/Vite ecosystem)
+- Node.js 24.14.1
 - npm 10+
 - A Contentful delivery token (for local/server rendering)
 - Playwright browser binaries (for browser-based tests)
+
+Optional local security tooling for `npm run security:*`:
+
+- `osv-scanner`
+- `gitleaks`
+- `semgrep`
+
+CI installs those tools automatically. For local use, install them with your preferred package manager before running the security scripts.
 
 ## Setup
 
@@ -34,13 +52,13 @@ SvelteKit-powered personal site that renders pages from Contentful and deploys t
 npm install
 ```
 
-2. Create a local env file from the template (or export in shell/CI):
+1. Create a local env file from the template (or export in shell/CI):
 
 ```bash
 cp .env.example .env
 ```
 
-3. Add required variables to `.env` (or your shell/CI environment):
+1. Add required variables to `.env` (or your shell/CI environment):
 
 ```bash
 CONTENTFUL_API_KEY=<your_contentful_delivery_or_preview_token>
@@ -58,7 +76,7 @@ CONTENTFUL_ENVIRONMENT=master
 > - The Contentful Live Preview SDK is loaded only when the page is embedded in Contentful Live Preview.
 > - If `CONTENTFUL_API_KEY` is missing, server-side page and nav fetches will fail.
 
-4. (Only needed once per machine) install Playwright browsers:
+1. (Only needed once per machine) install Playwright browsers:
 
 ```bash
 npx playwright install
@@ -87,10 +105,18 @@ Build and serve the production artifact locally.
 ### Type checking
 
 ```bash
-npm run check
+npm run check:types
 ```
 
 Runs `svelte-kit sync` and `svelte-check`.
+
+### Dependency hygiene and static analysis
+
+```bash
+npm run check:deps
+```
+
+Runs `knip` to catch unused files, exports, and dependencies.
 
 ### Linting and formatting
 
@@ -99,8 +125,16 @@ npm run lint
 npm run format
 ```
 
-- `lint` runs Prettier check + ESLint.
+- `lint` runs Prettier, ESLint, and Markdown linting.
 - `format` applies Prettier formatting.
+
+You can also run the stages individually:
+
+```bash
+npm run lint:format
+npm run lint:code
+npm run lint:docs
+```
 
 ### Unit tests
 
@@ -136,10 +170,36 @@ npm run test:storybook
 npm test
 ```
 
-Runs integration tests, then the dedicated unit test project.
+Runs unit tests, Storybook browser tests, and Playwright integration tests.
+
+### Security checks
+
+```bash
+npm run security:deps
+npm run security:secrets
+npm run security:sast
+```
+
+- `security:deps` runs `osv-scanner` against the project source and lockfiles.
+- `security:secrets` runs `gitleaks`.
+- `security:sast` runs Semgrep Community Edition with open-source JavaScript, TypeScript, and Node.js rules.
+
+### Full local CI pipeline
+
+```bash
+npm run ci
+```
+
+Runs formatting, linting, type checking, dependency hygiene, app build, Storybook build, tests, and security checks in the same order as the repository quality pipeline.
 
 ## Cloudflare deployment notes
 
 - SvelteKit is configured with Cloudflare adapter in `svelte.config.js`.
 - Worker config, compatibility date/flags, and preview env vars are defined in `wrangler.toml`.
 - Build artifacts are served from `.svelte-kit/cloudflare` per wrangler assets config.
+
+## GitHub automation
+
+- `.github/workflows/ci.yml` runs the OSS validation pipeline on pull requests and pushes to `main`.
+- `.github/workflows/security.yml` runs a scheduled weekly security scan and supports manual dispatch.
+- `.github/workflows/contentful-migrations.yml` validates and applies Contentful migrations, and now follows the same Node runtime baseline as the rest of the repo.

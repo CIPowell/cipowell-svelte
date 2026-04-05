@@ -5,6 +5,11 @@ node_modules
 .vercel
 /.svelte-kit
 /build
+storybook-static
+playwright-report
+coverage
+.tmp
+.semgrep
 
 # OS
 .DS_Store
@@ -25,3 +30,4 @@ test-results
 *storybook.log.tmp
 
 .tmp
+*storybook.log

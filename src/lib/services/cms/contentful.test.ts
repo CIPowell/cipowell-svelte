@@ -125,7 +125,9 @@ describe('Contentful.getBreadcrumb', () => {
 		const { default: Contentful } = await import('./contentful');
 		const client = Object.create(Contentful.prototype) as InstanceType<typeof Contentful>;
 
-		expect(client.getBreadcrumb(page as contentful.Entry)).toEqual([{ title: 'Home', target: '/' }]);
+		expect(client.getBreadcrumb(page as contentful.Entry)).toEqual([
+			{ title: 'Home', target: '/' }
+		]);
 	});
 
 	test('stops traversal and warns when a parent cycle is detected', async () => {

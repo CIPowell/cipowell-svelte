@@ -1,7 +1,7 @@
 import Contentful from '../cms/contentful';
 import type { SiteFooterContent } from './footer-content';
 
-export interface FooterClient {
+interface FooterClient {
 	getSiteFooter(): Promise<SiteFooterContent>;
 }
 
