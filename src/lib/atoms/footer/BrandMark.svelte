@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	type BrandMarkVariant = 'default' | 'inverse';
 
 	interface Props {
@@ -14,9 +16,11 @@
 		alt = 'Chris I. Powell logo',
 		variant = 'default'
 	}: Props = $props();
+
+	const resolvedHref = $derived(href.startsWith('/') ? resolve(href as `/${string}`) : href);
 </script>
 
-<a class={`brand-mark brand-mark--${variant}`} {href} aria-label="Go to home page">
+<a class={`brand-mark brand-mark--${variant}`} href={resolvedHref} aria-label="Go to home page">
 	<img {src} {alt} loading="lazy" decoding="async" />
 </a>
 

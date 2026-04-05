@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	type FooterLinkVariant = 'default' | 'inverse';
 
 	interface Props {
@@ -8,13 +10,10 @@
 	}
 
 	let { href, label, variant = 'default' }: Props = $props();
+	const resolvedHref = $derived(href.startsWith('/') ? resolve(href as `/${string}`) : href);
 </script>
 
-{#if href.startsWith('/')}
-	<a class={`footer-link footer-link--${variant}`} {href}>{label}</a>
-{:else}
-	<a class={`footer-link footer-link--${variant}`} {href}>{label}</a>
-{/if}
+<a class={`footer-link footer-link--${variant}`} href={resolvedHref}>{label}</a>
 
 <style>
 	.footer-link {
