@@ -44,12 +44,7 @@
 				<h2 id="latest-posts-heading">Latest posts</h2>
 				<p>The newest writing from across the site.</p>
 			</div>
-			<ThreeColumnSection
-				items={thoughtItems}
-				variant="cta"
-				background="plum"
-				hover={true}
-			/>
+			<ThreeColumnSection items={thoughtItems} variant="cta" background="plum" hover={true} />
 		</section>
 	{/if}
 
