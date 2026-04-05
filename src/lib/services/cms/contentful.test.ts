@@ -30,7 +30,7 @@ function createPage(
 			slug,
 			parent
 		}
-	} as BreadcrumbEntry;
+	} as unknown as BreadcrumbEntry;
 }
 
 describe('Contentful.getGlobalNavLinks', () => {
@@ -75,7 +75,6 @@ describe('Contentful.getGlobalNavLinks', () => {
 	});
 
 	test('uses preview token and same nav query on preview host', async () => {
-		envMock.CONTENTFUL_HOST = 'preview.contentful.com';
 		envMock.CONTENTFUL_API_KEY = 'fallback-token';
 		envMock.CONTENTFUL_PREVIEW_API_KEY = 'preview-token';
 
@@ -84,7 +83,7 @@ describe('Contentful.getGlobalNavLinks', () => {
 		});
 
 		const { default: Contentful } = await import('./contentful');
-		const cms = new Contentful();
+		const cms = new Contentful(undefined, true);
 
 		await expect(cms.getGlobalNavLinks()).resolves.toEqual([{ title: 'Home', target: '/' }]);
 
@@ -144,5 +143,80 @@ describe('Contentful.getBreadcrumb', () => {
 		expect(warnSpy).toHaveBeenCalledWith(
 			'Cycle detected in breadcrumb parent chain for entry first'
 		);
+	});
+});
+
+describe('Contentful blog queries', () => {
+	beforeEach(() => {
+		vi.resetModules();
+		getEntriesMock.mockReset();
+		createClientMock.mockClear();
+		for (const key of Object.keys(envMock)) {
+			delete envMock[key];
+		}
+		envMock.CONTENTFUL_API_KEY = 'delivery-token';
+	});
+
+	test('filters recent blog posts by tag when requested', async () => {
+		getEntriesMock.mockResolvedValueOnce({
+			items: [
+				{ fields: { title: 'Leading teams', slug: 'leading-teams', tags: ['leadership'] } }
+			]
+		});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		await expect(cms.getMostRecentlyCreatedBlogPosts(3, 'leadership')).resolves.toEqual([
+			{ title: 'Leading teams', slug: 'leading-teams', tags: ['leadership'] }
+		]);
+
+		expect(getEntriesMock).toHaveBeenCalledWith({
+			content_type: 'blogPost',
+			order: '-sys.createdAt',
+			limit: 3,
+			'fields.tags[in]': 'leadership'
+		});
+	});
+
+	test('returns blog post details for an individual slug', async () => {
+		getEntriesMock.mockResolvedValueOnce({
+			items: [
+				{
+					sys: { id: 'post-1', locale: 'en-US' },
+					fields: {
+						title: 'A thoughtful post',
+						slug: 'a-thoughtful-post',
+						body: { nodeType: 'document', content: [] },
+						tags: ['leadership', 'culture']
+					}
+				}
+			]
+		});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		await expect(cms.getBlogPost('a-thoughtful-post')).resolves.toEqual({
+			title: 'A thoughtful post',
+			slug: 'a-thoughtful-post',
+			body: { nodeType: 'document', content: [] },
+			tags: ['leadership', 'culture'],
+			contentfulMetadata: {
+				entryId: 'post-1',
+				locale: 'en-US',
+				environment: 'master'
+			},
+			livePreview: {
+				enabled: false
+			}
+		});
+
+		expect(getEntriesMock).toHaveBeenCalledWith({
+			content_type: 'blogPost',
+			'fields.slug': 'a-thoughtful-post',
+			include: 10,
+			limit: 1
+		});
 	});
 });
