@@ -236,7 +236,9 @@ class Contentful implements NavClient, PageClient {
 		return entries.items;
 	}
 
-	private getTagFieldValues(value: string[] | Record<string, string[] | undefined> | undefined): string[] {
+	private getTagFieldValues(
+		value: string[] | Record<string, string[] | undefined> | undefined
+	): string[] {
 		if (Array.isArray(value)) {
 			return value;
 		}
@@ -288,7 +290,8 @@ class Contentful implements NavClient, PageClient {
 		return {
 			title: this.getSymbolFieldValue(post.fields.title),
 			slug: this.getSymbolFieldValue(post.fields.slug),
-			body: (post.fields.body as { nodeType: string; content: unknown[] } | null | undefined) ?? null,
+			body:
+				(post.fields.body as { nodeType: string; content: unknown[] } | null | undefined) ?? null,
 			tags: this.getTagFieldValues(post.fields.tags),
 			contentfulMetadata: {
 				entryId: post.sys.id,

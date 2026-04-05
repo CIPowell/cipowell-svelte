@@ -161,9 +161,7 @@ describe('Contentful blog queries', () => {
 
 	test('filters recent blog posts by tag when requested', async () => {
 		getEntriesMock.mockResolvedValueOnce({
-			items: [
-				{ fields: { title: 'Leading teams', slug: 'leading-teams', tags: ['leadership'] } }
-			]
+			items: [{ fields: { title: 'Leading teams', slug: 'leading-teams', tags: ['leadership'] } }]
 		});
 
 		const { default: Contentful } = await import('./contentful');
