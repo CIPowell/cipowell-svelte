@@ -22,18 +22,14 @@
 	}
 
 	let { data }: Props = $props();
-	let postBody = $state<typeof data.body>(null);
-
-	$effect(() => {
-		postBody = data.body;
-	});
+	const postBody = $derived(data.body);
 
 	onMount(() => {
 		if (!data.livePreview.enabled) {
 			return;
 		}
 
-		let unsubscribe: VoidFunction | undefined;
+		let unsubscribe: (() => void) | undefined;
 		let cancelled = false;
 		let refreshInFlight = false;
 
