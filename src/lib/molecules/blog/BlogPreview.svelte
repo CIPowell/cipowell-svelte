@@ -7,10 +7,17 @@
 	}
 
 	let { post }: Props = $props();
+	const postHref = $derived(
+		post.slug.startsWith('/thoughts/')
+			? post.slug
+			: post.slug.startsWith('/')
+				? `/thoughts${post.slug}`
+				: `/thoughts/${post.slug}`
+	);
 </script>
 
 <article>
-	<a href="/blog{post.slug}">
+	<a href={postHref}>
 		<h1>{post.title}</h1>
 		<Image image={post.featuredImage} altText={post.featuredImageAltText} width={250} left={true} />
 		<p>{post.blurb}</p>

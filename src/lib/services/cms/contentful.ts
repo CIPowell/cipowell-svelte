@@ -1,4 +1,5 @@
 import { env } from '$env/dynamic/private';
+import type { BlogPost, BlogPostPreview } from '$lib/services/blog/Blog';
 import type { NavClient, NavLink } from '$lib/services/navigation/nav';
 import type { SiteFooterContent } from '$lib/services/footer/footer-content';
 import * as contentful from 'contentful';
@@ -232,20 +233,69 @@ export class Contentful implements NavClient, PageClient {
 		return entries.items;
 	}
 
-	async getMostRecentlyCreatedBlogPosts(
-		limit = 3
-	): Promise<Array<{ title: string; slug: string }>> {
+	private getTagFieldValues(value: string[] | Record<string, string[] | undefined> | undefined): string[] {
+		if (Array.isArray(value)) {
+			return value;
+		}
+
+		return value?.['en-US'] ?? [];
+	}
+
+	private mapBlogPostPreview(entry: contentful.Entry<ContentfulBlogPost>): BlogPostPreview {
+		return {
+			title: this.getSymbolFieldValue(entry.fields.title),
+			slug: this.getSymbolFieldValue(entry.fields.slug),
+			tags: this.getTagFieldValues(entry.fields.tags)
+		};
+	}
+
+	async getMostRecentlyCreatedBlogPosts(limit = 3, tag = ''): Promise<BlogPostPreview[]> {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
-		const entries = await this.client.getEntries<ContentfulBlogPost>({
+		const query: Record<string, string | number> = {
 			content_type: 'blogPost',
 			order: '-sys.createdAt',
 			limit
+		};
+
+		if (tag.trim()) {
+			query['fields.tags[in]'] = tag.trim();
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
+		const entries = await this.client.getEntries<ContentfulBlogPost>(query as any);
+
+		return entries.items.map((entry) => this.mapBlogPostPreview(entry));
+	}
+
+	async getBlogPost(slug: string): Promise<BlogPost> {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Contentful SDK types are strict about query parameters
+		const entries = await this.client.getEntries<ContentfulBlogPost>({
+			content_type: 'blogPost',
+			'fields.slug': slug,
+			include: 10,
+			limit: 1
 		} as any);
 
-		return entries.items.map((entry) => ({
-			title: this.getSymbolFieldValue(entry.fields.title),
-			slug: this.getSymbolFieldValue(entry.fields.slug)
-		}));
+		if (!entries.items.length) {
+			throw new Error(`Blog post not found: ${slug}`);
+		}
+
+		const post = entries.items[0];
+
+		return {
+			title: this.getSymbolFieldValue(post.fields.title),
+			slug: this.getSymbolFieldValue(post.fields.slug),
+			body: (post.fields.body as { nodeType: string; content: unknown[] } | null | undefined) ?? null,
+			tags: this.getTagFieldValues(post.fields.tags),
+			contentfulMetadata: {
+				entryId: post.sys.id,
+				locale: post.sys.locale || 'en-US',
+				environment: this.contentfulEnvironment
+			},
+			livePreview: {
+				enabled: this.previewEnabled
+			}
+		};
 	}
 
 	async getSiteFooter(): Promise<SiteFooterContent> {

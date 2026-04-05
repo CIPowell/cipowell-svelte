@@ -1,0 +1,40 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "cipowell"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_flags = [
+    "nodejs_compat"
+]
+compatibility_date = "2025-09-01"
+preview_urls = true
+
+[observability]
+enabled = false
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = false
+persist = true
+head_sampling_rate = 1
+
+[assets]
+binding = "ASSETS"
+directory = ".svelte-kit/cloudflare"
+
+######## PREVIEW environment config ########
+# Preview mode uses the Contentful Preview API to show draft content
+# Set CONTENTFUL_PREVIEW_API_KEY secret to use a preview-specific token
+# If not set, falls back to CONTENTFUL_API_KEY
+
+[env.preview.vars]
+CONTENTFUL_HOST = "preview.contentful.com"
+
+
+######## PRODUCTION environment config ########
+
+[env.production.vars]
