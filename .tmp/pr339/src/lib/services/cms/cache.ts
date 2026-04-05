@@ -1,0 +1,63 @@
+/**
+ * Cache wrapper for Contentful API responses using Cloudflare Cache API
+ */
+export class ContentfulCache {
+	private cache: Cache | null = null;
+	private cachePrefix = 'contentful-v1';
+	private defaultTtl = 60 * 60; // 1 hour in seconds
+	private hostNamespace: string;
+
+	constructor(platform?: App.Platform, contentfulHost?: string) {
+		const isPreviewHost = contentfulHost?.includes('preview') ?? false;
+
+		// Never cache preview responses to avoid stale draft content in Contentful preview mode.
+		this.cache = isPreviewHost ? null : (platform?.caches?.default ?? null);
+
+		// Derive namespace from host to prevent preview/delivery cache pollution
+		this.hostNamespace = isPreviewHost ? 'preview' : 'delivery';
+	}
+
+	/**
+	 * Get cached response or execute fetch function and cache the result
+	 */
+	async get<T>(key: string, fetchFn: () => Promise<T>, ttl: number = this.defaultTtl): Promise<T> {
+		const cacheKey = this.getCacheKey(key);
+
+		// Try to get from cache first
+		if (this.cache) {
+			const cachedResponse = await this.cache.match(cacheKey);
+			if (cachedResponse) {
+				const data = await cachedResponse.json();
+				return data as T;
+			}
+		}
+
+		// If not in cache, fetch the data
+		const data = await fetchFn();
+
+		// Store in cache for future requests
+		if (this.cache && data) {
+			const response = new Response(JSON.stringify(data), {
+				headers: {
+					'Content-Type': 'application/json',
+					'Cache-Control': `public, max-age=${ttl}, s-maxage=${ttl}`
+				}
+			});
+			// Don't await - cache in background
+			this.cache.put(cacheKey, response).catch((err) => {
+				console.error('Failed to cache response:', err);
+			});
+		}
+
+		return data;
+	}
+
+	private getCacheKey(key: string): string {
+		const cacheUrl = new URL(`https://cache.contentful/${this.cachePrefix}/${this.hostNamespace}`);
+
+		// Keep the caller key in a query param so URL encoding is handled safely.
+		cacheUrl.searchParams.set('key', key);
+
+		return cacheUrl.toString();
+	}
+}
