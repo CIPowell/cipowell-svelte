@@ -30,9 +30,3 @@ export interface BlogPost {
 		enabled: boolean;
 	};
 }
-
-export interface BlogClient {
-	getPostPreviews(tagList: string[]): Promise<BlogPostSummary[]>;
-	getMostRecentlyCreatedBlogPosts(limit?: number, tag?: string): Promise<BlogPostPreview[]>;
-	getBlogPost(slug: string): Promise<BlogPost>;
-}
