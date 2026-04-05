@@ -34,7 +34,7 @@ jobs:
       - name: Install OSV-Scanner and Gitleaks
         run: |
           go install github.com/google/osv-scanner/v2/cmd/osv-scanner@latest
-          go install github.com/gitleaks/gitleaks/v8@latest
+          go install github.com/zricethezav/gitleaks/v8@latest
           echo "$HOME/go/bin" >> "$GITHUB_PATH"
 
       - name: Install Semgrep CE
