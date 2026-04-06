@@ -219,4 +219,59 @@ describe('Contentful blog queries', () => {
 			limit: 1
 		});
 	});
+
+	test('returns sitemap page entries with slugs and updated timestamps', async () => {
+		getEntriesMock.mockResolvedValueOnce({
+			items: [
+				{
+					sys: { updatedAt: '2026-04-01T08:30:00.000Z' },
+					fields: { slug: 'home' }
+				},
+				{
+					sys: { updatedAt: '2026-04-02T09:45:00.000Z' },
+					fields: { slug: 'about' }
+				}
+			]
+		});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		await expect(cms.getSitemapPages()).resolves.toEqual([
+			{ slug: 'home', updatedAt: '2026-04-01T08:30:00.000Z' },
+			{ slug: 'about', updatedAt: '2026-04-02T09:45:00.000Z' }
+		]);
+
+		expect(getEntriesMock).toHaveBeenCalledWith({
+			content_type: 'page',
+			order: 'fields.slug',
+			limit: 1000,
+			select: 'fields.slug,sys.createdAt,sys.updatedAt'
+		});
+	});
+
+	test('returns sitemap blog post entries with slugs and updated timestamps', async () => {
+		getEntriesMock.mockResolvedValueOnce({
+			items: [
+				{
+					sys: { updatedAt: '2026-04-03T10:15:00.000Z' },
+					fields: { slug: 'leading-teams' }
+				}
+			]
+		});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		await expect(cms.getSitemapBlogPosts()).resolves.toEqual([
+			{ slug: 'leading-teams', updatedAt: '2026-04-03T10:15:00.000Z' }
+		]);
+
+		expect(getEntriesMock).toHaveBeenCalledWith({
+			content_type: 'blogPost',
+			order: 'fields.slug',
+			limit: 1000,
+			select: 'fields.slug,sys.createdAt,sys.updatedAt'
+		});
+	});
 });
