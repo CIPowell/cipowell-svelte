@@ -12,6 +12,8 @@ SvelteKit-powered personal site that renders pages from Contentful and deploys t
 
 The repository uses an open-source-only quality pipeline for formatting, linting, type checking, dependency hygiene, tests, and security scanning. When a PR changes behavior, tooling, workflows, or contributor rules, update `README.md`, `AGENTS.md`, `.github/copilot-instructions.md`, and any relevant docs in the same change.
 
+Component-scoped styles should live in colocated `*.module.css` files rather than inline `<style>` blocks inside `.svelte` components. Keep shared design tokens and global styles in `src/lib/main.css`, and continue using CSS custom properties for color values.
+
 ## How this repository works
 
 ### Runtime flow
