@@ -11,6 +11,7 @@ export interface NavClient {
 
 const ORDERED_NAV_ITEMS: Array<{ title: string; defaultTarget: string; aliases?: string[] }> = [
 	{ title: 'Home', defaultTarget: '/', aliases: ['home'] },
+	{ title: 'Library', defaultTarget: '/library', aliases: ['library'] },
 	{ title: 'Thoughts', defaultTarget: '/thoughts', aliases: ['blog', 'thoughts'] },
 	{ title: 'About Me', defaultTarget: '/about', aliases: ['about'] }
 ];
