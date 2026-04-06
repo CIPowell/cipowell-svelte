@@ -17,9 +17,9 @@
 				<p class="library-page__eyebrow">Library</p>
 				<h1>A growing shelf of books and articles worth returning to.</h1>
 				<p class="library-page__lede">
-					Library is where I collect recommendations, references, and pieces that have stayed
-					with me. It is separate from <a href="/thoughts">Thoughts</a>: fewer essays from me,
-					more signals about what I value and keep coming back to.
+					Library is where I collect recommendations, references, and pieces that have stayed with
+					me. It is separate from <a href="/thoughts">Thoughts</a>: fewer essays from me, more
+					signals about what I value and keep coming back to.
 				</p>
 			</header>
 
@@ -42,8 +42,8 @@
 				</div>
 				<p>
 					Articles sit alongside books as the faster, more linkable side of the same practice:
-					sharing writing that is memorable, useful, or revealing. They belong in the same
-					section because the job is recommendation, not publication.
+					sharing writing that is memorable, useful, or revealing. They belong in the same section
+					because the job is recommendation, not publication.
 				</p>
 			</section>
 

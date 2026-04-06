@@ -192,6 +192,8 @@ npm run ci
 
 Runs formatting, linting, type checking, dependency hygiene, app build, Storybook build, tests, and security checks in the same order as the repository quality pipeline.
 
+Before handing a branch over for review or merge, prefer running `npm run ci` so local validation matches the required GitHub checks as closely as possible. If you can only run a subset locally, call out what was skipped and why in the PR.
+
 ## Cloudflare deployment notes
 
 - SvelteKit is configured with Cloudflare adapter in `svelte.config.js`.
@@ -203,3 +205,4 @@ Runs formatting, linting, type checking, dependency hygiene, app build, Storyboo
 - `.github/workflows/ci.yml` runs the OSS validation pipeline on pull requests and pushes to `main`.
 - `.github/workflows/security.yml` runs a scheduled weekly security scan and supports manual dispatch.
 - `.github/workflows/contentful-migrations.yml` validates and applies Contentful migrations, and now follows the same Node runtime baseline as the rest of the repo.
+- Pull requests to `main` are expected to be blocked until the required GitHub checks pass, including `Lint, build, and test` and `Security checks`.
