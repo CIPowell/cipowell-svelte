@@ -18,7 +18,7 @@
 
 ## Visual Direction
 
-- Use warm paper and timber tokens from [`src/lib/main.css`](/C:/Users/chris/.codex/worktrees/f179/cipowell-svelte/src/lib/main.css) to create the bookshelf feel.
+- Use warm paper and timber tokens from [`src/lib/main.css`](../src/lib/main.css) to create the bookshelf feel.
 - Keep cards editorial and tactile: accent spines, rounded covers, and shelf rails do more of the work than heavy decoration.
 - Preserve the site’s existing typography so the new page feels like part of the same system instead of a separate microsite.
 
@@ -30,5 +30,5 @@
 
 ## Content Source
 
-- The initial version is seeded from [`src/lib/services/library/library.ts`](/C:/Users/chris/.codex/worktrees/f179/cipowell-svelte/src/lib/services/library/library.ts).
+- The initial version is seeded from [`src/lib/services/library/library.ts`](../src/lib/services/library/library.ts).
 - This avoids introducing a Contentful model before the information architecture is settled, while still giving later CMS work a concrete UI target.

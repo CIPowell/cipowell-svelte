@@ -1,5 +1,6 @@
 <INSTRUCTIONS>
 - Always use CSS custom properties for color values; do not hardcode hex/rgb/rgba color literals in component styles. Define the palette in `src/lib/main.css` and reference it via `var(--color-...)`.
+- Prefer CSS modules for component-specific styling instead of inline `<style>` blocks in `.svelte` files. Keep shared tokens and global styles in `src/lib/main.css`, and colocate component styles in `*.module.css` files.
 </INSTRUCTIONS>
 # Repository agent instructions
 
