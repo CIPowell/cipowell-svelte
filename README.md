@@ -26,6 +26,7 @@ The repository uses an open-source-only quality pipeline for formatting, linting
 - **SvelteKit app shell**: `+layout.svelte` renders `Header`, `Nav`, page content, and footer.
 - **Service layer**: navigation/page clients are abstracted behind small interfaces in `src/lib/services/**`.
 - **Content source**: Contentful is the backing CMS for page content and nav links.
+- **Library route**: `src/routes/library/+page.svelte` renders a curated bookshelf-style library from local seed data in `src/lib/services/library/library.ts`.
 - **Component library**: atoms/molecules/organisms live in `src/lib/**` with Storybook stories and docs.
 - **Cloudflare target**: adapter is `@sveltejs/adapter-cloudflare` and Worker config is in `wrangler.toml`.
 
