@@ -112,14 +112,14 @@ const libraryEntries: LibraryEntry[] = [
 	}
 ];
 
-export function getLibraryEntries(): LibraryEntry[] {
+function getLibraryEntries(): LibraryEntry[] {
 	return libraryEntries.map((entry) => ({
 		...entry,
 		topics: [...entry.topics]
 	}));
 }
 
-export function getLibraryTopics(entries: LibraryEntry[] = libraryEntries): string[] {
+function getLibraryTopics(entries: LibraryEntry[] = libraryEntries): string[] {
 	return Array.from(new Set(entries.flatMap((entry) => entry.topics))).sort((left, right) =>
 		left.localeCompare(right)
 	);
