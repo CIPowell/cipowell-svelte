@@ -11,12 +11,9 @@ describe('robots policy', () => {
 
 	test('allows crawling and includes the sitemap for production', () => {
 		expect(buildRobotsTxt(PRODUCTION_ORIGIN)).toBe(
-			[
-				'User-agent: *',
-				'Allow: /',
-				'Sitemap: https://www.chrisipowell.co.uk/sitemap.xml',
-				''
-			].join('\n')
+			['User-agent: *', 'Allow: /', 'Sitemap: https://www.chrisipowell.co.uk/sitemap.xml', ''].join(
+				'\n'
+			)
 		);
 	});
 

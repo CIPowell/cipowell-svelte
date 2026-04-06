@@ -10,12 +10,9 @@ describe('GET /robots.txt', () => {
 
 		expect(response.headers.get('content-type')).toBe('text/plain; charset=utf-8');
 		await expect(response.text()).resolves.toBe(
-			[
-				'User-agent: *',
-				'Allow: /',
-				'Sitemap: https://www.chrisipowell.co.uk/sitemap.xml',
-				''
-			].join('\n')
+			['User-agent: *', 'Allow: /', 'Sitemap: https://www.chrisipowell.co.uk/sitemap.xml', ''].join(
+				'\n'
+			)
 		);
 	});
 
