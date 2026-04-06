@@ -7,6 +7,11 @@ import type { Page, PageClient } from '$lib/services/page/Page';
 import { ContentfulCache } from './cache';
 import type { ContentfulBlogPost, ContentfulPage, ContentfulSiteFooter } from './content_types';
 
+export interface SitemapContentEntry {
+	slug: string;
+	updatedAt: string;
+}
+
 type RichTextNode = {
 	nodeType?: string;
 	data?: {
@@ -255,6 +260,15 @@ class Contentful implements NavClient, PageClient {
 		};
 	}
 
+	private mapSitemapEntry(
+		entry: contentful.Entry<ContentfulPage> | contentful.Entry<ContentfulBlogPost>
+	): SitemapContentEntry {
+		return {
+			slug: this.getSymbolFieldValue(entry.fields.slug),
+			updatedAt: entry.sys.updatedAt ?? entry.sys.createdAt ?? new Date(0).toISOString()
+		};
+	}
+
 	async getMostRecentlyCreatedBlogPosts(limit = 3, tag = ''): Promise<BlogPostPreview[]> {
 		const query: Record<string, string | number> = {
 			content_type: 'blogPost',
@@ -271,6 +285,40 @@ class Contentful implements NavClient, PageClient {
 		);
 
 		return entries.items.map((entry) => this.mapBlogPostPreview(entry));
+	}
+
+	async getSitemapPages(): Promise<SitemapContentEntry[]> {
+		return this.cache.get(
+			'sitemap-pages',
+			async () => {
+				const entries = await this.client.getEntries<ContentfulPage>({
+					content_type: 'page',
+					order: 'fields.slug',
+					limit: 1000,
+					select: ['fields.slug', 'sys.createdAt', 'sys.updatedAt'].join(',')
+				} as unknown as contentful.EntriesQueries<ContentfulPage, undefined>);
+
+				return entries.items.map((entry) => this.mapSitemapEntry(entry));
+			},
+			60 * 60 * 24
+		);
+	}
+
+	async getSitemapBlogPosts(): Promise<SitemapContentEntry[]> {
+		return this.cache.get(
+			'sitemap-blog-posts',
+			async () => {
+				const entries = await this.client.getEntries<ContentfulBlogPost>({
+					content_type: 'blogPost',
+					order: 'fields.slug',
+					limit: 1000,
+					select: ['fields.slug', 'sys.createdAt', 'sys.updatedAt'].join(',')
+				} as unknown as contentful.EntriesQueries<ContentfulBlogPost, undefined>);
+
+				return entries.items.map((entry) => this.mapSitemapEntry(entry));
+			},
+			60 * 60 * 24
+		);
 	}
 
 	async getBlogPost(slug: string): Promise<BlogPost> {
