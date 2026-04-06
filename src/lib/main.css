@@ -96,25 +96,20 @@
 	--color-library-filter-text-active: var(--color-white);
 	--color-library-stat-surface: #fff7ee;
 	--color-library-stat-border: #ddccb8;
-	--color-library-shelf-backdrop: #efe5d6;
-	--color-library-shelf-rail-top: #c69a6b;
-	--color-library-shelf-rail-bottom: #9a6f45;
 	--color-library-card-surface: #fffdf9;
 	--color-library-card-border: #d9c8b4;
 	--color-library-card-meta: #6c5742;
 	--color-library-chip-surface: #efe3d2;
 	--color-library-chip-text: #644a2f;
+	--color-library-icon-surface: #f4eadc;
+	--color-library-icon-border: #d7c4ae;
+	--color-library-icon: #5a442f;
 	--color-library-topic-surface: #f6eee2;
 	--color-library-topic-text: #664d34;
 	--color-library-empty-surface: #fff8ef;
 	--color-library-empty-border: #dbcab5;
-	--color-library-accent-amber: #c58a32;
-	--color-library-accent-sage: #718a5a;
-	--color-library-accent-ink: #4c5f84;
-	--color-library-accent-rose: #a16467;
 	--elevation-library-card: 0 20px 32px -26px rgba(72, 46, 19, 0.45);
 	--elevation-library-panel: 0 22px 44px -34px rgba(72, 46, 19, 0.32);
-	--elevation-library-rail: 0 16px 28px -24px rgba(72, 46, 19, 0.55);
 }
 
 html {

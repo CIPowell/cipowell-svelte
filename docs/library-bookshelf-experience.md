@@ -1,32 +1,32 @@
 # Library Bookshelf Experience
 
-`/library` is a curated destination page for books and articles. It is intentionally editorial rather than archive-like, with topic filters that rebalance the whole page while keeping books and articles separated into their own shelves.
+`/library` is a curated destination page for books and articles. It is intentionally editorial rather than archive-like, with one shared reading grid that can be narrowed by topic and by content type.
 
 ## Layout
 
 - Hero panel: introduces the Library with a short framing statement and three summary stats for books, articles, and topics.
-- Filter panel: exposes a single topic control row that applies across the entire collection.
-- Books shelf: longer-form references that inform leadership, delivery, and systems thinking.
-- Articles shelf: shorter essays and field notes for practical application.
+- Filter panel: exposes content-type toggles plus a topic control row that both apply across the same collection.
+- Reading grid: books and articles appear together in one card layout rather than split into separate shelves.
 
 ## Filtering Interaction
 
-- `All topics` is the default state.
-- Selecting a topic filters both shelves at the same time.
-- Filter state stays lightweight on purpose: there is only one active topic at a time, which keeps the experience feeling curated instead of becoming a faceted search UI.
-- The summary copy under the filter heading updates to reflect the current split between books and articles.
+- `All topics` is the default topic state.
+- `Books` and `Articles` are both active by default, so the mixed collection stays visible unless one is toggled off.
+- Selecting a topic filters the whole collection at the same time.
+- Type filters are independent toggles, but at least one stays active so the page never collapses accidentally.
+- The summary copy under the filter heading updates to reflect the current count and type mix.
 
 ## Visual Direction
 
 - Use warm paper and timber tokens from [`src/lib/main.css`](../src/lib/main.css) to create the bookshelf feel.
-- Keep cards editorial and tactile: accent spines, rounded covers, and shelf rails do more of the work than heavy decoration.
-- Preserve the site’s existing typography so the new page feels like part of the same system instead of a separate microsite.
+- Keep cards editorial and tactile without decorative left-edge color flashes or shelf rails. The distinction between books and articles should come from the top-right icon and type label instead.
+- Preserve the site's existing typography so the new page feels like part of the same system instead of a separate microsite.
 
 ## Responsive Behavior
 
-- Mobile: the hero stacks vertically, filter chips wrap naturally, and each shelf renders as a single column above the shelf rail.
-- Tablet and up: the stat cards move into a three-column row and shelf cards expand into a two-column grid.
-- Topic filters remain visible near the top of the page so the core interaction stays reachable after the hero.
+- Mobile: the hero stacks vertically, filter chips wrap naturally, and the reading grid renders as a single column.
+- Tablet and up: the stat cards move into a three-column row and the reading grid expands to two and then three columns.
+- Topic and type filters remain visible near the top of the page so the core interaction stays reachable after the hero.
 
 ## Content Source
 
