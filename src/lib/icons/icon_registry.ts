@@ -1,18 +1,18 @@
 import type { Component } from 'svelte';
-import BadgeIcon from '$lib/icons/BadgeIcon.svelte';
-import SparkIcon from '$lib/icons/SparkIcon.svelte';
-import ShieldIcon from '$lib/icons/ShieldIcon.svelte';
-import ChartIcon from '$lib/icons/ChartIcon.svelte';
-import UsersIcon from '$lib/icons/UsersIcon.svelte';
-import CodeIcon from '$lib/icons/CodeIcon.svelte';
-import GlobeIcon from '$lib/icons/GlobeIcon.svelte';
+import BadgeCheckIcon from '@lucide/svelte/icons/badge-check';
+import ChartColumnIcon from '@lucide/svelte/icons/chart-column';
+import Code2Icon from '@lucide/svelte/icons/code-2';
+import GlobeIcon from '@lucide/svelte/icons/globe';
+import ShieldCheckIcon from '@lucide/svelte/icons/shield-check';
+import SparklesIcon from '@lucide/svelte/icons/sparkles';
+import UsersIcon from '@lucide/svelte/icons/users';
 
 export const threeColumnIconByName: Record<string, Component> = {
-	badge: BadgeIcon,
-	spark: SparkIcon,
-	shield: ShieldIcon,
-	chart: ChartIcon,
+	badge: BadgeCheckIcon,
+	spark: SparklesIcon,
+	shield: ShieldCheckIcon,
+	chart: ChartColumnIcon,
 	users: UsersIcon,
-	code: CodeIcon,
+	code: Code2Icon,
 	globe: GlobeIcon
 };
