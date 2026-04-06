@@ -199,6 +199,7 @@ Before handing a branch over for review or merge, prefer running `npm run ci` so
 - SvelteKit is configured with Cloudflare adapter in `svelte.config.js`.
 - Worker config, compatibility date/flags, and preview env vars are defined in `wrangler.toml`.
 - Build artifacts are served from `.svelte-kit/cloudflare` per wrangler assets config.
+- `src/routes/robots.txt/+server.ts` serves crawler guidance dynamically: only the canonical production origin `https://www.chrisipowell.co.uk` allows crawling and advertises the sitemap, while preview, branch, staging, and local origins return `Disallow: /`.
 
 ## GitHub automation
 
