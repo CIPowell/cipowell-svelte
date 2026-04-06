@@ -1,5 +1,5 @@
 export const PRODUCTION_ORIGIN = 'https://www.chrisipowell.co.uk';
-export const PRODUCTION_SITEMAP_URL = `${PRODUCTION_ORIGIN}/sitemap.xml`;
+const PRODUCTION_SITEMAP_URL = `${PRODUCTION_ORIGIN}/sitemap.xml`;
 
 const PRODUCTION_POLICY = ['User-agent: *', 'Allow: /', `Sitemap: ${PRODUCTION_SITEMAP_URL}`];
 const NON_PRODUCTION_POLICY = ['User-agent: *', 'Disallow: /'];
