@@ -13,7 +13,7 @@
 			docs: {
 				description: {
 					component:
-						'Curated Library landing experience with bookshelf styling, topic filters, and split shelves for books and articles. Use when you need a destination page that feels editorial instead of archive-like.'
+						'Curated Library landing experience with one mixed reading grid, topic and type filters, and lightweight card chrome for books and articles. Use when you need a destination page that feels editorial instead of archive-like.'
 				}
 			}
 		}

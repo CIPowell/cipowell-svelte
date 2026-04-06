@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Container from '$lib/atoms/container/Container.svelte';
 	import LibraryShelf from '$lib/organisms/library_shelf/LibraryShelf.svelte';
-	import type { LibraryEntry } from '$lib/services/library/library';
+	import type { LibraryEntry, LibraryEntryType } from '$lib/services/library/library';
 	import styles from './LibraryExperience.module.css';
 
 	interface Props {
@@ -15,18 +15,63 @@
 
 	let { entries, topics, counts }: Props = $props();
 	let activeTopic = $state('all');
+	let activeTypes = $state<LibraryEntryType[]>(['book', 'article']);
 
 	function formatTopic(topic: string) {
 		return topic.replace(/\b\w/g, (character) => character.toUpperCase());
 	}
 
+	function isTypeActive(type: LibraryEntryType) {
+		return activeTypes.includes(type);
+	}
+
+	function toggleType(type: LibraryEntryType) {
+		if (activeTypes.includes(type)) {
+			if (activeTypes.length === 1) {
+				return;
+			}
+
+			activeTypes = activeTypes.filter((value) => value !== type);
+			return;
+		}
+
+		activeTypes = [...activeTypes, type];
+	}
+
+	function interleaveEntries(books: LibraryEntry[], articles: LibraryEntry[]) {
+		const mixed: LibraryEntry[] = [];
+		const maxLength = Math.max(books.length, articles.length);
+
+		for (let index = 0; index < maxLength; index += 1) {
+			const book = books[index];
+			const article = articles[index];
+
+			if (book) {
+				mixed.push(book);
+			}
+
+			if (article) {
+				mixed.push(article);
+			}
+		}
+
+		return mixed;
+	}
+
 	const filteredEntries = $derived(
-		activeTopic === 'all' ? entries : entries.filter((entry) => entry.topics.includes(activeTopic))
+		entries.filter((entry) => {
+			const matchesTopic = activeTopic === 'all' || entry.topics.includes(activeTopic);
+			const matchesType = activeTypes.includes(entry.type);
+			return matchesTopic && matchesType;
+		})
 	);
 	const filteredBooks = $derived(filteredEntries.filter((entry) => entry.type === 'book'));
 	const filteredArticles = $derived(filteredEntries.filter((entry) => entry.type === 'article'));
+	const mixedEntries = $derived(
+		activeTypes.length === 2 ? interleaveEntries(filteredBooks, filteredArticles) : filteredEntries
+	);
 	const resultSummary = $derived(
-		`${filteredBooks.length} book${filteredBooks.length === 1 ? '' : 's'} and ${filteredArticles.length} article${filteredArticles.length === 1 ? '' : 's'}`
+		`${filteredEntries.length} pick${filteredEntries.length === 1 ? '' : 's'} showing ${filteredBooks.length} book${filteredBooks.length === 1 ? '' : 's'} and ${filteredArticles.length} article${filteredArticles.length === 1 ? '' : 's'}`
 	);
 </script>
 
@@ -48,9 +93,9 @@
 						A curated shelf of books and articles that keep the work honest.
 					</h1>
 					<p class={styles.intro}>
-						A working collection for leadership, delivery, design systems, and strategy. Use topic
-						filters to move across the full mix without losing the split between longer books and
-						shorter field notes.
+						A working collection for leadership, delivery, design systems, and strategy. Books and
+						articles sit together in one reading grid, with filters to narrow by topic or content
+						type when you need a sharper view.
 					</p>
 				</div>
 
@@ -72,64 +117,86 @@
 
 			<section class={styles.filters} aria-labelledby="library-filter-heading">
 				<div class={styles.filtersCopy}>
-					<h2 id="library-filter-heading">Browse by topic</h2>
-					<p>
-						Filter once and the whole library rebalances itself. The current selection shows
-						{resultSummary}.
-					</p>
+					<h2 id="library-filter-heading">Browse the collection</h2>
+					<p>Filter by topic or content type. The current selection shows {resultSummary}.</p>
 				</div>
 
-				<div class={styles.filterList} role="toolbar" aria-label="Library topic filters">
-					<button
-						type="button"
-						class={`${styles.filter}${activeTopic === 'all' ? ` ${styles.filterActive}` : ''}`}
-						aria-pressed={activeTopic === 'all'}
-						onclick={() => {
-							activeTopic = 'all';
-						}}
-					>
-						All topics
-					</button>
+				<div class={styles.filterGroups}>
+					<div class={styles.filterGroup}>
+						<p class={styles.filterLabel}>Type</p>
+						<div class={styles.filterList} role="toolbar" aria-label="Library type filters">
+							<button
+								type="button"
+								class={`${styles.filter}${isTypeActive('book') ? ` ${styles.filterActive}` : ''}`}
+								aria-pressed={isTypeActive('book')}
+								onclick={() => {
+									toggleType('book');
+								}}
+							>
+								Books
+							</button>
+							<button
+								type="button"
+								class={`${styles.filter}${isTypeActive('article') ? ` ${styles.filterActive}` : ''}`}
+								aria-pressed={isTypeActive('article')}
+								onclick={() => {
+									toggleType('article');
+								}}
+							>
+								Articles
+							</button>
+						</div>
+					</div>
 
-					{#each topics as topic (topic)}
-						<button
-							type="button"
-							class={`${styles.filter}${activeTopic === topic ? ` ${styles.filterActive}` : ''}`}
-							aria-pressed={activeTopic === topic}
-							onclick={() => {
-								activeTopic = topic;
-							}}
-						>
-							{formatTopic(topic)}
-						</button>
-					{/each}
+					<div class={styles.filterGroup}>
+						<p class={styles.filterLabel}>Topic</p>
+						<div class={styles.filterList} role="toolbar" aria-label="Library topic filters">
+							<button
+								type="button"
+								class={`${styles.filter}${activeTopic === 'all' ? ` ${styles.filterActive}` : ''}`}
+								aria-pressed={activeTopic === 'all'}
+								onclick={() => {
+									activeTopic = 'all';
+								}}
+							>
+								All topics
+							</button>
+
+							{#each topics as topic (topic)}
+								<button
+									type="button"
+									class={`${styles.filter}${activeTopic === topic ? ` ${styles.filterActive}` : ''}`}
+									aria-pressed={activeTopic === topic}
+									onclick={() => {
+										activeTopic = topic;
+									}}
+								>
+									{formatTopic(topic)}
+								</button>
+							{/each}
+						</div>
+					</div>
 				</div>
 			</section>
 
 			{#if filteredEntries.length}
-				<div class={styles.shelves}>
-					{#if filteredBooks.length}
-						<LibraryShelf
-							title="Books"
-							description="Longer-form thinking worth revisiting when systems, teams, or roadmaps need steadier foundations."
-							items={filteredBooks}
-						/>
-					{/if}
+				<section class={styles.collection} aria-labelledby="library-collection-heading">
+					<div class={styles.collectionHeader}>
+						<h2 id="library-collection-heading">Reading now</h2>
+						<p>
+							Every card shares the same grid, so books and articles can sit together when both are
+							active.
+						</p>
+					</div>
 
-					{#if filteredArticles.length}
-						<LibraryShelf
-							title="Articles"
-							description="Shorter field notes and essays for the moves that matter between planning, facilitation, and execution."
-							items={filteredArticles}
-						/>
-					{/if}
-				</div>
+					<LibraryShelf items={mixedEntries} />
+				</section>
 			{:else}
 				<section class={styles.empty}>
 					<h2>No matches yet</h2>
 					<p>
-						Try another topic to reopen the shelf. This view keeps the filter set narrow on purpose
-						so the collection still feels curated instead of exhaustive.
+						Try another topic or turn a content type back on to reopen the collection. At least one
+						type filter always stays active so the view never collapses by accident.
 					</p>
 				</section>
 			{/if}

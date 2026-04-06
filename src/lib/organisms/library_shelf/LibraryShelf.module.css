@@ -1,96 +1,32 @@
-.shelf {
-	display: grid;
-	gap: var(--space-3);
-	padding: var(--space-4);
-	border: 1px solid var(--color-library-panel-border);
-	border-radius: 1.5rem;
-	background: var(--color-library-panel-surface);
-	box-shadow: var(--elevation-library-panel);
-}
-
-.header {
-	display: grid;
-	gap: var(--space-2);
-	align-items: end;
-}
-
-.header h2,
-.copy h3,
-.count {
-	margin: 0;
-}
-
-.header p {
-	margin: 0;
-	color: var(--color-library-panel-muted);
-}
-
-.count {
-	font-size: 0.95rem;
-	font-weight: var(--font-weight-semibold);
-	color: var(--color-library-chip-text);
-}
-
 .grid {
 	list-style: none;
 	display: grid;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
 	gap: var(--space-3);
 	margin: 0;
-	padding: 0 0 var(--space-3);
-	position: relative;
-}
-
-.grid::after {
-	content: '';
-	position: absolute;
-	inset: auto 0 0;
-	height: 0.95rem;
-	border-radius: 999px;
-	background: linear-gradient(
-		180deg,
-		var(--color-library-shelf-rail-top),
-		var(--color-library-shelf-rail-bottom)
-	);
-	box-shadow: var(--elevation-library-rail);
+	padding: 0;
 }
 
 .item {
-	position: relative;
-	z-index: 1;
+	height: 100%;
 }
 
 .card {
 	display: grid;
 	gap: var(--space-2);
 	height: 100%;
-	padding: var(--space-3);
+	padding: var(--space-3) var(--space-3) calc(var(--space-3) + 0.15rem);
 	border: 1px solid var(--color-library-card-border);
 	border-radius: 1.15rem;
 	background: var(--color-library-card-surface);
 	box-shadow: var(--elevation-library-card);
-	position: relative;
-	overflow: hidden;
 }
 
-.card::before {
-	content: '';
-	position: absolute;
-	inset: 0 auto 0 0;
-	width: 0.55rem;
-	background: var(--color-library-accent-amber);
-}
-
-.cardSage::before {
-	background: var(--color-library-accent-sage);
-}
-
-.cardInk::before {
-	background: var(--color-library-accent-ink);
-}
-
-.cardRose::before {
-	background: var(--color-library-accent-rose);
+.header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--space-2);
 }
 
 .meta {
@@ -102,7 +38,7 @@
 	color: var(--color-library-card-meta);
 }
 
-.chip {
+.typeLabel {
 	display: inline-flex;
 	align-items: center;
 	padding: 0.3rem 0.7rem;
@@ -115,14 +51,43 @@
 	letter-spacing: 0.08em;
 }
 
+.iconBadge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	inline-size: 2.25rem;
+	block-size: 2.25rem;
+	border: 1px solid var(--color-library-icon-border);
+	border-radius: 999px;
+	background: var(--color-library-icon-surface);
+	color: var(--color-library-icon);
+}
+
+.icon {
+	inline-size: 1.1rem;
+	block-size: 1.1rem;
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+}
+
 .copy {
 	display: grid;
 	gap: var(--space-1);
 }
 
+.copy h3,
 .copy p,
 .creator {
 	margin: 0;
+}
+
+.copy h3 {
+	font-size: clamp(1.2rem, 2vw, 1.5rem);
+	line-height: 1.25;
 }
 
 .creator {
@@ -161,11 +126,13 @@
 }
 
 @media (min-width: 48rem) {
-	.header {
-		grid-template-columns: minmax(0, 1fr) auto;
-	}
-
 	.grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 72rem) {
+	.grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 }

@@ -1,5 +1,4 @@
 export type LibraryEntryType = 'book' | 'article';
-export type LibraryEntryAccent = 'amber' | 'sage' | 'ink' | 'rose';
 
 export interface LibraryEntry {
 	id: string;
@@ -9,7 +8,6 @@ export interface LibraryEntry {
 	type: LibraryEntryType;
 	topics: string[];
 	detail: string;
-	accent: LibraryEntryAccent;
 }
 
 export interface LibraryPageData {
@@ -30,8 +28,7 @@ const libraryEntries: LibraryEntry[] = [
 			'A reminder that strong facilitation is often a product decision, not just a meeting skill.',
 		type: 'book',
 		topics: ['leadership', 'facilitation', 'teamwork'],
-		detail: 'Book recommendation',
-		accent: 'amber'
+		detail: 'Book recommendation'
 	},
 	{
 		id: 'team-topologies',
@@ -41,8 +38,7 @@ const libraryEntries: LibraryEntry[] = [
 			'Useful for shaping team boundaries, reducing handoff drag, and making delivery architecture easier to evolve.',
 		type: 'book',
 		topics: ['engineering', 'systems', 'delivery'],
-		detail: 'Operating model',
-		accent: 'sage'
+		detail: 'Operating model'
 	},
 	{
 		id: 'thinking-in-systems',
@@ -52,8 +48,7 @@ const libraryEntries: LibraryEntry[] = [
 			'A steady guide for spotting leverage points before a roadmap turns into a pile of symptoms.',
 		type: 'book',
 		topics: ['strategy', 'systems', 'leadership'],
-		detail: 'Systems lens',
-		accent: 'ink'
+		detail: 'Systems lens'
 	},
 	{
 		id: 'designing-data-intensive-applications',
@@ -63,8 +58,7 @@ const libraryEntries: LibraryEntry[] = [
 			'Still one of the best references for making technical tradeoffs explicit when systems need to scale calmly.',
 		type: 'book',
 		topics: ['architecture', 'engineering', 'reliability'],
-		detail: 'Technical depth',
-		accent: 'rose'
+		detail: 'Technical depth'
 	},
 	{
 		id: 'library-article-roadmaps-bets',
@@ -74,8 +68,7 @@ const libraryEntries: LibraryEntry[] = [
 			'A field note on keeping direction clear without pretending every quarter can be planned at storyboard precision.',
 		type: 'article',
 		topics: ['strategy', 'leadership', 'delivery'],
-		detail: '6 min read',
-		accent: 'amber'
+		detail: '6 min read'
 	},
 	{
 		id: 'library-article-design-systems',
@@ -85,8 +78,7 @@ const libraryEntries: LibraryEntry[] = [
 			'Patterns for keeping components useful when product teams need speed, not a museum of polished examples.',
 		type: 'article',
 		topics: ['design systems', 'engineering', 'delivery'],
-		detail: '8 min read',
-		accent: 'ink'
+		detail: '8 min read'
 	},
 	{
 		id: 'library-article-manager-pace',
@@ -96,8 +88,7 @@ const libraryEntries: LibraryEntry[] = [
 			'A practical essay on creating clarity, trust, and momentum without turning every problem into urgency theatre.',
 		type: 'article',
 		topics: ['leadership', 'teamwork', 'career'],
-		detail: '5 min read',
-		accent: 'sage'
+		detail: '5 min read'
 	},
 	{
 		id: 'library-article-service-blueprints',
@@ -107,8 +98,7 @@ const libraryEntries: LibraryEntry[] = [
 			'An article about using service design artefacts as live delivery tools once the discovery deck has gone cold.',
 		type: 'article',
 		topics: ['design systems', 'facilitation', 'strategy'],
-		detail: '7 min read',
-		accent: 'rose'
+		detail: '7 min read'
 	}
 ];
 
