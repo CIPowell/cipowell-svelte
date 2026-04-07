@@ -84,13 +84,24 @@ export function normalizeCanonicalPath(value: string): string | null {
 }
 
 function buildBlogPostPath(slug: string): string | null {
-	const normalized = normalizeCanonicalPath(slug);
+	const trimmed = slug.trim();
 
-	if (!normalized || normalized === '/') {
+	if (!trimmed) {
 		return null;
 	}
 
-	return `/thoughts${normalized}`;
+	const withoutQuery = trimmed.split(/[?#]/, 1)[0];
+	if (!withoutQuery) {
+		return null;
+	}
+
+	const normalized = withoutQuery.replace(/^\/+/, '').replace(/\/+$/, '');
+
+	if (!normalized) {
+		return null;
+	}
+
+	return `/thoughts/${normalized}`;
 }
 
 function buildCanonicalUrl(path: string): string {
