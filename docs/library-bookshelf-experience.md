@@ -4,9 +4,9 @@
 
 ## Layout
 
-- Hero panel: introduces the Library with a short framing statement and three summary stats for books, articles, and topics.
-- Filter panel: exposes content-type toggles plus a topic control row that both apply across the same collection.
-- Reading grid: books and articles appear together in one card layout rather than split into separate shelves.
+- Hero section: introduces the Library with a short framing statement and three summary stats for books, articles, and topics.
+- Filter row: exposes content-type toggles plus a topic control row that both apply across the same collection.
+- Reading grid: books and articles appear together in one editorial card layout rather than split into separate shelves.
 
 ## Filtering Interaction
 
@@ -19,7 +19,8 @@
 ## Visual Direction
 
 - Use warm paper and timber tokens from [`src/lib/main.css`](../src/lib/main.css) to create the bookshelf feel.
-- Keep cards editorial and tactile without decorative left-edge color flashes or shelf rails. The distinction between books and articles should come from the top-right icon and type label instead.
+- Keep the layout open and aligned with the rest of the site: rely on spacing, rules, and typography more than boxed panels or heavily rounded containers.
+- Keep cards editorial and tactile without decorative left-edge color flashes, shelf rails, or circular icon badges. The distinction between books and articles should come from the Lucide icon and type label instead.
 - Preserve the site's existing typography so the new page feels like part of the same system instead of a separate microsite.
 
 ## Responsive Behavior

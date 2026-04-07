@@ -4,7 +4,7 @@
 
 .layout {
 	display: grid;
-	gap: var(--space-4);
+	gap: var(--space-5);
 }
 
 .hero,
@@ -12,11 +12,7 @@
 .empty {
 	display: grid;
 	gap: var(--space-3);
-	padding: var(--space-4);
-	border: 1px solid var(--color-library-hero-border);
-	border-radius: 1.5rem;
-	background: var(--color-library-hero-surface);
-	box-shadow: var(--elevation-library-panel);
+	padding-block: 0;
 }
 
 .heroCopy,
@@ -31,7 +27,7 @@
 	font-weight: var(--font-weight-semibold);
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
-	color: var(--color-library-chip-text);
+	color: var(--color-library-type-label);
 }
 
 .intro,
@@ -47,16 +43,14 @@
 .stats {
 	display: grid;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: var(--space-2);
+	gap: var(--space-3);
 }
 
 .stat {
 	display: grid;
-	gap: 0.35rem;
-	padding: var(--space-3);
-	border: 1px solid var(--color-library-stat-border);
-	border-radius: 1rem;
-	background: var(--color-library-stat-surface);
+	gap: 0.2rem;
+	padding-top: var(--space-2);
+	border-top: 1px solid var(--color-library-rule);
 }
 
 .statValue {
@@ -91,27 +85,28 @@
 }
 
 .filter {
-	padding: 0.75rem 1rem;
-	border: 1px solid var(--color-library-filter-border);
-	border-radius: 999px;
-	background: var(--color-library-filter-surface);
-	color: var(--color-text-primary);
+	padding: 0 0 0.35rem;
+	border: none;
+	border-bottom: 1px solid var(--color-library-filter-rule);
+	background: transparent;
+	color: var(--color-library-filter-text);
 	font: inherit;
+	font-weight: var(--font-weight-medium);
 	cursor: pointer;
 }
 
 .filter:hover {
-	background: var(--color-library-filter-surface-hover);
+	color: var(--color-text-primary);
+	border-bottom-color: var(--color-library-filter-rule-strong);
 }
 
 .filter:focus-visible {
 	outline: 3px solid var(--color-focus-ring);
-	outline-offset: 3px;
+	outline-offset: 4px;
 }
 
 .filterActive {
-	border-color: var(--color-library-filter-border-active);
-	background: var(--color-library-filter-surface-active);
+	border-bottom-color: var(--color-library-filter-rule-active);
 	color: var(--color-library-filter-text-active);
 }
 
@@ -123,6 +118,8 @@
 .collectionHeader {
 	display: grid;
 	gap: var(--space-1);
+	padding-bottom: var(--space-2);
+	border-bottom: 1px solid var(--color-library-rule);
 }
 
 .collectionHeader h2 {
@@ -130,8 +127,8 @@
 }
 
 .empty {
-	background: var(--color-library-empty-surface);
-	border-color: var(--color-library-empty-border);
+	padding-top: var(--space-2);
+	border-top: 1px solid var(--color-library-rule);
 }
 
 .empty h2 {
@@ -146,11 +143,17 @@
 
 	.stats {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: var(--space-3);
 	}
 
 	.filterGroups {
 		grid-template-columns: auto minmax(0, 1fr);
 		align-items: start;
 		column-gap: var(--space-4);
+	}
+
+	.stat + .stat {
+		padding-left: var(--space-2);
+		border-left: 1px solid var(--color-library-rule);
 	}
 }

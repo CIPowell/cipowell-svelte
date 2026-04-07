@@ -1,4 +1,6 @@
 <script lang="ts">
+	import BookOpenText from '@lucide/svelte/icons/book-open-text';
+	import Newspaper from '@lucide/svelte/icons/newspaper';
 	import type { LibraryEntry } from '$lib/services/library/library';
 	import styles from './LibraryShelf.module.css';
 
@@ -22,18 +24,11 @@
 						<span class={styles.typeLabel}>{item.type}</span>
 						<span>{item.detail}</span>
 					</div>
-					<span class={styles.iconBadge} aria-label={`${item.type} recommendation`}>
+					<span class={styles.iconMarker} aria-label={`${item.type} recommendation`}>
 						{#if item.type === 'book'}
-							<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class={styles.icon}>
-								<path
-									d="M12 6v12M4 7.5A2.5 2.5 0 0 1 6.5 5H11a3 3 0 0 1 3 3 3 3 0 0 1 3-3h4.5A2.5 2.5 0 0 1 24 7.5V19H17a5 5 0 0 0-5 5 5 5 0 0 0-5-5H0V7.5Z"
-								/>
-							</svg>
+							<BookOpenText class={styles.icon} aria-hidden="true" />
 						{:else}
-							<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class={styles.icon}>
-								<path d="M4 5h13a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3V5Z" />
-								<path d="M8 9h8M8 12h8M8 15h5M4 19a3 3 0 0 1-3-3V8" />
-							</svg>
+							<Newspaper class={styles.icon} aria-hidden="true" />
 						{/if}
 					</span>
 				</div>
