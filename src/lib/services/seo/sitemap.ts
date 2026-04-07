@@ -3,12 +3,12 @@ import Contentful, { type SitemapContentEntry } from '$lib/services/cms/contentf
 
 import { PRODUCTION_ORIGIN } from './robots';
 
-export const SITEMAP_CACHE_TTL = 60 * 60 * 24;
+const SITEMAP_CACHE_TTL = 60 * 60 * 24;
 export const SITEMAP_CACHE_CONTROL = `public, max-age=0, s-maxage=${SITEMAP_CACHE_TTL}`;
 
 type SitemapChangeFrequency = 'daily' | 'weekly' | 'monthly';
 
-export interface SitemapUrlEntry {
+interface SitemapUrlEntry {
 	loc: string;
 	lastmod: string;
 	changefreq: SitemapChangeFrequency;

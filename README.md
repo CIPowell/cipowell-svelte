@@ -195,7 +195,7 @@ npm run ci
 
 Runs formatting, linting, type checking, dependency hygiene, app build, Storybook build, tests, and security checks in the same order as the repository quality pipeline.
 
-Before handing a branch over for review or merge, prefer running `npm run ci` so local validation matches the required GitHub checks as closely as possible. If you can only run a subset locally, call out what was skipped and why in the PR.
+Before handing a branch over for review or merge, run `npm run check`, `npm run lint`, and `npm run security` locally at minimum. Prefer `npm run ci` so local validation matches the required GitHub checks as closely as possible. If you can only run a subset locally, call out exactly what was skipped and why in the PR.
 
 ## Cloudflare deployment notes
 
