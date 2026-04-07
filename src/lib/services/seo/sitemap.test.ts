@@ -60,6 +60,20 @@ describe('buildSitemapUrls', () => {
 			}
 		]);
 	});
+
+	test('preserves blog slugs named home instead of aliasing them to the site root', () => {
+		const urls = buildSitemapUrls({
+			pages: [],
+			blogPosts: [{ slug: 'home', updatedAt: '2026-04-05T12:00:00.000Z' }]
+		});
+
+		expect(urls).toContainEqual({
+			loc: `${PRODUCTION_ORIGIN}/thoughts/home`,
+			lastmod: '2026-04-05T12:00:00.000Z',
+			changefreq: 'monthly',
+			priority: 0.6
+		});
+	});
 });
 
 describe('buildSitemapXml', () => {
