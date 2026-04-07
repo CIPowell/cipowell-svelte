@@ -260,13 +260,41 @@ class Contentful implements NavClient, PageClient {
 		};
 	}
 
-	private mapSitemapEntry(
-		entry: contentful.Entry<ContentfulPage> | contentful.Entry<ContentfulBlogPost>
+	private mapSitemapEntry<T extends ContentfulPage | ContentfulBlogPost>(
+		entry: contentful.Entry<T>
 	): SitemapContentEntry {
 		return {
 			slug: this.getSymbolFieldValue(entry.fields.slug),
 			updatedAt: entry.sys.updatedAt ?? entry.sys.createdAt ?? new Date(0).toISOString()
 		};
+	}
+
+	private async getPaginatedSitemapEntries<T extends ContentfulPage | ContentfulBlogPost>(
+		contentType: T['contentTypeId']
+	): Promise<SitemapContentEntry[]> {
+		const limit = 1000;
+		const items: Array<contentful.Entry<T>> = [];
+		let skip = 0;
+
+		while (true) {
+			const entries = await this.client.getEntries<T>({
+				content_type: contentType,
+				order: 'fields.slug',
+				limit,
+				skip,
+				select: ['fields.slug', 'sys.createdAt', 'sys.updatedAt'].join(',')
+			} as unknown as contentful.EntriesQueries<T, undefined>);
+
+			items.push(...entries.items);
+
+			if (!entries.items.length || items.length >= entries.total) {
+				break;
+			}
+
+			skip += entries.items.length;
+		}
+
+		return items.map((entry) => this.mapSitemapEntry(entry));
 	}
 
 	async getMostRecentlyCreatedBlogPosts(limit = 3, tag = ''): Promise<BlogPostPreview[]> {
@@ -290,16 +318,7 @@ class Contentful implements NavClient, PageClient {
 	async getSitemapPages(): Promise<SitemapContentEntry[]> {
 		return this.cache.get(
 			'sitemap-pages',
-			async () => {
-				const entries = await this.client.getEntries<ContentfulPage>({
-					content_type: 'page',
-					order: 'fields.slug',
-					limit: 1000,
-					select: ['fields.slug', 'sys.createdAt', 'sys.updatedAt'].join(',')
-				} as unknown as contentful.EntriesQueries<ContentfulPage, undefined>);
-
-				return entries.items.map((entry) => this.mapSitemapEntry(entry));
-			},
+			async () => this.getPaginatedSitemapEntries('page'),
 			60 * 60 * 24
 		);
 	}
@@ -307,16 +326,7 @@ class Contentful implements NavClient, PageClient {
 	async getSitemapBlogPosts(): Promise<SitemapContentEntry[]> {
 		return this.cache.get(
 			'sitemap-blog-posts',
-			async () => {
-				const entries = await this.client.getEntries<ContentfulBlogPost>({
-					content_type: 'blogPost',
-					order: 'fields.slug',
-					limit: 1000,
-					select: ['fields.slug', 'sys.createdAt', 'sys.updatedAt'].join(',')
-				} as unknown as contentful.EntriesQueries<ContentfulBlogPost, undefined>);
-
-				return entries.items.map((entry) => this.mapSitemapEntry(entry));
-			},
+			async () => this.getPaginatedSitemapEntries('blogPost'),
 			60 * 60 * 24
 		);
 	}

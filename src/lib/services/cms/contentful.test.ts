@@ -222,6 +222,7 @@ describe('Contentful blog queries', () => {
 
 	test('returns sitemap page entries with slugs and updated timestamps', async () => {
 		getEntriesMock.mockResolvedValueOnce({
+			total: 2,
 			items: [
 				{
 					sys: { updatedAt: '2026-04-01T08:30:00.000Z' },
@@ -246,12 +247,14 @@ describe('Contentful blog queries', () => {
 			content_type: 'page',
 			order: 'fields.slug',
 			limit: 1000,
+			skip: 0,
 			select: 'fields.slug,sys.createdAt,sys.updatedAt'
 		});
 	});
 
 	test('returns sitemap blog post entries with slugs and updated timestamps', async () => {
 		getEntriesMock.mockResolvedValueOnce({
+			total: 1,
 			items: [
 				{
 					sys: { updatedAt: '2026-04-03T10:15:00.000Z' },
@@ -271,6 +274,105 @@ describe('Contentful blog queries', () => {
 			content_type: 'blogPost',
 			order: 'fields.slug',
 			limit: 1000,
+			skip: 0,
+			select: 'fields.slug,sys.createdAt,sys.updatedAt'
+		});
+	});
+
+	test('paginates sitemap page entries past the first thousand items', async () => {
+		getEntriesMock
+			.mockResolvedValueOnce({
+				total: 1001,
+				items: Array.from({ length: 1000 }, (_, index) => ({
+					sys: { updatedAt: `2026-04-01T08:30:${String(index % 60).padStart(2, '0')}.000Z` },
+					fields: { slug: `page-${index}` }
+				}))
+			})
+			.mockResolvedValueOnce({
+				total: 1001,
+				items: [
+					{
+						sys: { updatedAt: '2026-04-02T09:45:00.000Z' },
+						fields: { slug: 'page-1000' }
+					}
+				]
+			});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		const pages = await cms.getSitemapPages();
+
+		expect(pages).toHaveLength(1001);
+		expect(pages.at(0)).toEqual({
+			slug: 'page-0',
+			updatedAt: '2026-04-01T08:30:00.000Z'
+		});
+		expect(pages.at(-1)).toEqual({
+			slug: 'page-1000',
+			updatedAt: '2026-04-02T09:45:00.000Z'
+		});
+		expect(getEntriesMock).toHaveBeenNthCalledWith(1, {
+			content_type: 'page',
+			order: 'fields.slug',
+			limit: 1000,
+			skip: 0,
+			select: 'fields.slug,sys.createdAt,sys.updatedAt'
+		});
+		expect(getEntriesMock).toHaveBeenNthCalledWith(2, {
+			content_type: 'page',
+			order: 'fields.slug',
+			limit: 1000,
+			skip: 1000,
+			select: 'fields.slug,sys.createdAt,sys.updatedAt'
+		});
+	});
+
+	test('paginates sitemap blog post entries past the first thousand items', async () => {
+		getEntriesMock
+			.mockResolvedValueOnce({
+				total: 1001,
+				items: Array.from({ length: 1000 }, (_, index) => ({
+					sys: { updatedAt: `2026-04-03T10:15:${String(index % 60).padStart(2, '0')}.000Z` },
+					fields: { slug: `post-${index}` }
+				}))
+			})
+			.mockResolvedValueOnce({
+				total: 1001,
+				items: [
+					{
+						sys: { updatedAt: '2026-04-04T11:00:00.000Z' },
+						fields: { slug: 'post-1000' }
+					}
+				]
+			});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		const posts = await cms.getSitemapBlogPosts();
+
+		expect(posts).toHaveLength(1001);
+		expect(posts.at(0)).toEqual({
+			slug: 'post-0',
+			updatedAt: '2026-04-03T10:15:00.000Z'
+		});
+		expect(posts.at(-1)).toEqual({
+			slug: 'post-1000',
+			updatedAt: '2026-04-04T11:00:00.000Z'
+		});
+		expect(getEntriesMock).toHaveBeenNthCalledWith(1, {
+			content_type: 'blogPost',
+			order: 'fields.slug',
+			limit: 1000,
+			skip: 0,
+			select: 'fields.slug,sys.createdAt,sys.updatedAt'
+		});
+		expect(getEntriesMock).toHaveBeenNthCalledWith(2, {
+			content_type: 'blogPost',
+			order: 'fields.slug',
+			limit: 1000,
+			skip: 1000,
 			select: 'fields.slug,sys.createdAt,sys.updatedAt'
 		});
 	});
