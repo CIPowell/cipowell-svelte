@@ -19,6 +19,7 @@
 ## Visual Direction
 
 - Use warm paper and timber tokens from [`src/lib/main.css`](../src/lib/main.css) to create the bookshelf feel.
+- Keep shared site tokens intact; route-specific background shifts for `/library` should be applied in the library CSS module rather than by changing the global `--color-background` token.
 - Keep the layout open and aligned with the rest of the site: rely on spacing, rules, and typography more than boxed panels or heavily rounded containers.
 - Keep cards editorial and tactile without decorative left-edge color flashes, shelf rails, or circular icon badges. The distinction between books and articles should come from the Lucide icon and type label instead.
 - Preserve the site's existing typography so the new page feels like part of the same system instead of a separate microsite.
