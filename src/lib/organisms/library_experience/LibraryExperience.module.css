@@ -1,5 +1,6 @@
 .libraryPage {
 	padding-block: var(--space-4) var(--space-7);
+	background: var(--color-white);
 }
 
 .layout {
