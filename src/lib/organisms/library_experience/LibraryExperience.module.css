@@ -1,17 +1,17 @@
 .libraryPage {
-	padding-block: var(--space-5) var(--space-7);
+	padding-block: var(--space-4) var(--space-7);
 }
 
 .layout {
 	display: grid;
-	gap: var(--space-5);
+	gap: var(--space-4);
 }
 
 .hero,
 .filters,
 .empty {
 	display: grid;
-	gap: var(--space-3);
+	gap: var(--space-2);
 	padding-block: 0;
 }
 
@@ -19,6 +19,7 @@
 .filtersCopy {
 	display: grid;
 	gap: var(--space-2);
+	max-inline-size: 42rem;
 }
 
 .eyebrow {
@@ -41,21 +42,22 @@
 }
 
 .stats {
-	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: var(--space-3);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2) var(--space-3);
+	align-items: baseline;
+	padding-top: var(--space-1);
 }
 
 .stat {
-	display: grid;
-	gap: 0.2rem;
-	padding-top: var(--space-2);
-	border-top: 1px solid var(--color-library-rule);
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.5rem;
 }
 
 .statValue {
 	font-family: var(--font-heading);
-	font-size: clamp(2rem, 5vw, 3rem);
+	font-size: clamp(1.5rem, 3vw, 2.25rem);
 	line-height: 1;
 	color: var(--color-text-primary);
 }
@@ -63,12 +65,17 @@
 .statLabel {
 	color: var(--color-library-card-meta);
 	font-weight: var(--font-weight-medium);
+	font-size: 0.95rem;
 }
 
 .filterGroups,
 .filterGroup {
 	display: grid;
 	gap: var(--space-2);
+}
+
+.filterGroups {
+	padding-top: var(--space-1);
 }
 
 .filterLabel {
@@ -112,14 +119,12 @@
 
 .collection {
 	display: grid;
-	gap: var(--space-3);
+	gap: var(--space-2);
 }
 
 .collectionHeader {
 	display: grid;
 	gap: var(--space-1);
-	padding-bottom: var(--space-2);
-	border-bottom: 1px solid var(--color-library-rule);
 }
 
 .collectionHeader h2 {
@@ -138,22 +143,19 @@
 @media (min-width: 48rem) {
 	.hero {
 		grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.85fr);
-		align-items: stretch;
+		align-items: end;
+		column-gap: var(--space-4);
 	}
 
 	.stats {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		column-gap: var(--space-3);
+		justify-content: flex-start;
+		align-content: end;
+		row-gap: var(--space-1);
 	}
 
 	.filterGroups {
 		grid-template-columns: auto minmax(0, 1fr);
 		align-items: start;
 		column-gap: var(--space-4);
-	}
-
-	.stat + .stat {
-		padding-left: var(--space-2);
-		border-left: 1px solid var(--color-library-rule);
 	}
 }
