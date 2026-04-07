@@ -2,7 +2,8 @@
 	list-style: none;
 	display: grid;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: var(--space-3);
+	column-gap: var(--space-3);
+	row-gap: var(--space-4);
 	margin: 0;
 	padding: 0;
 }
@@ -15,11 +16,9 @@
 	display: grid;
 	gap: var(--space-2);
 	height: 100%;
-	padding: var(--space-3) var(--space-3) calc(var(--space-3) + 0.15rem);
-	border: 1px solid var(--color-library-card-border);
-	border-radius: 1.15rem;
-	background: var(--color-library-card-surface);
-	box-shadow: var(--elevation-library-card);
+	padding-block: var(--space-3);
+	border-top: 1px solid var(--color-library-card-border);
+	background: transparent;
 }
 
 .header {
@@ -41,37 +40,24 @@
 .typeLabel {
 	display: inline-flex;
 	align-items: center;
-	padding: 0.3rem 0.7rem;
-	border-radius: 999px;
-	background: var(--color-library-chip-surface);
-	color: var(--color-library-chip-text);
+	color: var(--color-library-type-label);
 	font-size: 0.8rem;
 	font-weight: var(--font-weight-semibold);
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
 }
 
-.iconBadge {
+.iconMarker {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	inline-size: 2.25rem;
-	block-size: 2.25rem;
-	border: 1px solid var(--color-library-icon-border);
-	border-radius: 999px;
-	background: var(--color-library-icon-surface);
 	color: var(--color-library-icon);
 }
 
 .icon {
-	inline-size: 1.1rem;
-	block-size: 1.1rem;
-	fill: none;
-	stroke: currentColor;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	stroke-width: 1.8;
+	inline-size: 1.125rem;
+	block-size: 1.125rem;
 }
 
 .copy {
@@ -100,28 +86,41 @@
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.75rem;
+	column-gap: 0.75rem;
+	row-gap: 0.25rem;
 	margin: 0;
 	padding: 0;
 }
 
 .topics li {
-	padding: 0.4rem 0.75rem;
-	border-radius: 999px;
-	background: var(--color-library-topic-surface);
 	color: var(--color-library-topic-text);
 	font-size: 0.85rem;
+	position: relative;
+	padding-left: 0.75rem;
+}
+
+.topics li::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	inline-size: 0.3rem;
+	block-size: 0.3rem;
+	border-radius: 999px;
+	background: var(--color-library-topic-marker);
+	transform: translateY(-50%);
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
 	.card {
 		transition:
 			transform 180ms ease,
-			box-shadow 180ms ease;
+			border-color 180ms ease;
 	}
 
 	.card:hover {
-		transform: translateY(-0.2rem);
+		transform: translateY(-0.15rem);
+		border-color: var(--color-library-card-border-strong);
 	}
 }
 
