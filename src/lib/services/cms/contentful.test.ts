@@ -377,3 +377,153 @@ describe('Contentful blog queries', () => {
 		});
 	});
 });
+
+describe('Contentful library queries', () => {
+	beforeEach(() => {
+		vi.resetModules();
+		getEntriesMock.mockReset();
+		createClientMock.mockClear();
+		for (const key of Object.keys(envMock)) {
+			delete envMock[key];
+		}
+		envMock.CONTENTFUL_API_KEY = 'delivery-token';
+	});
+
+	test('returns library entries mapped from the shared libraryEntry content type', async () => {
+		getEntriesMock.mockResolvedValueOnce({
+			items: [
+				{
+					fields: {
+						title: 'An Elegant Puzzle',
+						slug: 'an-elegant-puzzle',
+						format: 'book',
+						creatorText: 'Will Larson',
+						summary: 'A management book for scaling engineering teams.',
+						recommendationNote:
+							'Useful whenever I need to reset how I think about org design.',
+						miniReview: 'Practical and opinionated in the right places.',
+						publicationTitle: '',
+						publicationDate: '2019-03-01',
+						externalUrl: '',
+						topics: ['leadership', 'engineering-management'],
+						readingStatus: 'finished',
+						startedOn: '2026-03-01',
+						finishedOn: '2026-03-12',
+						rating: 5,
+						coverOrThumbnail: {
+							fields: {
+								title: 'An Elegant Puzzle cover',
+								description: 'Book cover image',
+								file: {
+									url: '//images.ctfassets.net/library/book-cover.jpg'
+								}
+							}
+						}
+					}
+				}
+			]
+		});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		await expect(cms.getLibraryEntries()).resolves.toEqual([
+			{
+				title: 'An Elegant Puzzle',
+				slug: 'an-elegant-puzzle',
+				format: 'book',
+				creatorText: 'Will Larson',
+				summary: 'A management book for scaling engineering teams.',
+				recommendationNote:
+					'Useful whenever I need to reset how I think about org design.',
+				miniReview: 'Practical and opinionated in the right places.',
+				publicationTitle: '',
+				publicationDate: '2019-03-01',
+				externalUrl: '',
+				topics: ['leadership', 'engineering-management'],
+				readingStatus: 'finished',
+				startedOn: '2026-03-01',
+				finishedOn: '2026-03-12',
+				rating: 5,
+				coverImage: {
+					url: 'https://images.ctfassets.net/library/book-cover.jpg',
+					title: 'An Elegant Puzzle cover',
+					description: 'Book cover image'
+				}
+			}
+		]);
+
+		expect(getEntriesMock).toHaveBeenCalledWith({
+			content_type: 'libraryEntry',
+			order: 'fields.format,-fields.publicationDate,fields.title',
+			include: 2
+		});
+	});
+
+	test('returns full library entry details for an individual slug', async () => {
+		getEntriesMock.mockResolvedValueOnce({
+			items: [
+				{
+					sys: { id: 'library-1', locale: 'en-US' },
+					fields: {
+						title: 'The Source Article',
+						slug: 'the-source-article',
+						format: 'article',
+						creatorText: 'Charity Majors',
+						summary: 'A sharp article about observability and feedback loops.',
+						recommendationNote: 'This one changed how I talk about systems work.',
+						miniReview: '',
+						publicationTitle: 'Honeycomb Blog',
+						publicationDate: '2024-11-05',
+						externalUrl: 'https://example.com/source-article',
+						topics: ['observability'],
+						readingStatus: 'on-the-list',
+						startedOn: '',
+						finishedOn: '',
+						rating: 4,
+						coverOrThumbnail: undefined,
+						notes: { nodeType: 'document', content: [] }
+					}
+				}
+			]
+		});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		await expect(cms.getLibraryEntry('the-source-article')).resolves.toEqual({
+			title: 'The Source Article',
+			slug: 'the-source-article',
+			format: 'article',
+			creatorText: 'Charity Majors',
+			summary: 'A sharp article about observability and feedback loops.',
+			recommendationNote: 'This one changed how I talk about systems work.',
+			miniReview: '',
+			publicationTitle: 'Honeycomb Blog',
+			publicationDate: '2024-11-05',
+			externalUrl: 'https://example.com/source-article',
+			topics: ['observability'],
+			readingStatus: 'on-the-list',
+			startedOn: '',
+			finishedOn: '',
+			rating: 4,
+			coverImage: null,
+			notes: { nodeType: 'document', content: [] },
+			contentfulMetadata: {
+				entryId: 'library-1',
+				locale: 'en-US',
+				environment: 'master'
+			},
+			livePreview: {
+				enabled: false
+			}
+		});
+
+		expect(getEntriesMock).toHaveBeenCalledWith({
+			content_type: 'libraryEntry',
+			'fields.slug': 'the-source-article',
+			include: 2,
+			limit: 1
+		});
+	});
+});

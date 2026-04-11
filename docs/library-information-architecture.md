@@ -6,7 +6,7 @@
 - `Library` exists to show taste, recommendations, and the body of work Chris returns to.
 - `Thoughts` remains the place for original writing, reflections, and essays.
 - Launch scope includes both books and articles.
-- Books and articles should share one content model so the section can mature into a fuller reading log without splitting the schema too early.
+- Books and articles share one content model so the section can mature into a fuller reading log without splitting the schema too early.
 
 ## Purpose and scope
 
@@ -27,7 +27,7 @@ That makes Library adjacent to Thoughts, but not a sub-section of it. Thoughts i
 
 ### What each level does
 
-- `/library` is the landing page for the section. It introduces the purpose of the Library and groups entries into `Books` and `Articles`.
+- `/library` is the landing page for the section. It introduces the purpose of the Library, supports topic filtering, and groups entries into `Books` and `Articles`.
 - `/library/[slug]` is the shared detail page pattern for individual entries, regardless of format.
 
 ### Relationship to Thoughts
@@ -62,21 +62,21 @@ If browsing needs grow later, additional views can be added without changing can
 - paginated archives
 - theme- or status-based reading log views
 
-## Shared entry model assumptions
+## Shared entry model
 
-Use one shared entry type, tentatively `libraryEntry`, for both books and articles.
+Use one shared entry type, `libraryEntry`, for both books and articles.
 
-### Required launch fields
+### Implemented launch fields
 
-- `internalName`
 - `slug`
 - `title`
 - `format` with launch values `book` and `article`
 - `creatorText`
 - `summary`
 - `recommendationNote`
+- `miniReview`
 
-### Optional launch fields
+### Optional launch fields currently supported
 
 - `publicationTitle`
 - `publicationDate`
@@ -86,7 +86,7 @@ Use one shared entry type, tentatively `libraryEntry`, for both books and articl
 
 ### Fields that prepare for a reading-log future
 
-- `readingStatus` such as `to-read`, `reading`, `finished`, `reference`
+- `readingStatus` as a Contentful dropdown with launch values `on-the-list`, `reading`, `finished`
 - `startedOn`
 - `finishedOn`
 - `rating`
@@ -103,4 +103,6 @@ Use one shared entry type, tentatively `libraryEntry`, for both books and articl
 
 - Navigation should expose `Library` as a first-class sibling of `Thoughts`.
 - The landing page should explain the distinction between original writing and recommendations.
-- Future Contentful work should add a dedicated `libraryEntry` model plus the supporting queries and page rendering needed for `/library/[slug]`.
+- Use `title` as the Contentful display field for `libraryEntry`; do not add a separate `internalName` for this model at launch.
+- The site now uses a dedicated `libraryEntry` Contentful model plus supporting queries for `/library` and `/library/[slug]`.
+- Topic filtering is currently powered by the shared `topics` field on `libraryEntry`, which keeps editorial control simple while preserving room for a richer taxonomy later.

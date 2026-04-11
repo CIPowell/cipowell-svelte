@@ -36,6 +36,23 @@
 	--color-cta-border-inverse: #bca6d0;
 	--color-cta-border-inverse-hover: #e0d2ef;
 	--color-cta-label-inverse: #f3e9ff;
+	--color-library-hero-surface: #efe8dc;
+	--color-library-note-surface: #fffaf2;
+	--color-library-note-border: #d7c8af;
+	--color-library-note-accent: #b48448;
+	--color-library-shelf-line: #c8b79f;
+	--color-library-book-surface: #fff8ef;
+	--color-library-article-surface: #f3f7fb;
+	--color-library-detail-surface: #f7f2ea;
+	--color-library-placeholder-surface: #f0e5d3;
+	--color-library-placeholder-border: #c9b28d;
+	--color-library-filter-surface: #fbf8ff;
+	--color-library-filter-surface-hover: #f0ebf6;
+	--color-library-filter-surface-active: #5a2e7d;
+	--color-library-filter-border: #cfc0dd;
+	--color-library-filter-border-active: #9b80b5;
+	--color-library-filter-text-active: #f5f3f7;
+	--color-library-meta-divider: #958377;
 
 	--footer-bg: var(--color-background);
 	--footer-bg-plum: var(--color-plum-600);
