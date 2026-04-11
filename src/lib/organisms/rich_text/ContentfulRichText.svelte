@@ -13,8 +13,10 @@
 	let { document }: Props = $props();
 </script>
 
-{#if document?.content}
-	{#each document.content as node, index (`root-${index}`)}
-		<RichTextNode node={node as { nodeType: string; [key: string]: unknown }} />
-	{/each}
-{/if}
+<div class="content-flow contentful-rich-text">
+	{#if document?.content}
+		{#each document.content as node, index (`root-${index}`)}
+			<RichTextNode node={node as { nodeType: string; [key: string]: unknown }} />
+		{/each}
+	{/if}
+</div>
