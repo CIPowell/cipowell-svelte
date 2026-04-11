@@ -29,6 +29,29 @@ export type ContentfulBlogPreviewSection = {
 	};
 };
 
+export type ContentfulLibraryEntry = {
+	contentTypeId: 'libraryEntry';
+	fields: {
+		slug: EntryFieldTypes.Symbol;
+		title: EntryFieldTypes.Symbol;
+		format: EntryFieldTypes.Symbol<'book' | 'article'>;
+		creatorText: EntryFieldTypes.Symbol;
+		summary: EntryFieldTypes.Text;
+		recommendationNote: EntryFieldTypes.Text;
+		miniReview: EntryFieldTypes.Text;
+		publicationTitle: EntryFieldTypes.Symbol;
+		publicationDate: EntryFieldTypes.Date;
+		externalUrl: EntryFieldTypes.Symbol;
+		coverOrThumbnail: EntryFieldTypes.AssetLink;
+		topics: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
+		readingStatus: EntryFieldTypes.Symbol<'on-the-list' | 'reading' | 'finished'>;
+		startedOn: EntryFieldTypes.Date;
+		finishedOn: EntryFieldTypes.Date;
+		rating: EntryFieldTypes.Integer;
+		notes: EntryFieldTypes.RichText;
+	};
+};
+
 export type ContentfulFooterLink = {
 	contentTypeId: 'footerLink';
 	fields: {

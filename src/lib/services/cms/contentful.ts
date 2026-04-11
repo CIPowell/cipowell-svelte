@@ -1,11 +1,22 @@
 import { env } from '$env/dynamic/private';
 import type { BlogPost, BlogPostPreview } from '$lib/services/blog/Blog';
 import type { SiteFooterContent } from '$lib/services/footer/footer-content';
+import type {
+	LibraryEntry,
+	LibraryEntryPreview,
+	LibraryImage,
+	LibraryReadingStatus
+} from '$lib/services/library/library';
 import type { NavClient, NavLink } from '$lib/services/navigation/nav';
 import * as contentful from 'contentful';
 import type { Page, PageClient } from '$lib/services/page/Page';
 import { ContentfulCache } from './cache';
-import type { ContentfulBlogPost, ContentfulPage, ContentfulSiteFooter } from './content_types';
+import type {
+	ContentfulBlogPost,
+	ContentfulLibraryEntry,
+	ContentfulPage,
+	ContentfulSiteFooter
+} from './content_types';
 
 export interface SitemapContentEntry {
 	slug: string;
@@ -31,6 +42,19 @@ type RichTextNode = {
 		};
 	};
 	content?: RichTextNode[];
+};
+
+type RichTextDocument = { nodeType: string; content: unknown[] };
+type ContentfulAssetLike = {
+	fields?: {
+		title?: string | Record<string, string | undefined>;
+		description?: string | Record<string, string | undefined>;
+		file?:
+			| {
+					url?: string;
+			  }
+			| Record<string, { url?: string } | undefined>;
+	};
 };
 
 function mapResolvedFooterLinks(
@@ -96,10 +120,6 @@ class Contentful implements NavClient, PageClient {
 					query as unknown as contentful.EntriesQueries<ContentfulPage, undefined>
 				);
 
-				return pages.items.map((p) => ({
-					title: p.fields.title,
-					target: p.fields.slug
-				}));
 				return pages.items.map((p) => ({
 					title: p.fields.title,
 					target: p.fields.slug
@@ -215,7 +235,13 @@ class Contentful implements NavClient, PageClient {
 		return targets;
 	}
 
-	private getSymbolFieldValue(value: string | Record<string, string | undefined>): string {
+	private getSymbolFieldValue(
+		value: string | Record<string, string | undefined> | undefined
+	): string {
+		if (value === undefined) {
+			return '';
+		}
+
 		if (typeof value === 'string') {
 			return value;
 		}
@@ -250,6 +276,83 @@ class Contentful implements NavClient, PageClient {
 		}
 
 		return value?.['en-US'] ?? [];
+	}
+
+	private getDateFieldValue(value: string | Record<string, string | undefined> | undefined): string {
+		if (value === undefined) {
+			return '';
+		}
+
+		if (typeof value === 'string') {
+			return value;
+		}
+
+		return value['en-US'] ?? '';
+	}
+
+	private getIntegerFieldValue(
+		value: number | Record<string, number | undefined> | undefined
+	): number | null {
+		if (value === undefined) {
+			return null;
+		}
+
+		if (typeof value === 'number') {
+			return value;
+		}
+
+		return value['en-US'] ?? null;
+	}
+
+	private getAssetImage(asset: unknown): LibraryImage | null {
+		if (!asset || typeof asset !== 'object' || !('fields' in asset)) {
+			return null;
+		}
+
+		const resolvedAsset = asset as ContentfulAssetLike;
+		const fileField = resolvedAsset.fields?.file;
+		let url = '';
+		if (fileField && 'url' in fileField) {
+			url = (fileField as { url?: string }).url ?? '';
+		} else if (fileField) {
+			url =
+				(fileField as Record<string, { url?: string } | undefined>)['en-US']?.url ?? '';
+		}
+
+		if (!url) {
+			return null;
+		}
+
+		return {
+			url: url.startsWith('//') ? `https:${url}` : url,
+			title: this.getSymbolFieldValue(resolvedAsset.fields?.title),
+			description: this.getSymbolFieldValue(resolvedAsset.fields?.description)
+		};
+	}
+
+	private mapLibraryEntryPreview(
+		entry: contentful.Entry<ContentfulLibraryEntry>
+	): LibraryEntryPreview {
+		return {
+			title: this.getSymbolFieldValue(entry.fields.title),
+			slug: this.getSymbolFieldValue(entry.fields.slug),
+			format: this.getSymbolFieldValue(entry.fields.format) as LibraryEntryPreview['format'],
+			creatorText: this.getSymbolFieldValue(entry.fields.creatorText),
+			summary: this.getSymbolFieldValue(entry.fields.summary),
+			recommendationNote: this.getSymbolFieldValue(entry.fields.recommendationNote),
+			miniReview: this.getSymbolFieldValue(entry.fields.miniReview),
+			publicationTitle: this.getSymbolFieldValue(entry.fields.publicationTitle),
+			publicationDate: this.getDateFieldValue(entry.fields.publicationDate),
+			externalUrl: this.getSymbolFieldValue(entry.fields.externalUrl),
+			topics: this.getTagFieldValues(entry.fields.topics),
+			readingStatus: this.getSymbolFieldValue(
+				entry.fields.readingStatus
+			) as LibraryReadingStatus | '',
+			startedOn: this.getDateFieldValue(entry.fields.startedOn),
+			finishedOn: this.getDateFieldValue(entry.fields.finishedOn),
+			rating: this.getIntegerFieldValue(entry.fields.rating),
+			coverImage: this.getAssetImage(entry.fields.coverOrThumbnail)
+		};
 	}
 
 	private mapBlogPostPreview(entry: contentful.Entry<ContentfulBlogPost>): BlogPostPreview {
@@ -313,6 +416,55 @@ class Contentful implements NavClient, PageClient {
 		);
 
 		return entries.items.map((entry) => this.mapBlogPostPreview(entry));
+	}
+
+	async getLibraryEntries(): Promise<LibraryEntryPreview[]> {
+		return this.cache.get(
+			'library-entries',
+			async () => {
+				const entries = await this.client.getEntries<ContentfulLibraryEntry>({
+					content_type: 'libraryEntry',
+					order: 'fields.format,-fields.publicationDate,fields.title',
+					include: 2
+				} as unknown as contentful.EntriesQueries<ContentfulLibraryEntry, undefined>);
+
+				return entries.items.map((entry) => this.mapLibraryEntryPreview(entry));
+			},
+			60 * 60
+		);
+	}
+
+	async getLibraryEntry(slug: string): Promise<LibraryEntry> {
+		return this.cache.get(
+			`library-entry-${slug}`,
+			async () => {
+				const entries = await this.client.getEntries<ContentfulLibraryEntry>({
+					content_type: 'libraryEntry',
+					'fields.slug': slug,
+					include: 2,
+					limit: 1
+				} as unknown as contentful.EntriesQueries<ContentfulLibraryEntry, undefined>);
+
+				if (!entries.items.length) {
+					throw new Error(`Library entry not found: ${slug}`);
+				}
+
+				const entry = entries.items[0];
+				return {
+					...this.mapLibraryEntryPreview(entry),
+					notes: (entry.fields.notes as RichTextDocument | null | undefined) ?? null,
+					contentfulMetadata: {
+						entryId: entry.sys.id,
+						locale: entry.sys.locale || 'en-US',
+						environment: this.contentfulEnvironment
+					},
+					livePreview: {
+						enabled: this.previewEnabled
+					}
+				};
+			},
+			60 * 60
+		);
 	}
 
 	async getSitemapPages(): Promise<SitemapContentEntry[]> {

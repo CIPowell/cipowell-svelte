@@ -1,11 +1,11 @@
-<script lang="ts">
+	<script lang="ts">
 	import Container from '$lib/atoms/container/Container.svelte';
 	import LibraryShelf from '$lib/organisms/library_shelf/LibraryShelf.svelte';
-	import type { LibraryEntry, LibraryEntryType } from '$lib/services/library/library';
+	import type { LibraryEntryType, LibraryShelfEntry } from '$lib/services/library/library';
 	import styles from './LibraryExperience.module.css';
 
 	interface Props {
-		entries: LibraryEntry[];
+		entries: LibraryShelfEntry[];
 		topics: string[];
 		counts: {
 			books: number;
@@ -38,8 +38,8 @@
 		activeTypes = [...activeTypes, type];
 	}
 
-	function interleaveEntries(books: LibraryEntry[], articles: LibraryEntry[]) {
-		const mixed: LibraryEntry[] = [];
+	function interleaveEntries(books: LibraryShelfEntry[], articles: LibraryShelfEntry[]) {
+		const mixed: LibraryShelfEntry[] = [];
 		const maxLength = Math.max(books.length, articles.length);
 
 		for (let index = 0; index < maxLength; index += 1) {
