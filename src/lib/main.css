@@ -69,6 +69,12 @@
 	--space-6: 3rem;
 	--space-7: 4.5rem;
 
+	--rich-text-flow-space: var(--space-3);
+	--rich-text-flow-space-tight: var(--space-1);
+	--rich-text-list-indent: 1.25rem;
+	--rich-text-subheading-color: var(--color-accent-1);
+	--rich-text-emphasis-weight: var(--font-weight-medium);
+
 	--elevation-none: none;
 	--elevation-soft: 0 12px 24px -18px rgba(42, 42, 42, 0.45);
 
@@ -163,6 +169,39 @@ body {
 	font-weight: 400;
 	font-size: 1rem;
 	line-height: 1.7;
+}
+
+.content-flow {
+	display: grid;
+	gap: var(--rich-text-flow-space);
+}
+
+.content-flow :where(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, hr, picture) {
+	margin: 0;
+}
+
+.content-flow :where(h3) {
+	color: var(--rich-text-subheading-color);
+}
+
+.content-flow :where(h3 + p) {
+	font-weight: var(--rich-text-emphasis-weight);
+}
+
+.content-flow :where(ul, ol) {
+	padding-left: var(--rich-text-list-indent);
+}
+
+.content-flow :where(li + li) {
+	margin-top: var(--rich-text-flow-space-tight);
+}
+
+.content-flow :where(li > p) {
+	margin: 0;
+}
+
+.content-flow :where(li > ul, li > ol) {
+	margin-top: var(--rich-text-flow-space-tight);
 }
 
 img {
