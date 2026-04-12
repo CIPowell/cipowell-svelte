@@ -278,7 +278,9 @@ class Contentful implements NavClient, PageClient {
 		return value?.['en-US'] ?? [];
 	}
 
-	private getDateFieldValue(value: string | Record<string, string | undefined> | undefined): string {
+	private getDateFieldValue(
+		value: string | Record<string, string | undefined> | undefined
+	): string {
 		if (value === undefined) {
 			return '';
 		}
@@ -315,8 +317,7 @@ class Contentful implements NavClient, PageClient {
 		if (fileField && 'url' in fileField) {
 			url = (fileField as { url?: string }).url ?? '';
 		} else if (fileField) {
-			url =
-				(fileField as Record<string, { url?: string } | undefined>)['en-US']?.url ?? '';
+			url = (fileField as Record<string, { url?: string } | undefined>)['en-US']?.url ?? '';
 		}
 
 		if (!url) {
@@ -345,9 +346,9 @@ class Contentful implements NavClient, PageClient {
 			publicationDate: this.getDateFieldValue(entry.fields.publicationDate),
 			externalUrl: this.getSymbolFieldValue(entry.fields.externalUrl),
 			topics: this.getTagFieldValues(entry.fields.topics),
-			readingStatus: this.getSymbolFieldValue(
-				entry.fields.readingStatus
-			) as LibraryReadingStatus | '',
+			readingStatus: this.getSymbolFieldValue(entry.fields.readingStatus) as
+				| LibraryReadingStatus
+				| '',
 			startedOn: this.getDateFieldValue(entry.fields.startedOn),
 			finishedOn: this.getDateFieldValue(entry.fields.finishedOn),
 			rating: this.getIntegerFieldValue(entry.fields.rating),

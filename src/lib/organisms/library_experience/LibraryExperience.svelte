@@ -1,4 +1,4 @@
-	<script lang="ts">
+<script lang="ts">
 	import Container from '$lib/atoms/container/Container.svelte';
 	import LibraryShelf from '$lib/organisms/library_shelf/LibraryShelf.svelte';
 	import type { LibraryEntryType, LibraryShelfEntry } from '$lib/services/library/library';

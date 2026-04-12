@@ -399,8 +399,7 @@ describe('Contentful library queries', () => {
 						format: 'book',
 						creatorText: 'Will Larson',
 						summary: 'A management book for scaling engineering teams.',
-						recommendationNote:
-							'Useful whenever I need to reset how I think about org design.',
+						recommendationNote: 'Useful whenever I need to reset how I think about org design.',
 						miniReview: 'Practical and opinionated in the right places.',
 						publicationTitle: '',
 						publicationDate: '2019-03-01',
@@ -434,8 +433,7 @@ describe('Contentful library queries', () => {
 				format: 'book',
 				creatorText: 'Will Larson',
 				summary: 'A management book for scaling engineering teams.',
-				recommendationNote:
-					'Useful whenever I need to reset how I think about org design.',
+				recommendationNote: 'Useful whenever I need to reset how I think about org design.',
 				miniReview: 'Practical and opinionated in the right places.',
 				publicationTitle: '',
 				publicationDate: '2019-03-01',

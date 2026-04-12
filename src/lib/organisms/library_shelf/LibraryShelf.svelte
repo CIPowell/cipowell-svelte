@@ -1,4 +1,4 @@
-	<script lang="ts">
+<script lang="ts">
 	import BookOpenText from '@lucide/svelte/icons/book-open-text';
 	import Newspaper from '@lucide/svelte/icons/newspaper';
 	import type { LibraryShelfEntry } from '$lib/services/library/library';
