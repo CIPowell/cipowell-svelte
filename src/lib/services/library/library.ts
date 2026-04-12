@@ -67,7 +67,7 @@ function cloneTopics(topics: string[]): string[] {
 	return [...topics];
 }
 
-export function formatLibraryReadingStatus(value: LibraryReadingStatus | ''): string {
+function formatLibraryReadingStatus(value: LibraryReadingStatus | ''): string {
 	if (!value) {
 		return '';
 	}
@@ -107,7 +107,7 @@ function countEntries(entries: LibraryShelfEntry[]): LibraryPageData['counts'] {
 	};
 }
 
-export function getLibraryEntryDetail(
+function getLibraryEntryDetail(
 	entry: Pick<
 		LibraryEntryPreview,
 		'format' | 'publicationTitle' | 'publicationDate' | 'readingStatus'
@@ -129,7 +129,7 @@ export function getLibraryEntryDetail(
 	);
 }
 
-export function mapLibraryPreviewToShelfEntry(entry: LibraryEntryPreview): LibraryShelfEntry {
+function mapLibraryPreviewToShelfEntry(entry: LibraryEntryPreview): LibraryShelfEntry {
 	return {
 		id: entry.slug,
 		title: entry.title,
