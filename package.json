@@ -52,7 +52,7 @@
 		"@vitest/browser-playwright": "^4.1.4",
 		"@vitest/coverage-v8": "^4.1.2",
 		"@vitest/ui": "^4.1.2",
-		"eslint": "^10.2.0",
+		"eslint": "^10.2.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-storybook": "^10.3.5",
 		"eslint-plugin-svelte": "^3.17.0",
