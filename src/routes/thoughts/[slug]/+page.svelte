@@ -2,6 +2,8 @@
 	import { invalidateAll } from '$app/navigation';
 	import Container from '$lib/atoms/container/Container.svelte';
 	import ContentfulRichText from '$lib/organisms/rich_text/ContentfulRichText.svelte';
+	import OpenGraphHead from '$lib/services/seo/OpenGraphHead.svelte';
+	import { buildOpenGraphMetadata } from '$lib/services/seo/open-graph';
 	import { ContentfulLivePreview } from '@contentful/live-preview';
 	import { onMount } from 'svelte';
 
@@ -9,6 +11,12 @@
 		data: {
 			title: string;
 			slug: string;
+			description: string;
+			socialImage: {
+				url: string;
+				title: string;
+				description: string;
+			} | null;
 			body: { nodeType: string; content: unknown[] } | null;
 			tags: string[];
 			contentfulMetadata: {
@@ -23,6 +31,16 @@
 
 	let { data }: Props = $props();
 	const postBody = $derived(data.body);
+	const metadata = $derived(
+		buildOpenGraphMetadata({
+			title: data.title,
+			description: data.description,
+			path: `/thoughts/${data.slug}`,
+			type: 'article',
+			imageUrl: data.socialImage?.url,
+			imageAlt: data.socialImage?.description || data.socialImage?.title || data.title
+		})
+	);
 
 	onMount(() => {
 		if (!data.livePreview.enabled) {
@@ -67,9 +85,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Chris I Powell - {data.title}</title>
-</svelte:head>
+<OpenGraphHead {metadata} />
 
 <main class="thought-post">
 	<Container maxWidth="narrow">

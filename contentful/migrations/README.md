@@ -44,6 +44,7 @@ It updates the existing fields to match the current expected shape:
 
 - `title` (`Symbol`, required, unique)
 - `slug` (`Symbol`, required, unique)
+- `description` (`Text`, optional, max 300 characters; used for page descriptions and Open Graph previews)
 - `body` (`RichText`, optional)
 - `video` (`Object`, optional)
 - `tags` (`Array` of `Symbol`, optional, max 5)

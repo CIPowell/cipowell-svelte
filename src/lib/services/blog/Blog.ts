@@ -19,6 +19,12 @@ export interface BlogPostPreview {
 export interface BlogPost {
 	title: string;
 	slug: string;
+	description: string;
+	socialImage: {
+		url: string;
+		title: string;
+		description: string;
+	} | null;
 	body: { nodeType: string; content: unknown[] } | null;
 	tags: string[];
 	contentfulMetadata: {

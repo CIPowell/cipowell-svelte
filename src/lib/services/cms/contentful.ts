@@ -25,6 +25,7 @@ export interface SitemapContentEntry {
 
 type RichTextNode = {
 	nodeType?: string;
+	value?: string;
 	data?: {
 		target?: {
 			sys?: {
@@ -36,6 +37,7 @@ type RichTextNode = {
 			};
 			fields?: {
 				title?: string;
+				subtitle?: string;
 				subjectTag?: string;
 				items?: Array<{ fields?: Record<string, string> }>;
 			};
@@ -156,6 +158,10 @@ class Contentful implements NavClient, PageClient {
 				return {
 					title: page.fields.title as string,
 					slug: page.fields.slug as string,
+					description: this.truncateDescription(
+						this.getRichTextPlainText(page.fields.content as RichTextNode | null | undefined),
+						160
+					),
 					content: page.fields.content ?? null,
 					breadcrumbs,
 					contentfulMetadata: {
@@ -331,6 +337,64 @@ class Contentful implements NavClient, PageClient {
 		};
 	}
 
+	private getRichTextPlainText(content: RichTextNode | null | undefined): string {
+		if (!content) {
+			return '';
+		}
+
+		const parts: string[] = [];
+
+		const walk = (node: RichTextNode) => {
+			if (node.nodeType === 'text' && node.value) {
+				parts.push(node.value);
+			}
+
+			const target = node.data?.target;
+			if (node.nodeType === 'embedded-entry-block' && target?.fields?.subtitle) {
+				parts.push(target.fields.subtitle);
+			}
+
+			for (const child of node.content ?? []) {
+				walk(child);
+			}
+		};
+
+		walk(content);
+		return parts.join(' ').replace(/\s+/g, ' ').trim();
+	}
+
+	private truncateDescription(value: string, maxLength: number): string {
+		const normalized = value.replace(/\s+/g, ' ').trim();
+
+		if (normalized.length <= maxLength) {
+			return normalized;
+		}
+
+		return `${normalized.slice(0, maxLength).trimEnd()}...`;
+	}
+
+	private getFirstRichTextAssetImage(
+		content: RichTextNode | null | undefined
+	): LibraryImage | null {
+		if (!content) {
+			return null;
+		}
+
+		if (content.nodeType === 'embedded-asset-block') {
+			return this.getAssetImage(content.data?.target);
+		}
+
+		for (const child of content.content ?? []) {
+			const image = this.getFirstRichTextAssetImage(child);
+
+			if (image) {
+				return image;
+			}
+		}
+
+		return null;
+	}
+
 	private mapLibraryEntryPreview(
 		entry: contentful.Entry<ContentfulLibraryEntry>
 	): LibraryEntryPreview {
@@ -497,12 +561,18 @@ class Contentful implements NavClient, PageClient {
 		}
 
 		const post = entries.items[0];
+		const body = (post.fields.body as RichTextDocument | null | undefined) ?? null;
+		const explicitDescription = this.getSymbolFieldValue(post.fields.description);
+		const derivedDescription = this.getRichTextPlainText(body as RichTextNode | null | undefined);
 
 		return {
 			title: this.getSymbolFieldValue(post.fields.title),
 			slug: this.getSymbolFieldValue(post.fields.slug),
-			body:
-				(post.fields.body as { nodeType: string; content: unknown[] } | null | undefined) ?? null,
+			description: explicitDescription
+				? this.truncateDescription(explicitDescription, 160)
+				: this.truncateDescription(derivedDescription, 100),
+			socialImage: this.getFirstRichTextAssetImage(body as RichTextNode | null | undefined),
+			body,
 			tags: this.getTagFieldValues(post.fields.tags),
 			contentfulMetadata: {
 				entryId: post.sys.id,

@@ -1,11 +1,20 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import ContentfulRichText from '$lib/organisms/rich_text/ContentfulRichText.svelte';
+	import OpenGraphHead from '$lib/services/seo/OpenGraphHead.svelte';
+	import { DEFAULT_SITE_DESCRIPTION, buildOpenGraphMetadata } from '$lib/services/seo/open-graph';
 	import { ContentfulLivePreview } from '@contentful/live-preview';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	let pageContent = $derived(data.content);
+	const metadata = $derived(
+		buildOpenGraphMetadata({
+			title: data.title,
+			description: data.description || DEFAULT_SITE_DESCRIPTION,
+			path: data.slug
+		})
+	);
 
 	onMount(() => {
 		if (!data.livePreview.enabled) {
@@ -50,9 +59,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Chris I Powell - {data.title}</title>
-</svelte:head>
+<OpenGraphHead {metadata} />
 
 <main
 	data-contentful-entry-id={data.contentfulMetadata.entryId}

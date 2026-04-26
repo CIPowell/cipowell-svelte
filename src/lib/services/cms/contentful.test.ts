@@ -200,6 +200,8 @@ describe('Contentful blog queries', () => {
 		await expect(cms.getBlogPost('a-thoughtful-post')).resolves.toEqual({
 			title: 'A thoughtful post',
 			slug: 'a-thoughtful-post',
+			description: '',
+			socialImage: null,
 			body: { nodeType: 'document', content: [] },
 			tags: ['leadership', 'culture'],
 			contentfulMetadata: {
@@ -217,6 +219,66 @@ describe('Contentful blog queries', () => {
 			'fields.slug': 'a-thoughtful-post',
 			include: 10,
 			limit: 1
+		});
+	});
+
+	test('derives blog post metadata from description, body, and embedded images', async () => {
+		getEntriesMock.mockResolvedValueOnce({
+			items: [
+				{
+					sys: { id: 'post-2', locale: 'en-US' },
+					fields: {
+						title: 'A visual post',
+						slug: 'a-visual-post',
+						description: '',
+						body: {
+							nodeType: 'document',
+							content: [
+								{
+									nodeType: 'paragraph',
+									content: [
+										{
+											nodeType: 'text',
+											value:
+												'This first paragraph is long enough to become a concise fallback description for the shared link preview.'
+										}
+									]
+								},
+								{
+									nodeType: 'embedded-asset-block',
+									data: {
+										target: {
+											fields: {
+												title: 'Workshop wall',
+												description: 'Sticky notes arranged on a workshop wall',
+												file: {
+													url: '//images.ctfassets.net/blog/workshop-wall.jpg'
+												}
+											}
+										}
+									}
+								}
+							]
+						},
+						tags: []
+					}
+				}
+			]
+		});
+
+		const { default: Contentful } = await import('./contentful');
+		const cms = new Contentful();
+
+		await expect(cms.getBlogPost('a-visual-post')).resolves.toMatchObject({
+			title: 'A visual post',
+			slug: 'a-visual-post',
+			description:
+				'This first paragraph is long enough to become a concise fallback description for the shared link pre...',
+			socialImage: {
+				url: 'https://images.ctfassets.net/blog/workshop-wall.jpg',
+				title: 'Workshop wall',
+				description: 'Sticky notes arranged on a workshop wall'
+			}
 		});
 	});
 

@@ -1,7 +1,7 @@
 import { ContentfulCache } from '$lib/services/cms/cache';
 import Contentful, { type SitemapContentEntry } from '$lib/services/cms/contentful';
 
-import { PRODUCTION_ORIGIN } from './robots';
+import { buildCanonicalUrl, normalizeCanonicalPath } from './canonical';
 
 const SITEMAP_CACHE_TTL = 60 * 60 * 24;
 export const SITEMAP_CACHE_CONTROL = `public, max-age=0, s-maxage=${SITEMAP_CACHE_TTL}`;
@@ -57,32 +57,6 @@ function normalizeLastmod(value: string): string {
 	return lastModified.toISOString();
 }
 
-export function normalizeCanonicalPath(value: string): string | null {
-	const trimmed = value.trim();
-
-	if (!trimmed) {
-		return null;
-	}
-
-	const withoutQuery = trimmed.split(/[?#]/, 1)[0];
-	if (!withoutQuery) {
-		return null;
-	}
-
-	if (withoutQuery === '/' || withoutQuery.toLowerCase() === 'home') {
-		return '/';
-	}
-
-	const withoutLeadingSlash = withoutQuery.replace(/^\/+/, '');
-	const normalized = withoutLeadingSlash.replace(/\/+$/, '');
-
-	if (!normalized) {
-		return '/';
-	}
-
-	return `/${normalized}`;
-}
-
 function buildBlogPostPath(slug: string): string | null {
 	const trimmed = slug.trim();
 
@@ -102,14 +76,6 @@ function buildBlogPostPath(slug: string): string | null {
 	}
 
 	return `/thoughts/${normalized}`;
-}
-
-function buildCanonicalUrl(path: string): string {
-	if (path === '/') {
-		return PRODUCTION_ORIGIN;
-	}
-
-	return `${PRODUCTION_ORIGIN}${path}`;
 }
 
 function mapStaticRoute(route: (typeof STATIC_SITEMAP_ROUTES)[number]): SitemapUrlEntry {
