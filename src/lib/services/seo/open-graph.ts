@@ -5,9 +5,9 @@ export const DEFAULT_SITE_DESCRIPTION =
 	'Product, design, and engineering leadership notes from Chris I Powell.';
 export const DEFAULT_SOCIAL_IMAGE_PATH = '/logo-cip.png';
 
-export type OpenGraphType = 'website' | 'article';
+type OpenGraphType = 'website' | 'article';
 
-export interface OpenGraphImage {
+interface OpenGraphImage {
 	url: string;
 	alt?: string;
 }
