@@ -202,6 +202,7 @@ Before handing a branch over for review or merge, run `npm run check`, `npm run 
 - SvelteKit is configured with Cloudflare adapter in `svelte.config.js`.
 - Worker config, compatibility date/flags, and preview env vars are defined in `wrangler.toml`.
 - Build artifacts are served from `.svelte-kit/cloudflare` per wrangler assets config.
+- `src/hooks.server.ts` blocks high-volume probe paths (`*.php`, `/wp-*`, and `/xmlrpc.php`) early in the request lifecycle with a low-information `404 Not Found` response, and emits sampled warning logs with request metadata for observability.
 - `src/routes/robots.txt/+server.ts` serves crawler guidance dynamically: only the canonical production origin `https://www.chrisipowell.co.uk` allows crawling and advertises the sitemap, while preview, branch, staging, and local origins return `Disallow: /`.
 - `src/routes/sitemap.xml/+server.ts` serves a canonical XML sitemap built from first-class public routes plus published Contentful pages and blog posts, with 24-hour edge-friendly caching. When a new public route or indexable content type launches, update `src/lib/services/seo/sitemap.ts` in the same change so it stays discoverable.
 
