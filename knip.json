@@ -7,7 +7,7 @@
 		"contentful/migrations/**/*.{js,cjs}"
 	],
 	"project": [
-		"src/**/*.{js,ts,svelte}",
+		"src/**/*",
 		"tests/**/*.{js,ts}",
 		".storybook/**/*.{js,ts}",
 		"scripts/**/*.{js,mjs,cjs,ts}",

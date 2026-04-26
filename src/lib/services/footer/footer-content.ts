@@ -1,9 +1,9 @@
-export interface FooterLink {
+interface FooterLink {
 	label: string;
 	href: string;
 }
 
-export interface FooterColumn {
+interface FooterColumn {
 	title: string;
 	links: FooterLink[];
 }
