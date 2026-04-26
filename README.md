@@ -119,7 +119,9 @@ Runs `svelte-kit sync` and `svelte-check`.
 npm run check:deps
 ```
 
-Runs `knip` to catch unused files, exports, and dependencies.
+Runs `knip` to catch unused files, exports, and dependencies. Svelte files are handled by
+Knip's Svelte compiler integration, so `knip.json` keeps the `src/**/*` source glob
+extensionless instead of listing `.svelte` explicitly.
 
 ### Linting and formatting
 
