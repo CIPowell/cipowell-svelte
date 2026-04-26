@@ -1,6 +1,8 @@
 <script lang="ts">
 	import ThreeColumnSection from '$lib/organisms/three_column_section/ThreeColumnSection.svelte';
 	import type { BlogPostPreview } from '$lib/services/blog/Blog';
+	import OpenGraphHead from '$lib/services/seo/OpenGraphHead.svelte';
+	import { buildOpenGraphMetadata } from '$lib/services/seo/open-graph';
 
 	interface Props {
 		data: {
@@ -22,15 +24,15 @@
 
 	const thoughtItems = $derived(mapPostItems(data.recentPosts));
 	const leadershipItems = $derived(mapPostItems(data.leadershipPosts));
+	const description = 'Short updates, ideas, and longer reflections from Chris I Powell.';
+	const metadata = buildOpenGraphMetadata({
+		title: 'Thoughts',
+		description,
+		path: '/thoughts'
+	});
 </script>
 
-<svelte:head>
-	<title>Chris I Powell - Thoughts</title>
-	<meta
-		name="description"
-		content="Short updates, ideas, and longer reflections from Chris I Powell."
-	/>
-</svelte:head>
+<OpenGraphHead {metadata} />
 
 <main class="thoughts-page">
 	<div class="thoughts-page__intro">

@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'vitest';
 
+import { normalizeCanonicalPath } from './canonical';
 import { PRODUCTION_ORIGIN } from './robots';
-import { buildSitemapUrls, buildSitemapXml, normalizeCanonicalPath } from './sitemap';
+import { buildSitemapUrls, buildSitemapXml } from './sitemap';
 
 describe('normalizeCanonicalPath', () => {
 	test('maps home slugs and trims extra delimiters', () => {

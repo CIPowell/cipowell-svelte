@@ -29,6 +29,7 @@ Component-scoped styles should live in colocated `*.module.css` files rather tha
 - **Service layer**: navigation/page clients are abstracted behind small interfaces in `src/lib/services/**`.
 - **Content source**: Contentful is the backing CMS for page content and nav links.
 - **Library route**: `src/routes/library/+page.svelte` renders a curated bookshelf-style library from local seed data in `src/lib/services/library/library.ts`.
+- **SEO metadata**: public routes use `src/lib/services/seo/open-graph.ts` and `OpenGraphHead.svelte` for canonical Open Graph tags. See `docs/seo.md` before adding new public pages or content types.
 - **Component library**: atoms/molecules/organisms live in `src/lib/**` with Storybook stories and docs.
 - **Cloudflare target**: adapter is `@sveltejs/adapter-cloudflare` and Worker config is in `wrangler.toml`.
 
@@ -207,6 +208,7 @@ Before handing a branch over for review or merge, run `npm run check`, `npm run 
 - `src/hooks.server.ts` blocks high-volume probe paths (`*.php`, `/wp-*`, and `/xmlrpc.php`) early in the request lifecycle with a low-information `404 Not Found` response, and emits sampled warning logs with request metadata for observability.
 - `src/routes/robots.txt/+server.ts` serves crawler guidance dynamically: only the canonical production origin `https://www.chrisipowell.co.uk` allows crawling and advertises the sitemap, while preview, branch, staging, and local origins return `Disallow: /`.
 - `src/routes/sitemap.xml/+server.ts` serves a canonical XML sitemap built from first-class public routes plus published Contentful pages and blog posts, with 24-hour edge-friendly caching. When a new public route or indexable content type launches, update `src/lib/services/seo/sitemap.ts` in the same change so it stays discoverable.
+- Open Graph metadata uses the same canonical production origin, strips query strings/trailing slashes, includes the `Chris I Powell` site name in titles, and defaults to `static/logo-cip.png` when a page-specific image is unavailable.
 
 ## GitHub automation
 

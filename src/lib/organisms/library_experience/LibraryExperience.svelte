@@ -2,6 +2,8 @@
 	import Container from '$lib/atoms/container/Container.svelte';
 	import LibraryShelf from '$lib/organisms/library_shelf/LibraryShelf.svelte';
 	import type { LibraryEntryType, LibraryShelfEntry } from '$lib/services/library/library';
+	import OpenGraphHead from '$lib/services/seo/OpenGraphHead.svelte';
+	import { buildOpenGraphMetadata } from '$lib/services/seo/open-graph';
 	import styles from './LibraryExperience.module.css';
 
 	interface Props {
@@ -16,6 +18,13 @@
 	let { entries, topics, counts }: Props = $props();
 	let activeTopic = $state('all');
 	let activeTypes = $state<LibraryEntryType[]>(['book', 'article']);
+	const description =
+		'A curated shelf of books and articles shaping how Chris I Powell leads teams, designs systems, and ships meaningful work.';
+	const metadata = buildOpenGraphMetadata({
+		title: 'Library',
+		description,
+		path: '/library'
+	});
 
 	function formatTopic(topic: string) {
 		return topic.replace(/\b\w/g, (character) => character.toUpperCase());
@@ -75,13 +84,7 @@
 	);
 </script>
 
-<svelte:head>
-	<title>Chris I Powell - Library</title>
-	<meta
-		name="description"
-		content="A curated shelf of books and articles shaping how Chris I Powell leads teams, designs systems, and ships meaningful work."
-	/>
-</svelte:head>
+<OpenGraphHead {metadata} />
 
 <main class={styles.libraryPage}>
 	<Container>

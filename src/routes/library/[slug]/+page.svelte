@@ -2,6 +2,8 @@
 	import { invalidateAll } from '$app/navigation';
 	import Container from '$lib/atoms/container/Container.svelte';
 	import ContentfulRichText from '$lib/organisms/rich_text/ContentfulRichText.svelte';
+	import OpenGraphHead from '$lib/services/seo/OpenGraphHead.svelte';
+	import { buildOpenGraphMetadata } from '$lib/services/seo/open-graph';
 	import { ContentfulLivePreview } from '@contentful/live-preview';
 	import { onMount } from 'svelte';
 
@@ -40,6 +42,15 @@
 
 	let { data }: Props = $props();
 	const notes = $derived(data.notes);
+	const metadata = $derived(
+		buildOpenGraphMetadata({
+			title: data.title,
+			description: data.summary,
+			path: `/library/${data.slug}`,
+			imageUrl: data.coverImage?.url,
+			imageAlt: data.coverImage?.description || data.coverImage?.title || data.title
+		})
+	);
 
 	function formatDate(value: string): string {
 		if (!value) {
@@ -107,9 +118,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Chris I Powell - {data.title}</title>
-</svelte:head>
+<OpenGraphHead {metadata} />
 
 <main class="library-entry-page">
 	<Container maxWidth="narrow">

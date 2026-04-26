@@ -15,6 +15,7 @@ export type ContentfulBlogPost = {
 	fields: {
 		slug: EntryFieldTypes.Symbol;
 		title: EntryFieldTypes.Symbol;
+		description: EntryFieldTypes.Text;
 		body: EntryFieldTypes.RichText;
 		tags: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
 	};
