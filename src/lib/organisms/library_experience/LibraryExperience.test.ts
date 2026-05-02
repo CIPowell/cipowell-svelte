@@ -8,10 +8,9 @@ test('renders one mixed collection with both books and articles visible by defau
 
 	expect(
 		screen.getByRole('heading', {
-			name: 'A curated shelf of books and articles that keep the work honest.'
+			name: 'Books and articles that have helped me on my journey.'
 		})
 	).toBeTruthy();
-	expect(screen.getByRole('heading', { name: 'Reading now' })).toBeTruthy();
 	expect(screen.getByText('The Art of Gathering')).toBeTruthy();
 	expect(screen.getByText('Roadmaps, bets, and the cost of false certainty')).toBeTruthy();
 	expect(screen.getAllByLabelText('book recommendation').length).toBeGreaterThan(0);
