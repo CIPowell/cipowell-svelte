@@ -92,13 +92,11 @@
 			<section class={styles.hero} aria-labelledby="library-heading">
 				<div class={styles.heroCopy}>
 					<p class={styles.eyebrow}>Library</p>
-					<h1 id="library-heading">
-						A curated shelf of books and articles that keep the work honest.
-					</h1>
+					<h1 id="library-heading">Books and articles that have helped me on my journey.</h1>
 					<p class={styles.intro}>
-						A working collection for leadership, delivery, design systems, and strategy. Books and
-						articles sit together in one reading grid, with filters to narrow by topic or content
-						type when you need a sharper view.
+						This is the collection of books, articles, blog posts etc that have helped, inspired and
+						informed me over the years. This will grow, some are older. I'll be adding new things,
+						as well as things from earlier in my career as we go.
 					</p>
 				</div>
 
@@ -183,15 +181,7 @@
 			</section>
 
 			{#if filteredEntries.length}
-				<section class={styles.collection} aria-labelledby="library-collection-heading">
-					<div class={styles.collectionHeader}>
-						<h2 id="library-collection-heading">Reading now</h2>
-						<p>
-							Every card shares the same grid, so books and articles can sit together when both are
-							active.
-						</p>
-					</div>
-
+				<section class={styles.collection}>
 					<LibraryShelf items={mixedEntries} />
 				</section>
 			{:else}
