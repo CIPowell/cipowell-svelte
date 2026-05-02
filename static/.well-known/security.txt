@@ -1,4 +1,4 @@
-Contact: mailto:hello@cipowell.com
+Contact: mailto:security@chrisipowell.co.uk
 Expires: 2027-05-02T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://www.chrisipowell.co.uk/.well-known/security.txt
