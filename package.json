@@ -96,7 +96,7 @@
 	"type": "module",
 	"dependencies": {
 		"@contentful/live-preview": "^4.10.2",
-		"@lucide/svelte": "^1.11.0",
+		"@lucide/svelte": "^1.14.0",
 		"contentful": "^11.12.1"
 	}
 }
