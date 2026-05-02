@@ -183,10 +183,16 @@ describe('Contentful blog queries', () => {
 		getEntriesMock.mockResolvedValueOnce({
 			items: [
 				{
-					sys: { id: 'post-1', locale: 'en-US' },
+					sys: {
+						id: 'post-1',
+						locale: 'en-US',
+						createdAt: '2026-04-01T08:30:00.000Z',
+						updatedAt: '2026-04-02T09:45:00.000Z'
+					},
 					fields: {
 						title: 'A thoughtful post',
 						slug: 'a-thoughtful-post',
+						description: 'A carefully written post summary.',
 						body: { nodeType: 'document', content: [] },
 						tags: ['leadership', 'culture']
 					}
@@ -200,10 +206,12 @@ describe('Contentful blog queries', () => {
 		await expect(cms.getBlogPost('a-thoughtful-post')).resolves.toEqual({
 			title: 'A thoughtful post',
 			slug: 'a-thoughtful-post',
-			description: '',
+			description: 'A carefully written post summary.',
 			socialImage: null,
 			body: { nodeType: 'document', content: [] },
 			tags: ['leadership', 'culture'],
+			published: '2026-04-01T08:30:00.000Z',
+			lastUpdated: '2026-04-02T09:45:00.000Z',
 			contentfulMetadata: {
 				entryId: 'post-1',
 				locale: 'en-US',
@@ -226,7 +234,12 @@ describe('Contentful blog queries', () => {
 		getEntriesMock.mockResolvedValueOnce({
 			items: [
 				{
-					sys: { id: 'post-2', locale: 'en-US' },
+					sys: {
+						id: 'post-2',
+						locale: 'en-US',
+						createdAt: '2026-04-03T10:15:00.000Z',
+						updatedAt: '2026-04-04T11:00:00.000Z'
+					},
 					fields: {
 						title: 'A visual post',
 						slug: 'a-visual-post',
@@ -278,7 +291,9 @@ describe('Contentful blog queries', () => {
 				url: 'https://images.ctfassets.net/blog/workshop-wall.jpg',
 				title: 'Workshop wall',
 				description: 'Sticky notes arranged on a workshop wall'
-			}
+			},
+			published: '2026-04-03T10:15:00.000Z',
+			lastUpdated: '2026-04-04T11:00:00.000Z'
 		});
 	});
 

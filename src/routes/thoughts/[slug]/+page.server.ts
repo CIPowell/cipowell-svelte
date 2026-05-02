@@ -1,5 +1,6 @@
 import type { BlogPost } from '$lib/services/blog/Blog';
 import Contentful from '$lib/services/cms/contentful';
+import { buildArticleStructuredData, serializeJsonLd } from '$lib/services/seo/structured-data';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params, platform, url }) {
@@ -16,5 +17,8 @@ export async function load({ params, platform, url }) {
 		});
 	}
 
-	return post;
+	return {
+		...post,
+		articleStructuredDataJson: serializeJsonLd(buildArticleStructuredData(post))
+	};
 }

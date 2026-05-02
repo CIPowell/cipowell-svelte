@@ -2,6 +2,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import Container from '$lib/atoms/container/Container.svelte';
 	import ContentfulRichText from '$lib/organisms/rich_text/ContentfulRichText.svelte';
+	import JsonLd from '$lib/services/seo/JsonLd.svelte';
 	import OpenGraphHead from '$lib/services/seo/OpenGraphHead.svelte';
 	import { buildOpenGraphMetadata } from '$lib/services/seo/open-graph';
 	import { ContentfulLivePreview } from '@contentful/live-preview';
@@ -19,6 +20,9 @@
 			} | null;
 			body: { nodeType: string; content: unknown[] } | null;
 			tags: string[];
+			published: string;
+			lastUpdated: string;
+			articleStructuredDataJson: string;
 			contentfulMetadata: {
 				entryId: string;
 				locale: string;
@@ -86,6 +90,8 @@
 </script>
 
 <OpenGraphHead {metadata} />
+
+<JsonLd json={data.articleStructuredDataJson} />
 
 <main class="thought-post">
 	<Container maxWidth="narrow">

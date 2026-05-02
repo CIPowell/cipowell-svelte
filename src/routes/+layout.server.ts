@@ -1,11 +1,17 @@
 import { NavigationService, getOrderedNavLinks, type NavLink } from '$lib/services/navigation/nav';
 import { DEFAULT_SITE_FOOTER, type SiteFooterContent } from '$lib/services/footer/footer-content';
 import { FooterService } from '$lib/services/footer/footer.server';
+import {
+	buildSameAsUrls,
+	buildSiteStructuredData,
+	serializeJsonLd
+} from '$lib/services/seo/structured-data';
 
 interface LayoutData {
 	navLinks: NavLink[];
 	footer: SiteFooterContent;
 	preview: boolean;
+	siteStructuredDataJson: string;
 }
 
 export async function load({ platform, url }) {
@@ -13,7 +19,8 @@ export async function load({ platform, url }) {
 	const layoutData: LayoutData = {
 		navLinks: [],
 		footer: DEFAULT_SITE_FOOTER,
-		preview
+		preview,
+		siteStructuredDataJson: ''
 	};
 
 	try {
@@ -31,6 +38,10 @@ export async function load({ platform, url }) {
 	}
 
 	console.log(`Loaded ${url} preview mode is ${preview}`);
+
+	layoutData.siteStructuredDataJson = serializeJsonLd(
+		buildSiteStructuredData(buildSameAsUrls(layoutData.footer.connect.links))
+	);
 
 	return layoutData;
 }

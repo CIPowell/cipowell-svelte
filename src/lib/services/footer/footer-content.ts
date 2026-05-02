@@ -39,8 +39,8 @@ export const DEFAULT_SITE_FOOTER: SiteFooterContent = {
 	connect: {
 		title: 'Connect',
 		links: [
-			{ label: 'LinkedIn', href: 'https://linkedin.com' },
-			{ label: 'GitHub', href: 'https://github.com' },
+			{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/chris-i-powell/' },
+			{ label: 'GitHub', href: 'https://github.com/CIPowell' },
 			{ label: 'Email', href: 'mailto:hello@cipowell.com' }
 		]
 	},
