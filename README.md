@@ -49,11 +49,11 @@ Component-scoped styles should live in colocated `*.module.css` files rather tha
 
 Optional local security tooling for `npm run security:*`:
 
-- `osv-scanner`
+- `osv-scanner` `v2.3.5`
 - `gitleaks`
 - `semgrep`
 
-CI installs those tools automatically. For local use, install them with your preferred package manager before running the security scripts.
+CI installs those tools automatically. OSV-Scanner is pinned to `v2.3.5` in CI because newer source installs can break on upstream module metadata. For local use, install the same version or use your preferred package manager before running the security scripts.
 
 ## Setup
 
