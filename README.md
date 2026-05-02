@@ -33,6 +33,13 @@ Component-scoped styles should live in colocated `*.module.css` files rather tha
 - **Component library**: atoms/molecules/organisms live in `src/lib/**` with Storybook stories and docs.
 - **Cloudflare target**: adapter is `@sveltejs/adapter-cloudflare` and Worker config is in `wrangler.toml`.
 
+### SEO and structured data
+
+- `src/lib/services/seo/structured-data.ts` builds JSON-LD for the personal brand, site, and blog posts.
+- The app shell emits `WebSite` and `Person` schema on public pages.
+- Blog posts at `/thoughts/[slug]` emit `Article` schema using Contentful title, description/body fallback, tags, and publish/update timestamps.
+- When a new indexable route or content type launches, update structured data and the sitemap together. See `docs/structured-data.md`.
+
 ## Prerequisites
 
 - Node.js 24.14.1

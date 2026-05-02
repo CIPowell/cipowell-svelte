@@ -574,6 +574,8 @@ class Contentful implements NavClient, PageClient {
 			socialImage: this.getFirstRichTextAssetImage(body as RichTextNode | null | undefined),
 			body,
 			tags: this.getTagFieldValues(post.fields.tags),
+			published: post.sys.createdAt ?? post.sys.updatedAt ?? new Date(0).toISOString(),
+			lastUpdated: post.sys.updatedAt ?? post.sys.createdAt ?? new Date(0).toISOString(),
 			contentfulMetadata: {
 				entryId: post.sys.id,
 				locale: post.sys.locale || 'en-US',

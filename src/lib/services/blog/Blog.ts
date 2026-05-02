@@ -27,6 +27,8 @@ export interface BlogPost {
 	} | null;
 	body: { nodeType: string; content: unknown[] } | null;
 	tags: string[];
+	published: string;
+	lastUpdated: string;
 	contentfulMetadata: {
 		entryId: string;
 		locale: string;

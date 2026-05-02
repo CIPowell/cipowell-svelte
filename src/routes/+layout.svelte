@@ -3,12 +3,15 @@
 	import Nav from '$lib/molecules/nav/Nav.svelte';
 	import SiteFooter from '$lib/organisms/site_footer/SiteFooter.svelte';
 	import LivePreviewBootstrap from '$lib/services/cms/LivePreviewBootstrap.svelte';
+	import JsonLd from '$lib/services/seo/JsonLd.svelte';
 
 	import '$lib/main.css';
 
 	let { data, children } = $props();
 	const footer = $derived(data.footer);
 </script>
+
+<JsonLd json={data.siteStructuredDataJson} />
 
 {#if data.preview}
 	<LivePreviewBootstrap locale="en-US" />
