@@ -219,6 +219,7 @@ Before handing a branch over for review or merge, run `npm run check`, `npm run 
 
 ## GitHub automation
 
+- `.github/dependabot.yml` checks npm packages and GitHub Actions weekly, opening dependency PRs with `chore(deps)` commits.
 - `.github/workflows/ci.yml` runs the OSS validation pipeline on pull requests and pushes to `main`.
 - `.github/workflows/security.yml` runs a scheduled weekly security scan and supports manual dispatch.
 - `.github/workflows/contentful-migrations.yml` validates and applies Contentful migrations, and now follows the same Node runtime baseline as the rest of the repo.
