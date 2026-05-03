@@ -12,6 +12,16 @@ export interface LibraryImage {
 	description: string;
 }
 
+interface LibraryContentfulMetadata {
+	entryId: string;
+	locale: string;
+	environment: string;
+}
+
+export interface LibraryLivePreviewState {
+	enabled: boolean;
+}
+
 export interface LibraryEntryPreview {
 	title: string;
 	slug: string;
@@ -29,18 +39,14 @@ export interface LibraryEntryPreview {
 	finishedOn: string;
 	rating: number | null;
 	coverImage: LibraryImage | null;
+	contentfulMetadata?: LibraryContentfulMetadata;
+	livePreview?: LibraryLivePreviewState;
 }
 
 export interface LibraryEntry extends LibraryEntryPreview {
 	notes: RichTextDocument | null;
-	contentfulMetadata: {
-		entryId: string;
-		locale: string;
-		environment: string;
-	};
-	livePreview: {
-		enabled: boolean;
-	};
+	contentfulMetadata: LibraryContentfulMetadata;
+	livePreview: LibraryLivePreviewState;
 }
 
 export interface LibraryShelfEntry {
@@ -52,6 +58,7 @@ export interface LibraryShelfEntry {
 	topics: string[];
 	detail: string;
 	href: string;
+	contentfulMetadata?: LibraryContentfulMetadata;
 }
 
 export interface LibraryPageData {
@@ -61,6 +68,7 @@ export interface LibraryPageData {
 		books: number;
 		articles: number;
 	};
+	livePreview: LibraryLivePreviewState;
 }
 
 function cloneTopics(topics: string[]): string[] {
@@ -138,7 +146,8 @@ function mapLibraryPreviewToShelfEntry(entry: LibraryEntryPreview): LibraryShelf
 		type: entry.format,
 		topics: cloneTopics(entry.topics),
 		detail: getLibraryEntryDetail(entry),
-		href: `/library/${entry.slug}`
+		href: `/library/${entry.slug}`,
+		contentfulMetadata: entry.contentfulMetadata
 	};
 }
 
@@ -148,7 +157,10 @@ export function createLibraryPageData(previewEntries: LibraryEntryPreview[]): Li
 	return {
 		entries,
 		topics: getLibraryTopics(entries),
-		counts: countEntries(entries)
+		counts: countEntries(entries),
+		livePreview: {
+			enabled: previewEntries.some((entry) => entry.livePreview?.enabled)
+		}
 	};
 }
 
@@ -256,6 +268,45 @@ export function getLibraryPageData(): LibraryPageData {
 	return {
 		entries,
 		topics: getLibraryTopics(entries),
-		counts: countEntries(entries)
+		counts: countEntries(entries),
+		livePreview: {
+			enabled: false
+		}
+	};
+}
+
+export function getLibraryEntryData(slug: string): LibraryEntry {
+	const entry = getSeedLibraryEntries().find((item) => item.id === slug);
+
+	if (!entry) {
+		throw new Error(`Library entry not found: ${slug}`);
+	}
+
+	return {
+		title: entry.title,
+		slug: entry.id,
+		format: entry.type,
+		creatorText: entry.creator,
+		summary: entry.summary,
+		recommendationNote: entry.summary,
+		miniReview: '',
+		publicationTitle: entry.type === 'article' ? entry.creator : '',
+		publicationDate: '',
+		externalUrl: '',
+		topics: cloneTopics(entry.topics),
+		readingStatus: '',
+		startedOn: '',
+		finishedOn: '',
+		rating: null,
+		coverImage: null,
+		notes: null,
+		contentfulMetadata: {
+			entryId: entry.id,
+			locale: 'en-US',
+			environment: 'local'
+		},
+		livePreview: {
+			enabled: false
+		}
 	};
 }

@@ -52,7 +52,7 @@ That makes Library adjacent to Thoughts, but not a sub-section of it. Thoughts i
 
 ### Launch grouping
 
-At launch, the landing page should surface separate `Books` and `Articles` sections within `/library`, rather than creating separate top-level collection routes immediately.
+At launch, the landing page should surface one mixed collection that can be filtered by `Books`, `Articles`, and topic, rather than creating separate top-level collection routes immediately.
 
 ### Future-safe extensions
 

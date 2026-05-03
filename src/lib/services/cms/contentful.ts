@@ -416,7 +416,15 @@ class Contentful implements NavClient, PageClient {
 			startedOn: this.getDateFieldValue(entry.fields.startedOn),
 			finishedOn: this.getDateFieldValue(entry.fields.finishedOn),
 			rating: this.getIntegerFieldValue(entry.fields.rating),
-			coverImage: this.getAssetImage(entry.fields.coverOrThumbnail)
+			coverImage: this.getAssetImage(entry.fields.coverOrThumbnail),
+			contentfulMetadata: {
+				entryId: entry.sys.id,
+				locale: entry.sys.locale || 'en-US',
+				environment: this.contentfulEnvironment
+			},
+			livePreview: {
+				enabled: this.previewEnabled
+			}
 		};
 	}
 

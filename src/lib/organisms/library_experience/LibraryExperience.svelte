@@ -1,9 +1,16 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import Container from '$lib/atoms/container/Container.svelte';
 	import LibraryShelf from '$lib/organisms/library_shelf/LibraryShelf.svelte';
-	import type { LibraryEntryType, LibraryShelfEntry } from '$lib/services/library/library';
+	import type {
+		LibraryEntryType,
+		LibraryLivePreviewState,
+		LibraryShelfEntry
+	} from '$lib/services/library/library';
 	import OpenGraphHead from '$lib/services/seo/OpenGraphHead.svelte';
 	import { buildOpenGraphMetadata } from '$lib/services/seo/open-graph';
+	import { ContentfulLivePreview } from '@contentful/live-preview';
+	import { onMount } from 'svelte';
 	import styles from './LibraryExperience.module.css';
 
 	interface Props {
@@ -13,9 +20,10 @@
 			books: number;
 			articles: number;
 		};
+		livePreview: LibraryLivePreviewState;
 	}
 
-	let { entries, topics, counts }: Props = $props();
+	let { entries, topics, counts, livePreview }: Props = $props();
 	let activeTopic = $state('all');
 	let activeTypes = $state<LibraryEntryType[]>(['book', 'article']);
 	const description =
@@ -82,6 +90,48 @@
 	const resultSummary = $derived(
 		`${filteredEntries.length} pick${filteredEntries.length === 1 ? '' : 's'} showing ${filteredBooks.length} book${filteredBooks.length === 1 ? '' : 's'} and ${filteredArticles.length} article${filteredArticles.length === 1 ? '' : 's'}`
 	);
+
+	onMount(() => {
+		if (!livePreview.enabled) {
+			return;
+		}
+
+		let unsubscribe: (() => void) | undefined;
+		let cancelled = false;
+		let refreshInFlight = false;
+
+		const subscribeAfterInit = async () => {
+			while (!ContentfulLivePreview.initialized && !cancelled) {
+				await new Promise((resolve) => setTimeout(resolve, 50));
+			}
+
+			if (cancelled) {
+				return;
+			}
+
+			unsubscribe = ContentfulLivePreview.subscribe('save', {
+				callback: async () => {
+					if (refreshInFlight) {
+						return;
+					}
+
+					refreshInFlight = true;
+					try {
+						await invalidateAll();
+					} finally {
+						refreshInFlight = false;
+					}
+				}
+			});
+		};
+
+		void subscribeAfterInit();
+
+		return () => {
+			cancelled = true;
+			unsubscribe?.();
+		};
+	});
 </script>
 
 <OpenGraphHead {metadata} />

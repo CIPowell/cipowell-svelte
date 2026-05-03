@@ -2,8 +2,8 @@
 	list-style: none;
 	display: grid;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
-	column-gap: var(--space-3);
-	row-gap: var(--space-4);
+	column-gap: var(--space-4);
+	row-gap: var(--space-5);
 	margin: 0;
 	padding: 0;
 }
@@ -15,7 +15,6 @@
 .card {
 	display: grid;
 	height: 100%;
-	border-top: 1px solid var(--color-library-card-border);
 	background: transparent;
 }
 
@@ -98,7 +97,7 @@
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
-	column-gap: 0.75rem;
+	column-gap: var(--space-1);
 	row-gap: 0.25rem;
 	margin: 0;
 	padding: 0;
@@ -108,31 +107,21 @@
 	color: var(--color-library-topic-text);
 	font-size: 0.85rem;
 	position: relative;
-	padding-left: 0.75rem;
 }
 
-.topics li::before {
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 50%;
-	inline-size: 0.3rem;
-	block-size: 0.3rem;
-	border-radius: 999px;
-	background: var(--color-library-topic-marker);
-	transform: translateY(-50%);
+.topics li + li::before {
+	content: '/';
+	margin-right: var(--space-1);
+	color: var(--color-library-meta-divider);
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
 	.card {
-		transition:
-			transform 180ms ease,
-			border-color 180ms ease;
+		transition: transform 180ms ease;
 	}
 
 	.card:hover {
 		transform: translateY(-0.15rem);
-		border-color: var(--color-library-card-border-strong);
 	}
 }
 

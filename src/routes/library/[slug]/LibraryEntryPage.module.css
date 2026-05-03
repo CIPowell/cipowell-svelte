@@ -1,0 +1,130 @@
+.page {
+	padding-block: var(--space-5) var(--space-7);
+}
+
+.entry {
+	display: grid;
+	gap: var(--space-5);
+}
+
+.backLink {
+	justify-self: start;
+	font-family: var(--font-heading);
+	font-weight: var(--font-weight-medium);
+}
+
+.hero {
+	display: grid;
+	gap: var(--space-4);
+	align-items: start;
+	padding-block: var(--space-2) var(--space-3);
+}
+
+.cover {
+	float: none;
+	width: 100%;
+	max-height: none;
+	margin: 0;
+	object-fit: cover;
+	aspect-ratio: 4 / 5;
+}
+
+.heroCopy,
+.section {
+	display: grid;
+	gap: var(--space-2);
+}
+
+.heroCopy {
+	align-content: start;
+	padding-block: var(--space-1);
+}
+
+.eyebrow,
+.sectionLabel {
+	margin: 0;
+	font-family: var(--font-heading);
+	font-weight: var(--font-weight-medium);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--color-library-type-label);
+}
+
+.heroCopy h1,
+.section p,
+.section :global(p),
+.section :global(li),
+.section :global(blockquote),
+.creator,
+.lead,
+.callout,
+.dates p {
+	margin: 0;
+}
+
+.creator,
+.lead,
+.callout,
+.dates p,
+.section :global(p),
+.section :global(li),
+.section :global(blockquote) {
+	font-size: var(--font-size-body-lg);
+	line-height: var(--line-height-body);
+}
+
+.creator {
+	color: var(--color-library-panel-muted);
+	font-weight: var(--font-weight-medium);
+}
+
+.callout {
+	padding-left: var(--space-2);
+	border-left: 3px solid var(--color-library-note-accent);
+	font-family: var(--font-heading);
+}
+
+.meta,
+.topics {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: var(--space-2);
+	row-gap: var(--space-1);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	color: var(--color-library-card-meta);
+}
+
+.topics {
+	color: var(--color-library-topic-text);
+}
+
+.meta li,
+.topics li {
+	display: inline-flex;
+	align-items: baseline;
+	gap: var(--space-1);
+}
+
+.meta li + li::before,
+.topics li + li::before {
+	content: '/';
+	color: var(--color-library-meta-divider);
+}
+
+.section {
+	max-inline-size: 44rem;
+}
+
+.notes :global(ul),
+.notes :global(ol) {
+	padding-left: var(--rich-text-list-indent);
+}
+
+@media (min-width: 48rem) {
+	.hero {
+		grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+		column-gap: var(--space-5);
+	}
+}

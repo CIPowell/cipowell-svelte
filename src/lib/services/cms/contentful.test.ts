@@ -470,6 +470,7 @@ describe('Contentful library queries', () => {
 		getEntriesMock.mockResolvedValueOnce({
 			items: [
 				{
+					sys: { id: 'library-preview-1', locale: 'en-US' },
 					fields: {
 						title: 'An Elegant Puzzle',
 						slug: 'an-elegant-puzzle',
@@ -524,6 +525,14 @@ describe('Contentful library queries', () => {
 					url: 'https://images.ctfassets.net/library/book-cover.jpg',
 					title: 'An Elegant Puzzle cover',
 					description: 'Book cover image'
+				},
+				contentfulMetadata: {
+					entryId: 'library-preview-1',
+					locale: 'en-US',
+					environment: 'master'
+				},
+				livePreview: {
+					enabled: false
 				}
 			}
 		]);

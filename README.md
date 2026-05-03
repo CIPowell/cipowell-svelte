@@ -28,7 +28,7 @@ Component-scoped styles should live in colocated `*.module.css` files rather tha
 - **SvelteKit app shell**: `+layout.svelte` renders `Header`, `Nav`, page content, and footer.
 - **Service layer**: navigation/page clients are abstracted behind small interfaces in `src/lib/services/**`.
 - **Content source**: Contentful is the backing CMS for page content and nav links.
-- **Library route**: `src/routes/library/+page.svelte` renders a curated bookshelf-style library from local seed data in `src/lib/services/library/library.ts`.
+- **Library route**: `src/routes/library/+page.svelte` renders a curated bookshelf-style library from Contentful `libraryEntry` content, with local seed data fallback when Contentful credentials are unavailable outside preview mode.
 - **SEO metadata**: public routes use `src/lib/services/seo/open-graph.ts` and `OpenGraphHead.svelte` for canonical Open Graph tags. See `docs/seo.md` before adding new public pages or content types.
 - **Component library**: atoms/molecules/organisms live in `src/lib/**` with Storybook stories and docs.
 - **Cloudflare target**: adapter is `@sveltejs/adapter-cloudflare` and Worker config is in `wrangler.toml`.
@@ -73,6 +73,8 @@ cp .env.example .env
 
 ```bash
 CONTENTFUL_API_KEY=<your_contentful_delivery_or_preview_token>
+# Optional, used for ?preview=true draft content:
+CONTENTFUL_PREVIEW_API_KEY=<your_contentful_preview_token>
 # Optional, defaults to cdn.contentful.com:
 CONTENTFUL_HOST=cdn.contentful.com
 # Optional, defaults to master:
@@ -81,11 +83,10 @@ CONTENTFUL_ENVIRONMENT=master
 
 > Notes:
 >
-> - Preview environment uses `preview.contentful.com` via `wrangler.toml`.
-> - Preview API mode now activates only when requests originate from Contentful Live Preview (Contentful app iframe context), not via URL query flags.
+> - Preview API mode activates with `?preview=true` and uses `preview.contentful.com`.
 > - If `CONTENTFUL_ENVIRONMENT` is not set, the app defaults Contentful environment to `master`.
-> - The Contentful Live Preview SDK is loaded only when the page is embedded in Contentful Live Preview.
-> - If `CONTENTFUL_API_KEY` is missing, server-side page and nav fetches will fail.
+> - The Contentful Live Preview SDK is loaded when `?preview=true` is present.
+> - If `CONTENTFUL_API_KEY` is missing, server-side Contentful page fetches fail; `/library` and `/library/[slug]` fall back to seed content outside preview mode so local UI work can continue.
 
 1. (Only needed once per machine) install Playwright browsers:
 

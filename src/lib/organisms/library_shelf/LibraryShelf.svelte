@@ -2,6 +2,7 @@
 	import BookOpenText from '@lucide/svelte/icons/book-open-text';
 	import Newspaper from '@lucide/svelte/icons/newspaper';
 	import type { LibraryShelfEntry } from '$lib/services/library/library';
+	import { ContentfulLivePreview } from '@contentful/live-preview';
 	import styles from './LibraryShelf.module.css';
 
 	interface Props {
@@ -12,6 +13,21 @@
 
 	function formatTopic(topic: string) {
 		return topic.replace(/\b\w/g, (character) => character.toUpperCase());
+	}
+
+	function getInspectorProps(item: LibraryShelfEntry, fieldId: string): Record<string, string> {
+		if (!item.contentfulMetadata) {
+			return {};
+		}
+
+		return (
+			ContentfulLivePreview.getProps({
+				entryId: item.contentfulMetadata.entryId,
+				fieldId,
+				environment: item.contentfulMetadata.environment,
+				locale: item.contentfulMetadata.locale
+			}) ?? {}
+		);
 	}
 </script>
 
@@ -35,11 +51,11 @@
 					</div>
 
 					<div class={styles.copy}>
-						<h3>{item.title}</h3>
-						<p>{item.summary}</p>
+						<h3 {...getInspectorProps(item, 'title')}>{item.title}</h3>
+						<p {...getInspectorProps(item, 'summary')}>{item.summary}</p>
 					</div>
 
-					<p class={styles.creator}>{item.creator}</p>
+					<p class={styles.creator} {...getInspectorProps(item, 'creatorText')}>{item.creator}</p>
 
 					<ul class={styles.topics} aria-label={`${item.title} topics`}>
 						{#each item.topics as topic (topic)}
