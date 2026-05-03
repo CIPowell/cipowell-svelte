@@ -9,4 +9,9 @@
 	let { data }: Props = $props();
 </script>
 
-<LibraryExperience entries={data.entries} topics={data.topics} counts={data.counts} />
+<LibraryExperience
+	entries={data.entries}
+	topics={data.topics}
+	counts={data.counts}
+	livePreview={data.livePreview}
+/>
